@@ -1,0 +1,26 @@
+girth=6
+--- LDPC codec ----------------------------------
+Nvar : 200
+Ncheck : 100
+Rate : 0.5
+Column degrees (node perspective): [0 0 0 200]
+Row degrees (node perspective): [0 0 0 0 0 0 100]
+-------------------------------------------------
+Decoder parameters:
+ - method : BP
+ - max. iterations : 50
+ - syndrom check at each iteration : 1
+ - syndrom check at start : 0
+-------------------------------------------------
+---------- LLR calculation unit -----------------
+LLR_calc_unit table properties:
+The granularity in the LLR representation is 0.000244141
+The LLR scale factor is 4096
+The largest LLR that can be represented is 32768
+The table resolution is 0.03125
+The number of entries in the table is 300
+The tables truncates at the LLR value 9.375
+-------------------------------------------------
+
+
+[31359 33413 27783 41537 36128 26426 40069 46363 52003 16921 33356 27970 47102 36675 16830 75252 40125 60137 58298 36016 8124 36046 49082 43386 39949]

@@ -1,0 +1,49 @@
+/*!
+ * \file
+ * \brief Pulse shaping classes - source file
+ * \author Tony Ottosson, Hakan Eriksson and Adam Piatyszek
+ *
+ * -------------------------------------------------------------------------
+ *
+ * IT++ - C++ library of mathematical, signal processing, speech processing,
+ *        and communications classes and functions
+ *
+ * Copyright (C) 1995-2007  (see AUTHORS file for a list of contributors)
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+ *
+ * This program is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ *
+ * -------------------------------------------------------------------------
+ */
+
+#include <itpp/comm/pulse_shape.h>
+
+
+namespace itpp {
+
+  //---------------------------------------------------------------------------
+  // Template instantiations
+  //---------------------------------------------------------------------------
+
+  template class Pulse_Shape<double, double, double>;
+  template class Pulse_Shape<std::complex<double>, double, std::complex<double> >;
+  template class Pulse_Shape<std::complex<double>, std::complex<double>, std::complex<double> >;
+
+  template class Root_Raised_Cosine<double>;
+  template class Root_Raised_Cosine<std::complex<double> >;
+
+  template class Raised_Cosine<double>;
+  template class Raised_Cosine<std::complex<double> >;
+
+} // namespace itpp
