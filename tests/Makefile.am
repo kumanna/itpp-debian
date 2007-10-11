@@ -2,86 +2,66 @@ include $(top_srcdir)/Makefile.common
 LDADD = $(top_builddir)/itpp/libitpp.la
 AM_CXXFLAGS = $(CXXFLAGS_OPT)
 
-BASE_TESTS = \
-	array_test \
-	bessel_test \
-	blas_test \
-	cholesky_test \
-	circular_buffer_test \
-	det_test \
-	eigen_test \
-	fastmath_test \
-	gf2mat_test \
-	integration_test \
-	inv_test \
-	itfile_test \
-	ls_solve_test \
-	lu_test \
-	matfunc_test \
-	mat_test \
-	parser_test \
-	qr_test \
-	rand_test \
-	schur_test \
-	sort_test \
-	sparse_test \
-	svd_test \
-	timer_test \
-	vec_test
+BASE_TESTS = array_test bessel_test blas_test circular_buffer_test	\
+  fastmath_test gf2mat_test integration_test itfile_test mat_test	\
+  parser_test rand_test sort_test sparse_test timer_test vec_test
+BASE_LAP_TESTS = cholesky_test det_test eigen_test inv_test ls_solve_test \
+  lu_test matfunc_test qr_test schur_test svd_test
 
-COMM_TESTS = \
-	bch_test \
-	channel_test \
-	commfunc_test \
-	convcode_test \
-	galois_test \
-	interleaver_test \
-	ldpc_test \
-	llr_test \
-	modulator_test \
-	modulator_nd_test \
-	pulse_shape_test \
-	rec_syst_conv_code_test \
-	reedsolomon_test \
-	turbo_test
+COMM_TESTS = bch_test commfunc_test convcode_test galois_test		\
+  interleaver_test ldpc_test llr_test modulator_test pulse_shape_test	\
+  rec_syst_conv_code_test reedsolomon_test turbo_test
+COMM_LAP_TESTS = modulator_nd_test
+COMM_FFT_TESTS = channel_test
 
-FIXED_TESTS = \
-	fix_test
+FIXED_TESTS = fix_test
 
-OPTIM_TESTS = \
-	newton_search_test
+OPTIM_TESTS = newton_search_test
 
-SIGNAL_TESTS = \
-	fastica_test \
-	filter_test \
-	filter_design_test \
-	freq_filt_test \
-	poly_test \
-	sigfun_test \
-	source_test \
-	transforms_test \
-	window_test
+SIGNAL_TESTS = filter_test source_test window_test
+SIGNAL_LAP_TESTS = fastica_test poly_test
+SIGNAL_FFT_TESTS = freq_filt_test sigfun_test transforms_test
+SIGNAL_LAP_FFT_TESTS = filter_design_test
 
-STAT_TESTS = \
-	histogram_test \
-	stat_test
+STAT_TESTS = histogram_test
+STAT_LAP_TESTS = stat_test
 
-ALL_TESTS = $(BASE_TESTS) $(COMM_TESTS) $(FIXED_TESTS) $(OPTIM_TESTS) \
-	$(SIGNAL_TESTS) $(STAT_TESTS)
+ALL_TESTS = $(BASE_TESTS) $(BASE_LAP_TESTS) $(COMM_TESTS) $(COMM_LAP_TESTS) \
+  $(COMM_FFT_TESTS) $(FIXED_TESTS) $(OPTIM_TESTS) $(SIGNAL_TESTS) \
+  $(SIGNAL_LAP_TESTS) $(SIGNAL_FFT_TESTS) $(SIGNAL_LAP_FFT_TESTS) \
+  $(STAT_TESTS) $(STAT_LAP_TESTS)
 
 USED_TESTS = $(BASE_TESTS) $(STAT_TESTS)
+if RUN_LAPACK_TESTS
+  USED_TESTS += $(BASE_LAP_TESTS) $(STAT_LAP_TESTS)
+endif # RUN_LAPACK_TESTS
 if ENABLE_COMM
   USED_TESTS += $(COMM_TESTS)
-endif
+if RUN_LAPACK_TESTS
+  USED_TESTS += $(COMM_LAP_TESTS)
+endif # RUN_LAPACK_TESTS
+if RUN_FFT_TESTS
+  USED_TESTS += $(COMM_FFT_TESTS)
+endif # RUN_FFT_TESTS
+endif # ENABLE_COMM
 if ENABLE_FIXED
   USED_TESTS += $(FIXED_TESTS)
-endif
+endif # ENABLE_FIXED
 if ENABLE_OPTIM
   USED_TESTS += $(OPTIM_TESTS)
-endif
+endif # ENABLE_OPTIM
 if ENABLE_SIGNAL
   USED_TESTS += $(SIGNAL_TESTS)
-endif
+if RUN_LAPACK_TESTS
+  USED_TESTS += $(SIGNAL_LAP_TESTS)
+endif # RUN_LAPACK_TESTS
+if RUN_FFT_TESTS
+  USED_TESTS += $(SIGNAL_FFT_TESTS)
+if RUN_LAPACK_TESTS
+  USED_TESTS += $(SIGNAL_LAP_FFT_TESTS)
+endif # RUN_LAPACK_TESTS
+endif # RUN_FFT_TESTS
+endif # ENABLE_SIGNAL
 
 array_test_SOURCES = array_test.cpp
 bch_test_SOURCES = bch_test.cpp
@@ -145,20 +125,34 @@ tmp_files = $(USED_TESTS:=.tmp)
 ref_files = $(ALL_TESTS:=.ref)
 
 EXTRA_DIST = itfile_test_data.it fastica_test_data.txt parser_test_data.txt \
-	$(ref_files) 
+	$(ref_files)
 
 check-local: $(check_PROGRAMS) $(ref_files)
-	@for i in $(USED_TESTS); do \
-		echo ------------------------------------------------------------------------------; \
-		./$$i$(EXEEXT) 2> /dev/null | sed 's/^M$$//' | sed 's/\(-\?[0-9]\+\.\?[0-9]*e[+-]\)0\([0-9][0-9]\)/\1\2/g' > $$i.tmp; \
-		diff $$i.tmp $(srcdir)/$$i.ref > /dev/null; \
-		if test "x$$?" = "x0"; then \
+	@total=0; failed=0; \
+	for i in $(USED_TESTS); \
+	do \
+		echo "------------------------------------------------------------------------------"; \
+		./$$i$(EXEEXT) 2>/dev/null | sed -e 's/^M$$//' -e 's/\(-\?[0-9]\+\.\?[0-9]*e[+-]\)0\([0-9][0-9]\)/\1\2/g' > $$i.tmp; \
+		diff $(srcdir)/$$i.ref $$i.tmp >/dev/null; \
+		if [ "x$$?" = "x0" ]; \
+		then \
 			echo "Test \`$$i' PASSED."; \
 		else \
 			echo "Test \`$$i' FAILED!!!"; \
+			failed=$$(($$failed + 1)); \
 		fi; \
+		total=$$(($$total + 1)); \
 	done; \
-	echo ------------------------------------------------------------------------------
+	echo "------------------------------------------------------------------------------"; \
+	if [ $$failed -gt 0 ]; \
+	then \
+		echo ""; \
+		echo "******************************************************************************"; \
+		echo "*** ERROR: $$failed/$$total tests failed!!!"; \
+		echo "******************************************************************************"; \
+		echo ""; \
+		exit 1; \
+	fi
 
 clean-local:
 	-rm -f $(tmp_files) gf2mat_test.alist ldpc_test.codec

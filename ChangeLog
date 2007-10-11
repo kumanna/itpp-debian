@@ -1,3 +1,442 @@
+2007-10-06  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* IT++ 4.0.0-rc2 released (SVN tag: release-4-0-0-rc2)
+
+	* NEWS: Updated to reflect recent changes
+
+2007-10-05  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* INSTALL, doc/local/installation.doc: Installation manual updated
+	to reflect recent changes
+
+2007-10-04  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* itpp/base/binary.cpp, itpp/base/binary.h: Check for allowed 0 or
+	1 values in ">>" operator of bin class
+
+	Without this patch it was possible to initialise binary vectors or
+	matrices with values other than 0 or 1, when linking to the IT++
+	library build without "-DNDEBUG" flag.
+	BTW, performed a set of cosmetic changes in bin class operators
+	and constructors.
+
+2007-10-02  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* INSTALL, doc/local/installation.doc, config/acx_fft.m4: Added
+	--with-fft-include=DIR option to the configure command
+
+	This option can be used instead of CPPFLAGS to pass non standard
+	paths to include files required by IT++ FFT routines (using ACML,
+	MKL or FFTW).
+
+	* config/acx_blas.m4, config/acx_fft.m4, config/acx_lapack.m4:
+	Cosmetic changes in --with-PACKAGE strings of the configure
+	command
+
+2007-10-01  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* tests/Makefile.am: All test programs needs to be declared in
+	ALL_TESTS
+
+	Without this change, some reference files (*.ref) might not have
+	been included in the distribution package when --without-lapack or
+	--without-fft switch was used.
+
+	* config/acx_fft.m4: Do not set blas_xxx_ok=yes when detecting FFT
+	libraries
+
+	This patch fixes FFT library detection macros, so they do not set
+	blas_mkl_ok or blas_acml_ok variables. Without this fix, it might
+	happened that even if BLAS detection was disabled (e.g. by using
+	`--without-blas'), an ACML or MKL BLAS library was indicated as
+	found.
+
+	* config/acx_blas.m4, itpp/base/blas.h, itpp/base/vec.h,
+	itpp/config_msvc.h: Fixed failing blas_test and vec_test when
+	linking with MKL
+
+	There was a problem with using zdotusub_ Fortran wrapper with
+	Intel's MKL library, which resulted in segmentation faults in
+	blas_test and vec_test programs. Now zdotusub_ is defined as
+	zdotu_ when MKL BLAS is used, and zdotusub.f is not built in such
+	a case. BTW, the detection of MKL, ACML and ATLAS BLAS libraries
+	is improved (additional HAVE_BLAS_MKL, HAVE_BLAS_ACML and
+	HAVE_BLAS_ATLAS definitions are available).
+
+	* configure.ac, itpp/base/Makefile.am: Fixed linking problem with
+	zdotu_ when not using BLAS
+
+	If an external BLAS library is not used, do not compile and link
+	the zdotusub_ Fortran wrapper, since it requires an external
+	zdotu_ function to exist.
+
+==============================================================================
+
+2007-09-28  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* IT++ 4.0.0-rc1 released (SVN tag: release-4-0-0-rc1)
+
+	* NEWS: Updated to reflect recent changes
+
+	* tests/itfile_test.cpp: Fixed a minor bug in itfile_test program
+
+	This test program opened the reference data file from source
+	directory in read/write mode, which was wrong, because source
+	directory can be located on read-only file system. This patch
+	fixes this bug.
+
+2007-09-27  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* tests/modulator_nd_test.cpp, tests/modulator_nd_test.ref: Test
+	program updated to use ZF Log-MAP demodulation method
+
+2007-09-26  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* itpp/comm/modulator_nd.cpp, itpp/comm/modulator_nd.h:
+	Implemented Zero-Forcing (ZF) Log-MAP soft demodulation method
+
+	Zero-Forcing approximate demodulation method can be used instead
+	of a brute-force optimum enumeration of all constellation points
+	in both real- and complex-valued MIMO demodulators. Thanks to Erik
+	G. Larsson, who provided the draft implementation and reviewed the
+	code.
+
+2007-09-07  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* itpp/comm/modulator_nd.cpp, itpp/comm/modulator_nd.h,
+	tests/modulator_nd_test.cpp: Interface improvements in
+	Modulator_ND classes
+
+	The interfaces of Modulator_ND class and its descendants were
+	redesigned to be more similar to 1D and 2D modulators' interfaces.
+	BTW, revised the documentation and performed a set of cosmetic
+	changes.
+
+2007-09-06  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* itpp/comm/channel.h: Documentation improvements in AWGN_Channel
+
+	Described clearly what is the meaning of the AWGN_Channel's
+	"noisevar" input parameter for real- and complex-valued signals.
+
+2007-09-04  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* itpp/base/math/elem_math.h: Added sign_i() and sgn_i() functions
+
+	These new functions calculates the sign of an integer or double
+	argument and return -1, 0 or 1 integer value.
+
+2007-08-30  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* configure.ac, itpp/base/math/log_exp.h, itpp/base/specmat.cpp,
+	itpp/comm/galois.cpp, itpp/comm/modulator_nd.cpp,
+	itpp/signal/sigfun.cpp: Improved log2() and log1p() portability
+
+	Additional checks for log2() and log1p() functions have been added
+	to the configure script. If they are not found, local
+	implementations are used. Besides, log2() is now in a global
+	scope, not in the "itpp" namespace, which is consistent with GCC.
+	BTW, removed unnecessary checks for C++ standard header files.
+
+	* itpp/itmex.h: Added missing mxArray2string() and
+	string2mxArray() functions
+
+	Thanks to Bogdan Cristea for reporting this issue and providing
+	the patch.
+
+	* doc/local/linking.doc, extras/itpp-config.t2t, itpp-config.1.in,
+	itpp-config.in, itpp.pc.in: Improvements in itpp-config and
+	pkg-config's itpp.pc scripts
+
+	These changes are intended to follow the distinction between
+	linking to a static and shared version of the library, which is
+	used in pkg-config's itpp.pc file. By default "itpp-config --libs"
+	returns "-I${prefix}/lib -litpp", whereas when "--static" is added
+	in front of "--libs", the returned string is extended with a set
+	of external library names required for proper static linking.
+	Moreover, an additional "--debug" switch has been added, which
+	changes the output of "itpp-config --cflags" and "itpp-config
+	--libs" by providing debugging flags and debugging library name.
+	For backward compatibility "--cflags-opt", "--cflags-debug",
+	"--libs-opt" and "--libs-debug" still exist, but they are not
+	documented and their use is deprecated.
+
+2007-08-28  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* config/acx_blas.m4, config/acx_fft.m4, config/acx_lapack.m4,
+	configure.ac, itpp-config.in, itpp.pc.in: Break configuration when
+	BLAS, LAPACK or FFT not found
+
+	If the required external libraries are not found, stop
+	configuration process and print an error message informing that
+	one can use "--without-{blas,lapack,fft}" option, but IT++
+	functionality will be limited. BTW, removal of redundant spaces
+	from CXXFLAGS_OPT, CXXFLAGS_DEBUG CPPFLAGS, LDFLAGS and LIBS has
+	been implemented in the configure script.
+
+2007-08-27  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* configure.ac, tests/Makefile.am, tests/cholesky_test.cpp,
+	tests/det_test.cpp, tests/eigen_test.cpp, tests/fastica_test.cpp,
+	tests/filter_design_test.cpp, tests/freq_filt_test.cpp,
+	tests/inv_test.cpp, tests/ls_solve_test.cpp, tests/lu_test.cpp,
+	tests/matfunc_test.cpp, tests/modulator_nd_test.cpp,
+	tests/poly_test.cpp, tests/qr_test.cpp, tests/schur_test.cpp,
+	tests/sigfun_test.cpp, tests/stat_test.cpp, tests/svd_test.cpp,
+	tests/transforms_test.cpp: Made LAPACK and FFT dependent tests
+	conditional
+
+	If linking to an optional LAPACK or FFT external library is not
+	configured, do not compile and run the test programs that depends
+	on these libraries. This results in all tests passed when
+	"--without-{blas,lapack,fft}" configure switch is intentionally
+	used.
+
+	* itpp/base/array.h, itpp/base/factory.cpp, itpp/base/factory.h,
+	itpp/base/mat.h, itpp/base/vec.h, itpp/fixed/fix_factory.cpp:
+	Improved memory allocation routines
+
+	Following the idea proposed in feature request [1277721]
+	implementation of create_elements() functions was improved. First
+	the memory for an Array, Vec or Mat is allocated and then the
+	constructor of each element is executed, but only if necessary.
+	For simple types like bin, int, double, etc., the constructor is
+	not invoked. Moreover, in the previous implementation the
+	constructor of each Array<Array>, Array<Vec> or Array<Mat> element
+	was invoked twice. Now this is fixed. Thanks to George Jongren for
+	submitting this feature request.
+
+	* itpp/base/factory.cpp, itpp/base/factory.h,
+	itpp/base/sources.mk, itpp/signal/transforms.cpp,
+	win32/itpp_acml.vcproj, win32/itpp_mkl.vcproj: Solved FFTW
+	alignment issue
+
+	By implementing new specialisations of create_elements() and
+	destroy_elements() functions, 16-byte memory alignment of Array,
+	Vec and Mat data is used for double and complex<double> types.
+	With this new implementation, fft(), ifft(), dct() and idct()
+	functions using FFTW external library run up to 30% faster than
+	with non-aligned data structures. This fix closes feature
+	request [1418707].
+
+	* itpp/base/array.h, itpp/base/factory.h, itpp/base/mat.h,
+	itpp/base/vec.h: Added destroy_elements() function
+
+	The destroy_elements() function accompanies create_elements() used
+	for memory allocation. Future changes to memory allocation
+	scheme (e.g. memory alignment) for Array, Vec and Mat classes will
+	only require redefinition of these two methods.
+	BTW, removed inlining of alloc(), free(), create_elements() and
+	destroy_elements() functions, which does not give any real
+	performance gain but the code is bigger than necessary.
+
+2007-08-26  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* itpp/base/mat.h, itpp/base/vec.cpp, itpp/base/vec.h,
+	itpp/fixed/cfix.cpp, itpp/fixed/cfix.h, itpp/fixed/fix.cpp,
+	itpp/fixed/fix.h: Improvements in string parsers
+
+	Added support for NaN (not a number) and Inf (infinity) for parsed
+	Vec<double> arguments. This fixes feature request [1066711].
+	Changed "bool Vec<>::set()" into "void Vec<>::set(), because
+	returned value was always true. Reused Vec<int>::set()
+	specialisation in Vec<short int>::set() implementation. Simplified
+	implementation of Vec<int>::set() specialisation.
+
+2007-08-25  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* itpp/base/mat.h, tests/mat_test.cpp, tests/mat_test.ref:
+	Added set_rows() and set_cols() methods to Mat
+
+	These new set functions match existing get_rows() and get_cols()
+	methods. This patch fixes feature request [711263].
+
+2007-08-24  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* itpp/base/random.h: Fine tuning of random generators
+
+	When generating a vector or matrix of random samples, it is more
+	efficient to use "*=" and "+=" operators on the same allocated
+	memory pool than create temporary copies of vectors and matrices.
+	Moreover, for double and complex<double> types, "*=" operator can
+	employ optimised BLAS implementation.
+
+	* itpp/comm/channel.cpp, itpp/comm/channel.h: Fine tuning of
+	AWGN_Channel operator() performance
+
+	Instead of using randn() and randn_c() global functions,
+	Normal_RNG and Complex_Normal_RNG generators are declared as class
+	objects. This reduces the number of generator's constructor
+	executions to minimum.
+
+2007-08-24  Andreas Wolfgang  <andreas-w@users.sourceforge.net>
+
+	* extras/itsave.m: Fixed script to be compatible with Matlab V7.3
+
+	Since Matlab does not support sizeof(), it was replaced by a new
+	function itsizeof(). In addition logical expressions have been
+	made Matlab compatible (only variables with identical dimensions
+	are used in logical expressions). The patch was tested using
+	Matlab V7.3 and Octave V2.9.9.
+
+2007-08-23  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* tests/Makefile.am: Return non-zero exit status on make check
+	failure
+
+	If not all test programs pass, output a short status message with
+	the number of tests failed and return non-zero exit status to
+	make.
+
+2007-08-21  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* doc/local/installation.doc, doc/local/linking.doc: Documentation
+	updated to reflect recent changes
+
+	* win32/itpp_acml_tests/fastica_test.vcproj,
+	win32/itpp_acml_tests/itfile_test.vcproj,
+	win32/itpp_acml_tests/parser_test.vcproj,
+	win32/itpp_mkl_tests/*.vcproj: Final problems fixed in the MSVC++
+	project files for test programs
+
+	The fastica_test, itfile_test and parser_test projects require
+	additional preprocessor definitions of some test data files.
+	Besides, all project files in win32/itpp_mkl_tests directory were
+	missing ProjectGUID, which is normally automatically added by the
+	MSVC++ IDE environment. All test programs should now compile and
+	run without any problems.
+
+2007-08-20  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* extras/acml_tests_vcproj.template,
+	extras/mkl_tests_vcproj.template, win32/**/*.vcproj: Removed
+	versions from MKL and ACML directories
+
+	To prevent unnecessary updates of MSVC++ project files, the
+	installation directories of MKL and ACML libraries under windows
+	do not contain version numbers, i.e. "C:\Program Files\Intel\MKL"
+	and "C:\Program Files\AMD\acml". MKL and ACML libraries should be
+	installed into these directories in order to work with the
+	prepared project files without any modifications.
+
+	* itpp/base/mat.cpp, itpp/base/mat.h, itpp/base/vec.cpp,
+	itpp/base/vec.h: Fixed problems with comma in Vec::set() parser
+
+	The previous string parser implementation in Vec class was not
+	fully functional when using MSVC++ compiler. The problem was that
+	commas just after a parsed value caused application crash. For
+	instance "1 , 0 1 " was parsed fine, but parsing "1, 0,1" resulted
+	in a crash. Fixed this issue by replacing all commas with spaces
+	before actual parsing is done, except the complex vector case,
+	where "(1,0.2)" are valid complex values. BTW, the Mat::set()
+	parsing function was rewritten to reuse the Vec::set() method.
+
+	* extras/acml_tests_vcproj.template, extras/gen_vcproj_tests.sh,
+	extras/mkl_tests_vcproj.template, win32/itpp_acml.vcproj,
+	win32/itpp_acml_tests/*.vcproj, win32/itpp_acml_tests/Makefile.am,
+	win32/itpp_acml_tests/itpp_acml_tests.sln, win32/itpp_mkl.vcproj,
+	win32/itpp_mkl_tests/*.vcproj, win32/itpp_mkl_tests/Makefile.am,
+	win32/itpp_mkl_tests/itpp_mkl_tests.sln: Prepared MSVC++ project
+	files for test programs
+
+	These project files were generated from two template files with
+	"gen_vcproj_tests.sh" script. Then, they were included in
+	appropriate solutions: "itpp_acml_tests.sln" and
+	"itpp_mkl_tests.sln", for external ACML and MKL libraries
+	respectively.
+
+	* itpp/base/blas.h, itpp/base/vec.cpp, itpp/base/vec.h,
+	itpp/base/zdotusub.f: Modified zdotusub_() function to match ACML
+	interface
+
+	The Fortran wrapper zdodusub_() of BLAS zdotu_() function used
+	CBLAS inteface, which was incompatible with ACML implementation.
+	Fixed this, so the native ACML function can be used under MSVC++
+	compiler. Besides, disabled this function when using IT++ with
+	Intel MKL under MSVC++.
+
+	* tests/fastica_test.cpp, tests/itfile_test.cpp,
+	tests/parser_test.cpp, tests/turbo_test.cpp: Cosmetic changes in a
+	few test programs
+
+	Compilation of turbo_test and itfile_test programs under MSVC++
+	resulted in some warnings related to the use of variable `i' and
+	initialisation of a float variable `f_ref'. These issues are now
+	fixed. BTW, error messages in fastica_test, itfile_test and
+	parser_test were changed to use `cerr' output stream, instead of
+	`cout'.
+
+2007-08-18  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* tests/rand_test.cpp, tests/rand_test.ref: Fixed a bug in
+	rand_test program
+
+	The rand_test implementation was not deterministic, which resulted
+	in a failed test result on SunOS SPARC platform. Generation of
+	scalars, vectors and matrices of random numbers in separate "cout"
+	commands fixes this problem.
+
+	* doc/local/linking.doc: Documentation updated
+
+	Reflected recent changes in the pkg-config's itpp.pc file in the
+	"Linking with IT++" documentation. BTW, revised the section about
+	using itload.m and itsave.m m-files in Matlab/Octave.
+
+	* itpp/base/vec.cpp, itpp/base/vec.h: Fixed regressions related to
+	the specialised operator*()
+
+	The templated friend operator*() for two vectors, which calculates
+	the dot product, needs to be instantiated in the same way as the
+	dot() function. Besides, the declaration of the friend operator*()
+	included the definition. This definition is now moved below dot()
+	function definition. Without these two changes, a segmentation
+	fault occurred in vec_test under Cygwin.
+
+	* itpp.pc.in: Improvements in pkg-config's itpp.pc script
+
+	"Libs" variable settings in the itpp.pc pkg-config's file are now
+	split into "Libs" and "Libs.private". The latter one is only used
+	when doing a static linking (using "--static" pkg-config switch).
+
+	* config/acx_blas.m4, config/acx_fft.m4, config/acx_lapack.m4:
+	Cosmetic changes - deleted trailing whitespace
+
+	* configure.ac: Let the user override the default CXXFLAGS_DEBUG
+
+	The CXXFLAGS_DEBUG environment variable can be used to override
+	the default settings of this flag. BTW, added "-Werror" to the
+	default debug flags.
+
+2007-08-13  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* itpp/base/random.cpp, itpp/base/random.h, tests/rand_test.cpp,
+	tests/rand_test.ref, tests/source_test.cpp, tests/source_test.ref:
+	Simplified and optimised RNG implementations
+
+	Rayleigh_RNG and Rice_RNG now use Normal_RNG for efficient
+	generation of samples (new implementation is about 4 times
+	faster). Minor code optimisations in Laplace_RNG, Weibull_RNG and
+	AR1_Normal_RNG. Test programs for RNG and deterministic sources
+	updated accordingly.
+
+2007-08-11  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* Makefile.am: Added NEWS-3.99 to EXTRA_DIST
+
+	* tests/stat_test.cpp: Check for LAPACK
+
+	This test requires svd() function, which is provided by an
+	external LAPACK library. Therefore we have to check for
+	HAVE_LAPACK definition like in other LAPACK-related test programs.
+
+	* NEWS-3.10: Updated to include 3.10.12 release notes
+
+	* NEWS, NEWS-3.99: Created a new NEWS file for 4.0.x releases
+
+	* configure.ac: Version number updated
+
+==============================================================================
+
 2007-08-10  Adam Piatyszek  <ediap@users.sourceforge.net>
 
 	* IT++ 3.99.3.1 released (SVN tag: release-3-99-3-1)
@@ -186,10 +625,10 @@
 2007-07-16  Adam Piatyszek  <ediap@users.sourceforge.net>
 
 	* doc/local/documentation.doc, extras/itload.m, extras/itsave.m,
-	itpp/**/*.cpp, itpp/**/*.h, tests/*.cpp: Removed $Revision: 1110 $ and
-	$Date: 2007-08-10 20:11:27 +0200 (pią, 10 sie 2007) $ keywords
+	itpp/**/*.cpp, itpp/**/*.h, tests/*.cpp: Removed $Revision$ and
+	$Date$ keywords
 
-	The $Revision: 1110 $ and $Date: 2007-08-10 20:11:27 +0200 (pią, 10 sie 2007) $ keywords in each file comment sometimes
+	The $Revision$ and $Date$ keywords in each file comment sometimes
 	cause errors when trying to apply patches or merged branches.
 	Therefore, IT++ sources will not use them any more.
 

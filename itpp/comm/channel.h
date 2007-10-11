@@ -999,11 +999,12 @@ namespace itpp {
   /*!
     \brief Ordinary AWGN Channel for cvec or vec inputs and outputs.
 
-    For real signals, the input parameter (\a noisevar) should be set to
-    \f$ N_0/2 \f$, where \f$ N_0 \f$ is the noise spectral density.
-    However, in case of complex signals, the input parameter (\a noisevar)
-    represents the total noise variance of both real and imaginary parts,
-    and thus is equal to \f$ N_0 \f$.
+    For real signals, the input parameter (\a noisevar) denotes the noise
+    variance per real dimension. Therefore, it should be set to \f$N_0/2\f$,
+    where \f$N_0\f$ is the noise power spectral density. However, in case of
+    complex signals, the input parameter (\a noisevar) represents the
+    noise variance per complex dimension, i.e. the sum of the variances in
+    the real and imaginary parts, and thus is equal to \f$N_0\f$.
 
     Example:
     \code
@@ -1031,17 +1032,18 @@ namespace itpp {
   class AWGN_Channel {
   public:
     //! Class constructor. Sets the noise variance (for complex-valued channels the sum of real and imaginary parts)
-    AWGN_Channel(double noisevar = 0.0) { sigma = std::sqrt(noisevar); }
+    AWGN_Channel(double noisevar = 0.0): sigma(std::sqrt(noisevar)) {}
     //! Set noise variance (for complex-valued channels the sum of real and imaginary parts)
     void set_noise(double noisevar) { sigma = std::sqrt(noisevar); }
     //! Get noise variance (for complex-valued channels the sum of real and imaginary parts)
-    double get_noise() { return sqr(sigma); }
+    double get_noise() const { return sqr(sigma); }
     //! Feed the complex input \a input through the complex-valued AWGN channel
     cvec operator()(const cvec &input);
     //! Feed the input \a through the real-valued AWGN channel
     vec operator()(const vec &input);
-  protected:
-    //! Standard deviation of the AWGN
+  private:
+    Complex_Normal_RNG rng_cn;
+    Normal_RNG rng_n;
     double sigma;
   };
 

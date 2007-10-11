@@ -13,7 +13,15 @@ dnl specific FFT library <lib>.
 
 AC_DEFUN([ACX_FFT], [
 
-AC_ARG_WITH(fft, [AC_HELP_STRING([--with-fft=<lib>], [use FFT library <lib>])])
+# Initialise local variables
+acx_fft_ok=no
+fft_mkl_ok=no
+fft_acml_ok=no
+fftw3_ok=no
+
+
+# Parse "--with-fft=<lib>" option
+AC_ARG_WITH(fft, [AC_HELP_STRING([--with-fft@<:@=LIB@:>@], [use FFT library, optionally specified by LIB])])
 case $with_fft in
   yes | "") ;;
   no) acx_fft_ok=disabled ;;
@@ -21,11 +29,10 @@ case $with_fft in
   *) FFT_LIBS="-l$with_fft" ;;
 esac
 
-test "$acx_fft_ok" != disabled && acx_fft_ok=no
-
-fft_mkl_ok=no
-fft_acml_ok=no
-fftw3_ok=no
+# Parse "--with-fft-include=<path>" option
+AC_ARG_WITH(fft_include, [AC_HELP_STRING([--with-fft-include=DIR],
+    [path to FFT header files])],
+  [CPPFLAGS="$CPPFLAGS -I$with_fft_include"])
 
 # First, check FFT_LIBS environment variable
 if test "x$FFT_LIBS" != x; then
@@ -34,16 +41,14 @@ if test "x$FFT_LIBS" != x; then
   AC_TRY_LINK_FUNC(DftiComputeForward, [acx_fft_ok=yes])
   AC_MSG_RESULT($acx_fft_ok)
   if test "$acx_fft_ok" = yes; then
-    AC_CHECK_HEADER([mkl_dfti.h], [fft_mkl_ok=yes; blas_mkl_ok=yes], 
-      [acx_fft_ok=no])
+    AC_CHECK_HEADER([mkl_dfti.h], [fft_mkl_ok=yes], [acx_fft_ok=no])
   fi
   if test "$acx_fft_ok" = no; then
     AC_MSG_CHECKING([for zfft1dx in $FFT_LIBS])
     AC_TRY_LINK_FUNC(zfft1dx, [acx_fft_ok=yes])
     AC_MSG_RESULT($acx_fft_ok)
     if test "$acx_fft_ok" = yes; then
-      AC_CHECK_HEADER([acml.h], [fft_acml_ok=yes; blas_acml_ok=yes],
-        [acx_fft_ok=no])
+      AC_CHECK_HEADER([acml.h], [fft_acml_ok=yes], [acx_fft_ok=no])
     fi
   fi
   if test "$acx_fft_ok" = no; then
@@ -62,8 +67,7 @@ if test "$acx_fft_ok" = no; then
   save_LIBS="$LIBS"; LIBS="$LIBS $BLAS_LIBS"
   AC_CHECK_FUNC(DftiComputeForward, [acx_fft_ok=yes])
   if test "$acx_fft_ok" = yes; then
-    AC_CHECK_HEADER([mkl_dfti.h], [fft_mkl_ok=yes; blas_mkl_ok=yes], 
-      [acx_fft_ok=no])
+    AC_CHECK_HEADER([mkl_dfti.h], [fft_mkl_ok=yes], [acx_fft_ok=no])
   fi
   LIBS="$save_LIBS"
 fi
@@ -73,8 +77,7 @@ if test "$acx_fft_ok" = no; then
   save_LIBS="$LIBS"; LIBS="$LIBS $BLAS_LIBS"
   AC_CHECK_FUNC(zfft1dx, [acx_fft_ok=yes])
   if test "$acx_fft_ok" = yes; then
-    AC_CHECK_HEADER([acml.h], [fft_acml_ok=yes; blas_acml_ok=yes], 
-      [acx_fft_ok=no])
+    AC_CHECK_HEADER([acml.h], [fft_acml_ok=yes], [acx_fft_ok=no])
   fi
   LIBS="$save_LIBS"
 fi
@@ -83,7 +86,7 @@ fi
 if test "$acx_fft_ok" = no; then
   AC_CHECK_LIB(fftw3, fftw_plan_dft_1d, [acx_fft_ok=yes])
   if test "$acx_fft_ok" = yes; then
-    AC_CHECK_HEADER([fftw3.h], [fftw3_ok=yes; FFT_LIBS="-lfftw3"], 
+    AC_CHECK_HEADER([fftw3.h], [fftw3_ok=yes; FFT_LIBS="-lfftw3"],
       [acx_fft_ok=no])
   fi
 fi
@@ -92,20 +95,19 @@ fi
 if test "$acx_fft_ok" = no; then
   AC_CHECK_LIB(fftw3, fftw_plan_dft_1d, [acx_fft_ok=yes], [], [-lm])
   if test "$acx_fft_ok" = yes; then
-    AC_CHECK_HEADER([fftw3.h], [fftw3_ok=yes; FFT_LIBS="-lfftw3 -lm"], 
+    AC_CHECK_HEADER([fftw3.h], [fftw3_ok=yes; FFT_LIBS="-lfftw3 -lm"],
       [acx_fft_ok=no])
   fi
 fi
 
 # FFT in MKL library?
 if test "$acx_fft_ok" = no; then
-  save_LIBS="$LIBS"; LIBS="$LIBS $FLIBS"
-  AC_CHECK_LIB(mkl, DftiComputeForward, [acx_fft_ok=yes], [], 
+  save_LIBS="$LIBS"; LIBS="$LIBS"
+  AC_CHECK_LIB(mkl, DftiComputeForward, [acx_fft_ok=yes], [],
     [-lguide -lpthread])
   if test "$acx_fft_ok" = yes; then
     AC_CHECK_HEADER([mkl_dfti.h],
-      [fft_mkl_ok=yes; blas_mkl_ok=yes; FFT_LIBS="-lmkl -lguide -lpthread"], 
-      [acx_fft_ok=no])
+      [fft_mkl_ok=yes; FFT_LIBS="-lmkl -lguide -lpthread"], [acx_fft_ok=no])
   fi
   LIBS="$save_LIBS"
 fi
@@ -115,9 +117,8 @@ if test "$acx_fft_ok" = no; then
   save_LIBS="$LIBS"; LIBS="$LIBS$MY_FLIBS"
   AC_CHECK_LIB(acml, zfft1dx, [acx_fft_ok=yes])
   if test "$acx_fft_ok" = yes; then
-    AC_CHECK_HEADER([acml.h], 
-      [fft_acml_ok=yes; blas_acml_ok=yes; FFT_LIBS="-lacml$MY_FLIBS"],
-      [acx_fft_ok=no])
+    AC_CHECK_HEADER([acml.h],
+      [fft_acml_ok=yes; FFT_LIBS="-lacml$MY_FLIBS"], [acx_fft_ok=no])
   fi
   LIBS="$save_LIBS"
 fi
@@ -135,6 +136,12 @@ if test "$acx_fft_ok" = yes; then
   fi
   if test "$fftw3_ok" = yes; then
     AC_DEFINE(HAVE_FFTW3, 1, [Define if you have FFTW3 library.])
+  fi
+else
+  if test "$acx_fft_ok" != disabled; then
+    AC_MSG_ERROR([cannot find any FFT library.
+You can override this error by using "--without-fft" option, but the
+functionality of the IT++ library will be limited. You have been warned!])
   fi
 fi
 

@@ -220,9 +220,9 @@ namespace itpp {
     //! Set matrix equal to the all one matrix
     void ones();
     //! Set matrix equal to values in \c values
-    bool set(const char *values);
+    void set(const char *str);
     //! Set matrix equal to values in the string \c str
-    bool set(const std::string &str);
+    void set(const std::string &str);
 
     //! Get element (R,C) from matrix
     const Num_T &operator()(int R, int C) const;
@@ -266,6 +266,10 @@ namespace itpp {
     void set_row(int Index, const Vec<Num_T> &invector);
     //! Set column \c Index to \c invector
     void set_col(int Index, const Vec<Num_T> &invector);
+    //! Set rows to matrix \c m, staring from row \c r
+    void set_rows(int r, const Mat<Num_T> &m);
+    //! Set colums to matrix \c m, starting from column \c c
+    void set_cols(int c, const Mat<Num_T> &m);
     //! Copy row \c from onto row \c to
     void copy_row(int to, int from);
     //! Copy column \c from onto column \c to
@@ -500,11 +504,6 @@ namespace itpp {
   template<class Num_T> inline
   void Mat<Num_T>::alloc(int rows, int cols)
   {
-//     if (datasize == rows * cols) { // Reuse the memory
-//       no_rows = rows; no_cols = cols;
-//       return;
-//     }
-//     free();  // Free memory (if any allocated)
     if ((rows > 0) && (cols > 0)) {
       datasize = rows * cols;
       no_rows = rows;
@@ -522,8 +521,7 @@ namespace itpp {
   template<class Num_T> inline
   void Mat<Num_T>::free()
   {
-    delete[] data;
-    data = 0;
+    destroy_elements(data, datasize);
     datasize = 0;
     no_rows = 0;
     no_cols = 0;
@@ -604,7 +602,7 @@ namespace itpp {
   }
 
 
-  template<class Num_T> inline
+  template<class Num_T>
   void Mat<Num_T>::set_size(int inrow, int incol, bool copy)
   {
     it_assert_debug((inrow >= 0) && (incol >= 0), "Mat<Num_T>::set_size: "
@@ -614,9 +612,11 @@ namespace itpp {
       return;
     // conditionally copy previous matrix content
     if (copy) {
-      // backup access to the current matrix
+      // create a temporary pointer to the allocated data
       Num_T* tmp = data;
-      int tmp_rows = no_rows;
+      // store the current number of elements and number of rows
+      int old_datasize = datasize;
+      int old_rows = no_rows;
       // check the boundaries of the copied data
       int min_r = (no_rows < inrow) ? no_rows : inrow;
       int min_c = (no_cols < incol) ? no_cols : incol;
@@ -624,7 +624,7 @@ namespace itpp {
       alloc(inrow, incol);
       // copy the previous data into the allocated memory
       for (int i = 0; i < min_c; ++i) {
-	copy_vector(min_r, &tmp[i*tmp_rows], &data[i*no_rows]);
+	copy_vector(min_r, &tmp[i*old_rows], &data[i*no_rows]);
       }
       // fill-in the rest of matrix with zeros
       for (int i = min_r; i < inrow; ++i)
@@ -633,8 +633,8 @@ namespace itpp {
       for (int j = min_c; j < incol; ++j)
 	for (int i = 0; i < min_r; ++i)
 	  data[i+j*inrow] = Num_T(0);
-      // free the previous data memory
-      delete[] tmp;
+      // delete old elements
+      destroy_elements(tmp, old_datasize);
     }
     // if possible, reuse the allocated memory
     else if (datasize == inrow * incol) {
@@ -712,79 +712,67 @@ namespace itpp {
 
 
   template<class Num_T>
-  bool Mat<Num_T>::set(const char *values)
+  void Mat<Num_T>::set(const std::string &str)
   {
-    std::istringstream buffer(values);
-    int rows = 0, maxrows = 10, cols = 0, nocols = 0, maxcols = 10;
-    bool comma = true;
+    // actual row counter
+    int rows = 0;
+    // number of rows to allocate next time (8, 16, 32, 64, etc.)
+    int maxrows = 8;
 
+    // clean the current matrix content
     free();
-    alloc(maxrows, maxcols);
-    zeros();
 
-    while (buffer.peek() != EOF) {
-      if (++rows > maxrows) {
-	maxrows <<= 1;
-	set_size(maxrows, maxcols, true);
-      }
+    // variable to store the start of a current vector
+    std::string::size_type beg = 0;
+    std::string::size_type end = 0;
+    while (end != std::string::npos) {
+      // find next occurence of a semicolon in string str
+      end = str.find(';', beg);
+      // parse first row into a vector v
+      Vec<Num_T> v(str.substr(beg, end-beg));
+      int v_size = v.size();
 
-      cols = 0;
-      while ((buffer.peek() != ';') && (buffer.peek() != EOF)) {
-	switch (buffer.peek()) {
-	  // first remove value separators
-	case ',':
-	  it_assert(!comma, "Mat<Num_T>::set(): Improper matrix string");
-	  buffer.seekg(1, std::ios_base::cur);
-	  comma = true;
-	  break;
-	case ' ': case '\t':
-	  buffer.seekg(1, std::ios_base::cur);
-	  break;
-
-	default:
-	  if (++cols > nocols) {
-	    nocols = cols;
-	    if (cols > maxcols) {
-	      maxcols <<= 1;
-	      set_size(maxrows, maxcols, true);
+      // this check is necessary to parse the following two strings as the
+      // same matrix: "1 0 1; ; 1 1; " and "1 0 1; 0 0 0; 1 1 0"
+      if ((end != std::string::npos) || (v_size > 0)) {
+	// matrix empty -> insert v as a first row and allocate maxrows
+	if (rows == 0) {
+	  set_size(maxrows, v_size, true);
+	  set_row(rows++, v);
+	}
+	else {
+	  // check if we need to resize the matrix
+	  if ((rows == maxrows) || (v_size != no_cols)) {
+	    // we need to add new rows
+	    if (rows == maxrows) {
+	      maxrows *= 2;
+	    }
+	    // check if ne need to add new colums
+	    if (v_size > no_cols) {
+	      set_size(maxrows, v_size, true);
+	    }
+	    else {
+	      set_size(maxrows, no_cols, true);
+	      // set the size of the parsed vector to the number of colums
+	      v.set_size(no_cols, true);
 	    }
 	  }
-	  buffer >> this->operator()(rows-1, cols-1);
-	  it_assert(!buffer.fail(), "Mat<Num_T>::set(): Stream operation failed (buffer >> data)");
-	  comma = false;
+	  // set the parsed vector as the next row
+	  set_row(rows++, v);
 	}
       }
+      // update the starting position of the next vector in the parsed
+      // string
+      beg = end + 1;
+    } // if ((end != std::string::npos) || (v.size > 0))
 
-      if (buffer.peek() == ';') {
-	// remove row separator...
-	buffer.seekg(1, std::ios_base::cur);
-	// ... but also check if it was at the end of buffer
-	while (buffer.peek() == ' ' || buffer.peek() == '\t') {
-	  buffer.seekg(1, std::ios_base::cur);
-	}
-	comma = false;
-	// it_assert(buffer.peek() != EOF, "Mat<double>::set(): Improper data string");
-      }
-
-      it_assert(!comma || (nocols == 0), "Mat<Num_T>::set(): Improper matrix string");
-
-    }
-    set_size(rows, nocols, true);
-
-    return true;
+    set_size(rows, no_cols, true);
   }
 
-  //! Specialization of \c set() method for int
-  template<>
-  bool Mat<int>::set(const char *values);
-  //! Specialization of \c set() method for short int
-  template<>
-  bool Mat<short int>::set(const char *values);
-
   template<class Num_T>
-  bool Mat<Num_T>::set(const std::string &str)
+  void Mat<Num_T>::set(const char *str)
   {
-    return set(str.c_str());
+    set(std::string(str));
   }
 
   template<class Num_T> inline
@@ -902,6 +890,38 @@ namespace itpp {
 
     copy_vector(v.size(), v._data(), data+Index*no_rows);
   }
+
+
+  template<class Num_T> inline
+  void Mat<Num_T>::set_rows(int r, const Mat<Num_T> &m)
+  {
+    it_assert_debug((r >= 0) && (r < no_rows),
+		    "Mat<>::set_rows(): Index out of range");
+    it_assert_debug(no_cols == m.cols(),
+		    "Mat<>::set_rows(): Column sizes do not match");
+    it_assert_debug(m.rows() + r <= no_rows,
+		    "Mat<>::set_rows(): Not enough rows");
+
+    for (int i = 0; i < m.rows(); ++i) {
+      copy_vector(no_cols, m.data+i, m.no_rows, data+i+r, no_rows);
+    }
+  }
+
+  template<class Num_T> inline
+  void Mat<Num_T>::set_cols(int c, const Mat<Num_T> &m)
+  {
+    it_assert_debug((c >= 0) && (c < no_cols),
+		    "Mat<>::set_cols(): Index out of range");
+    it_assert_debug(no_rows == m.rows(),
+		    "Mat<>::set_cols(): Row sizes do not match");
+    it_assert_debug(m.cols() + c <= no_cols,
+		    "Mat<>::set_cols(): Not enough colums");
+
+    for (int i = 0; i < m.cols(); ++i) {
+      copy_vector(no_rows, m.data+i*no_rows, data+(i+c)*no_rows);
+    }
+  }
+
 
   template<class Num_T> inline
   void Mat<Num_T>::copy_row(int to, int from)

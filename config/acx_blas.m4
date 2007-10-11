@@ -25,20 +25,21 @@ AC_DEFUN([ACX_BLAS], [
 AC_PREREQ(2.50)
 AC_REQUIRE([AC_F77_LIBRARY_LDFLAGS])
 
+# Initialise local variables
+acx_blas_ok=no
+blas_mkl_ok=no
+blas_acml_ok=no
+blas_atlas_ok=no
+
+# Parse "--with-blas=<lib>" option
 AC_ARG_WITH(blas,
-  [AC_HELP_STRING([--with-blas=<lib>], [use BLAS library <lib>])])
+  [AC_HELP_STRING([--with-blas@<:@=LIB@:>@], [use BLAS library, optionally specified by LIB])])
 case $with_blas in
   yes | "") ;;
   no) acx_blas_ok=disabled ;;
   -* | */* | *.a | *.so | *.so.* | *.o) BLAS_LIBS="$with_blas" ;;
   *) BLAS_LIBS="-l$with_blas" ;;
 esac
-
-test "$acx_blas_ok" != disabled && acx_blas_ok=no
-
-blas_mkl_ok=no
-blas_acml_ok=no
-blas_atlas_ok=no
 
 # Clean up -L/../.. paths from FLIBS
 MY_FLIBS="`echo "$FLIBS" | sed 's/-L[[^ ]]* //g'`"
@@ -60,16 +61,10 @@ if test "$acx_blas_ok" = no; then
     if test "$acx_blas_ok" = no; then
       LIBS="$LIBS$MY_FLIBS"
       AC_MSG_CHECKING([for $sgemm in $BLAS_LIBS$MY_FLIBS])
-      AC_TRY_LINK_FUNC($sgemm, 
-        [acx_blas_ok=yes; BLAS_LIBS="$BLAS_LIBS$MY_FLIBS"], 
+      AC_TRY_LINK_FUNC($sgemm,
+        [acx_blas_ok=yes; BLAS_LIBS="$BLAS_LIBS$MY_FLIBS"],
         [BLAS_LIBS=""])
       AC_MSG_RESULT($acx_blas_ok)
-    fi
-    # if BLAS is found check for ATLAS
-    if test "$acx_blas_ok" = yes; then
-      AC_MSG_CHECKING([for ATL_xerbla in $BLAS_LIBS])
-      AC_TRY_LINK_FUNC(ATL_xerbla, [blas_atlas_ok=yes])
-      AC_MSG_RESULT($blas_atlas_ok)
     fi
     LIBS="$save_LIBS"
   fi
@@ -82,13 +77,13 @@ fi
 #   LIBS="$save_LIBS"
 # fi
 
-# BLAS in MKL library? 
+# BLAS in MKL library?
 # (http://www.intel.com/cd/software/products/asmo-na/eng/perflib/mkl/index.htm)
 if test "$acx_blas_ok" = no; then
-  AC_CHECK_LIB(mkl, $sgemm, 
-    [acx_blas_ok=yes; blas_mkl_ok=yes; BLAS_LIBS="-lmkl"], 
+  AC_CHECK_LIB(mkl, $sgemm,
+    [acx_blas_ok=yes; blas_mkl_ok=yes; BLAS_LIBS="-lmkl"],
     [AC_CHECK_LIB(mkl, $dgemm,
-      [acx_blas_ok=yes; blas_mkl_ok=yes; BLAS_LIBS="-lmkl -lpthread"], 
+      [acx_blas_ok=yes; blas_mkl_ok=yes; BLAS_LIBS="-lmkl -lpthread"],
       [], [-lpthread])],
     [])
 fi
@@ -96,10 +91,10 @@ fi
 # BLAS in ACML library? (http://developer.amd.com/acml.aspx)
 if test "$acx_blas_ok" = no; then
   save_LIBS="$LIBS"; LIBS="$LIBS$MY_FLIBS"
-  AC_CHECK_LIB(acml, $sgemm, 
+  AC_CHECK_LIB(acml, $sgemm,
     [acx_blas_ok=yes; blas_acml_ok=yes; BLAS_LIBS="-lacml$MY_FLIBS"],
     [AC_CHECK_LIB(acml, $dgemm,
-      [acx_blas_ok=yes; blas_acml_ok=yes; 
+      [acx_blas_ok=yes; blas_acml_ok=yes;
         BLAS_LIBS="-lacml -lacml_mv$MY_FLIBS"],
       [], [-lacml_mv])],
     [])
@@ -109,9 +104,9 @@ fi
 # BLAS in ATLAS library? (http://math-atlas.sourceforge.net/)
 if test "$acx_blas_ok" = no; then
   save_LIBS="$LIBS"; LIBS="$LIBS$MY_FLIBS"
-  AC_CHECK_LIB(atlas, ATL_xerbla,	
-    [AC_CHECK_LIB(f77blas, $sgemm, 
-      [AC_CHECK_LIB(cblas, cblas_dgemm, 
+  AC_CHECK_LIB(atlas, ATL_xerbla,
+    [AC_CHECK_LIB(f77blas, $sgemm,
+      [AC_CHECK_LIB(cblas, cblas_dgemm,
         [acx_blas_ok=yes; blas_atlas_ok=yes;
           BLAS_LIBS="-lcblas -lf77blas -latlas$MY_FLIBS"],
         [], [-lf77blas -latlas])],
@@ -144,7 +139,7 @@ fi
 #   if test "x$GCC" != xyes; then # only works with Sun CC
 #     AC_CHECK_LIB(sunmath, acosp,
 #       [AC_CHECK_LIB(sunperf, $sgemm,
-#         [acx_blas_ok=yes; BLAS_LIBS="-xlic_lib=sunperf -lsunmath"], [], 
+#         [acx_blas_ok=yes; BLAS_LIBS="-xlic_lib=sunperf -lsunmath"], [],
 #           [-lsunmath])])
 #   fi
 # fi
@@ -174,11 +169,46 @@ if test "$acx_blas_ok" = no; then
       [], [$MY_FLIBS])])
 fi
 
+# if BLAS is found check what kind of BLAS it is
+if test "$acx_blas_ok" = yes && test "$blas_mkl_ok" = no \
+    && test "$blas_acml_ok" = no && test "$blas_atlas_ok" = no; then
+  save_LIBS="$LIBS"; LIBS="$BLAS_LIBS $LIBS"
+  AC_MSG_CHECKING([for MKLGetVersion in $BLAS_LIBS])
+  AC_TRY_LINK_FUNC(MKLGetVersion, [blas_mkl_ok=yes])
+  AC_MSG_RESULT($blas_mkl_ok)
+  if test "$blas_mkl_ok" = no; then
+    AC_MSG_CHECKING([for acmlversion in $BLAS_LIBS])
+    AC_TRY_LINK_FUNC(acmlversion, [blas_acml_ok=yes])
+    AC_MSG_RESULT($blas_acml_ok)
+  fi
+  if test "$blas_mkl_ok" = no && test "$blas_acml_ok" = no; then
+    AC_MSG_CHECKING([for ATL_xerbla in $BLAS_LIBS])
+    AC_TRY_LINK_FUNC(ATL_xerbla, [blas_atlas_ok=yes])
+    AC_MSG_RESULT($blas_atlas_ok)
+  fi
+  LIBS="$save_LIBS"
+fi
+
 AC_SUBST(BLAS_LIBS)
 
 # Finally, define HAVE_BLAS
 if test "$acx_blas_ok" = yes; then
   AC_DEFINE(HAVE_BLAS, 1, [Define if you have a BLAS library.])
+  if test "$blas_mkl_ok" = yes; then
+    AC_DEFINE(HAVE_BLAS_MKL, 1, [Define if you have an MKL BLAS library.])
+  fi
+  if test "$blas_acml_ok" = yes; then
+    AC_DEFINE(HAVE_BLAS_ACML, 1, [Define if you have an ACML BLAS library.])
+  fi
+  if test "$blas_atlas_ok" = yes; then
+    AC_DEFINE(HAVE_BLAS_ATLAS, 1, [Define if you have an ATLAS BLAS library.])
+  fi
+else
+  if test "$acx_blas_ok" != disabled; then
+    AC_MSG_ERROR([cannot find any BLAS library, which is required by LAPACK.
+You can override this error by using "--without-blas" option, but the
+functionality of the IT++ library will be limited. You have been warned!])
+  fi
 fi
 
 ])dnl ACX_BLAS

@@ -36,8 +36,8 @@ DIST_COMMON = $(pkginclude_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in $(srcdir)/sources.mk \
 	$(top_srcdir)/Makefile.common
 @ENABLE_DEBUG_TRUE@am__append_1 = libbase_debug.la
-@HAVE_F77_TRUE@am__append_2 = $(f_base_sources)
-@HAVE_F77_TRUE@am__append_3 = $(f_base_sources)
+@BUILD_ZDOTUSUB_TRUE@am__append_2 = $(f_base_sources)
+@BUILD_ZDOTUSUB_TRUE@am__append_3 = $(f_base_sources)
 subdir = itpp/base
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/config/acx_blas.m4 \
@@ -81,6 +81,7 @@ am__libbase_la_SOURCES_DIST = $(top_srcdir)/itpp/base/array.h \
 	$(top_srcdir)/itpp/base/binary.cpp \
 	$(top_srcdir)/itpp/base/binfile.cpp \
 	$(top_srcdir)/itpp/base/converters.cpp \
+	$(top_srcdir)/itpp/base/factory.cpp \
 	$(top_srcdir)/itpp/base/fastmath.cpp \
 	$(top_srcdir)/itpp/base/gf2mat.cpp \
 	$(top_srcdir)/itpp/base/help_functions.cpp \
@@ -100,14 +101,15 @@ am__libbase_la_SOURCES_DIST = $(top_srcdir)/itpp/base/array.h \
 am__objects_1 =
 am__objects_2 = libbase_la-bessel.lo libbase_la-binary.lo \
 	libbase_la-binfile.lo libbase_la-converters.lo \
-	libbase_la-fastmath.lo libbase_la-gf2mat.lo \
-	libbase_la-help_functions.lo libbase_la-itassert.lo \
-	libbase_la-itfile.lo libbase_la-mat.lo libbase_la-matfunc.lo \
-	libbase_la-operators.lo libbase_la-parser.lo \
-	libbase_la-random.lo libbase_la-smat.lo libbase_la-specmat.lo \
-	libbase_la-svec.lo libbase_la-timing.lo libbase_la-vec.lo
+	libbase_la-factory.lo libbase_la-fastmath.lo \
+	libbase_la-gf2mat.lo libbase_la-help_functions.lo \
+	libbase_la-itassert.lo libbase_la-itfile.lo libbase_la-mat.lo \
+	libbase_la-matfunc.lo libbase_la-operators.lo \
+	libbase_la-parser.lo libbase_la-random.lo libbase_la-smat.lo \
+	libbase_la-specmat.lo libbase_la-svec.lo libbase_la-timing.lo \
+	libbase_la-vec.lo
 am__objects_3 = zdotusub.lo
-@HAVE_F77_TRUE@am__objects_4 = $(am__objects_3)
+@BUILD_ZDOTUSUB_TRUE@am__objects_4 = $(am__objects_3)
 am_libbase_la_OBJECTS = $(am__objects_1) $(am__objects_2) \
 	$(am__objects_4)
 libbase_la_OBJECTS = $(am_libbase_la_OBJECTS)
@@ -146,6 +148,7 @@ am__libbase_debug_la_SOURCES_DIST = $(top_srcdir)/itpp/base/array.h \
 	$(top_srcdir)/itpp/base/binary.cpp \
 	$(top_srcdir)/itpp/base/binfile.cpp \
 	$(top_srcdir)/itpp/base/converters.cpp \
+	$(top_srcdir)/itpp/base/factory.cpp \
 	$(top_srcdir)/itpp/base/fastmath.cpp \
 	$(top_srcdir)/itpp/base/gf2mat.cpp \
 	$(top_srcdir)/itpp/base/help_functions.cpp \
@@ -164,8 +167,8 @@ am__libbase_debug_la_SOURCES_DIST = $(top_srcdir)/itpp/base/array.h \
 	$(top_srcdir)/itpp/base/zdotusub.f
 am__objects_5 = libbase_debug_la-bessel.lo libbase_debug_la-binary.lo \
 	libbase_debug_la-binfile.lo libbase_debug_la-converters.lo \
-	libbase_debug_la-fastmath.lo libbase_debug_la-gf2mat.lo \
-	libbase_debug_la-help_functions.lo \
+	libbase_debug_la-factory.lo libbase_debug_la-fastmath.lo \
+	libbase_debug_la-gf2mat.lo libbase_debug_la-help_functions.lo \
 	libbase_debug_la-itassert.lo libbase_debug_la-itfile.lo \
 	libbase_debug_la-mat.lo libbase_debug_la-matfunc.lo \
 	libbase_debug_la-operators.lo libbase_debug_la-parser.lo \
@@ -275,6 +278,7 @@ INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 LAPACK_LIBS = @LAPACK_LIBS@
 LDFLAGS = @LDFLAGS@
+LDLIBS = @LDLIBS@
 LIBOBJS = @LIBOBJS@
 LIBS = @LIBS@
 LIBTOOL = @LIBTOOL@
@@ -390,6 +394,7 @@ cpp_base_sources = \
 	$(top_srcdir)/itpp/base/binary.cpp \
 	$(top_srcdir)/itpp/base/binfile.cpp \
 	$(top_srcdir)/itpp/base/converters.cpp \
+	$(top_srcdir)/itpp/base/factory.cpp \
 	$(top_srcdir)/itpp/base/fastmath.cpp \
 	$(top_srcdir)/itpp/base/gf2mat.cpp \
 	$(top_srcdir)/itpp/base/help_functions.cpp \
@@ -485,6 +490,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libbase_debug_la-binary.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libbase_debug_la-binfile.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libbase_debug_la-converters.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libbase_debug_la-factory.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libbase_debug_la-fastmath.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libbase_debug_la-gf2mat.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libbase_debug_la-help_functions.Plo@am__quote@
@@ -504,6 +510,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libbase_la-binary.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libbase_la-binfile.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libbase_la-converters.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libbase_la-factory.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libbase_la-fastmath.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libbase_la-gf2mat.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libbase_la-help_functions.Plo@am__quote@
@@ -568,6 +575,13 @@ libbase_la-converters.lo: $(top_srcdir)/itpp/base/converters.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$(top_srcdir)/itpp/base/converters.cpp' object='libbase_la-converters.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbase_la_CXXFLAGS) $(CXXFLAGS) -c -o libbase_la-converters.lo `test -f '$(top_srcdir)/itpp/base/converters.cpp' || echo '$(srcdir)/'`$(top_srcdir)/itpp/base/converters.cpp
+
+libbase_la-factory.lo: $(top_srcdir)/itpp/base/factory.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbase_la_CXXFLAGS) $(CXXFLAGS) -MT libbase_la-factory.lo -MD -MP -MF $(DEPDIR)/libbase_la-factory.Tpo -c -o libbase_la-factory.lo `test -f '$(top_srcdir)/itpp/base/factory.cpp' || echo '$(srcdir)/'`$(top_srcdir)/itpp/base/factory.cpp
+@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/libbase_la-factory.Tpo $(DEPDIR)/libbase_la-factory.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$(top_srcdir)/itpp/base/factory.cpp' object='libbase_la-factory.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbase_la_CXXFLAGS) $(CXXFLAGS) -c -o libbase_la-factory.lo `test -f '$(top_srcdir)/itpp/base/factory.cpp' || echo '$(srcdir)/'`$(top_srcdir)/itpp/base/factory.cpp
 
 libbase_la-fastmath.lo: $(top_srcdir)/itpp/base/fastmath.cpp
 @am__fastdepCXX_TRUE@	$(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbase_la_CXXFLAGS) $(CXXFLAGS) -MT libbase_la-fastmath.lo -MD -MP -MF $(DEPDIR)/libbase_la-fastmath.Tpo -c -o libbase_la-fastmath.lo `test -f '$(top_srcdir)/itpp/base/fastmath.cpp' || echo '$(srcdir)/'`$(top_srcdir)/itpp/base/fastmath.cpp
@@ -701,6 +715,13 @@ libbase_debug_la-converters.lo: $(top_srcdir)/itpp/base/converters.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$(top_srcdir)/itpp/base/converters.cpp' object='libbase_debug_la-converters.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbase_debug_la_CXXFLAGS) $(CXXFLAGS) -c -o libbase_debug_la-converters.lo `test -f '$(top_srcdir)/itpp/base/converters.cpp' || echo '$(srcdir)/'`$(top_srcdir)/itpp/base/converters.cpp
+
+libbase_debug_la-factory.lo: $(top_srcdir)/itpp/base/factory.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbase_debug_la_CXXFLAGS) $(CXXFLAGS) -MT libbase_debug_la-factory.lo -MD -MP -MF $(DEPDIR)/libbase_debug_la-factory.Tpo -c -o libbase_debug_la-factory.lo `test -f '$(top_srcdir)/itpp/base/factory.cpp' || echo '$(srcdir)/'`$(top_srcdir)/itpp/base/factory.cpp
+@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/libbase_debug_la-factory.Tpo $(DEPDIR)/libbase_debug_la-factory.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$(top_srcdir)/itpp/base/factory.cpp' object='libbase_debug_la-factory.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbase_debug_la_CXXFLAGS) $(CXXFLAGS) -c -o libbase_debug_la-factory.lo `test -f '$(top_srcdir)/itpp/base/factory.cpp' || echo '$(srcdir)/'`$(top_srcdir)/itpp/base/factory.cpp
 
 libbase_debug_la-fastmath.lo: $(top_srcdir)/itpp/base/fastmath.cpp
 @am__fastdepCXX_TRUE@	$(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbase_debug_la_CXXFLAGS) $(CXXFLAGS) -MT libbase_debug_la-fastmath.lo -MD -MP -MF $(DEPDIR)/libbase_debug_la-fastmath.Tpo -c -o libbase_debug_la-fastmath.lo `test -f '$(top_srcdir)/itpp/base/fastmath.cpp' || echo '$(srcdir)/'`$(top_srcdir)/itpp/base/fastmath.cpp

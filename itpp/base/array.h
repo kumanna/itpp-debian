@@ -195,21 +195,20 @@ namespace itpp {
   template<class T> inline
   void Array<T>::alloc(int n)
   {
-    if (n == 0) {
-      data = 0;
-      ndata = 0;
-    }
-    else {
+    if (n > 0) {
       create_elements(data, n, factory);
       ndata = n;
+    }
+    else {
+      data = 0;
+      ndata = 0;
     }
   }
 
   template<class T> inline
   void Array<T>::free()
   {
-    delete[] data;
-    data = 0;
+    destroy_elements(data, ndata);
     ndata = 0;
   }
 
@@ -253,19 +252,31 @@ namespace itpp {
     free();
   }
 
-  template<class T> inline
+  template<class T>
   void Array<T>::set_size(int size, bool copy)
   {
     it_assert_debug(size >= 0, "Array::set_size(): New size must not be negative");
     if (ndata == size)
       return;
     if (copy) {
+      // create a temporary pointer to the allocated data
       T* tmp = data;
+      // store the current number of elements
+      int old_ndata = ndata;
+      // check how many elements we need to copy
       int min = (ndata < size) ? ndata : size;
+      // allocate new memory
       alloc(size);
-      for (int i = 0; i < min; ++i)
+      // copy old elements into a new memory region
+      for (int i = 0; i < min; ++i) {
 	data[i] = tmp[i];
-      delete[] tmp;
+      }
+      // initialize the rest of resized array
+      for (int i = min; i < size; ++i) {
+	data[i] = T();
+      }
+      // delete old elements
+      destroy_elements(tmp, old_ndata);
     }
     else {
       free();
