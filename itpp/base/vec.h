@@ -74,8 +74,7 @@ namespace itpp {
   //! Inner (dot) product of two vectors v1 and v2
   template<class Num_T> Num_T dot(const Vec<Num_T> &v1, const Vec<Num_T> &v2);
   //! Inner (dot) product of two vectors v1 and v2
-  template<class Num_T> Num_T operator*(const Vec<Num_T> &v1, const Vec<Num_T> &v2)
-  { return dot(v1, v2); }
+  template<class Num_T> Num_T operator*(const Vec<Num_T> &v1, const Vec<Num_T> &v2);
   /*!
    * \brief Outer product of two vectors v1 and v2
    *
@@ -245,9 +244,9 @@ namespace itpp {
     //! Set the vector to the all one vector
     void ones();
     //! Set the vector equal to the values in the \c str string
-    bool set(const char *str);
+    void set(const char *str);
     //! Set the vector equal to the values in the \c str string
-    bool set(const std::string &str);
+    void set(const std::string &str);
 
     //! C-style index operator. First element is 0
     const Num_T &operator[](int i) const;
@@ -457,6 +456,9 @@ namespace itpp {
     Num_T *data;
     //! Element factory (set to DEFAULT_FACTORY to use Num_T default constructors only)
     const Factory &factory;
+  private:
+    // This function is used in set() methods to replace commas with spaces
+    std::string replace_commas(const std::string &str);
   };
 
   //-----------------------------------------------------------------------------------
@@ -545,8 +547,7 @@ namespace itpp {
   template<class Num_T> inline
   void Vec<Num_T>::free()
   {
-    delete [] data;
-    data = 0;
+    destroy_elements(data, datasize);
     datasize = 0;
   }
 
@@ -607,13 +608,21 @@ namespace itpp {
     if (datasize == size)
       return;
     if (copy) {
+      // create a temporary pointer to the allocated data
       Num_T* tmp = data;
+      // store the current number of elements
+      int old_datasize = datasize;
+      // check how many elements we need to copy
       int min = datasize < size ? datasize : size;
+      // allocate new memory
       alloc(size);
+      // copy old elements into a new memory region
       copy_vector(min, tmp, data);
+      // initialize the rest of resized vector
       for (int i = min; i < size; ++i)
 	data[i] = Num_T(0);
-      delete[] tmp;
+      // delete old elements
+      destroy_elements(tmp, old_datasize);
     }
     else {
       free();
@@ -715,31 +724,31 @@ namespace itpp {
 
   //! Specialization of \c set() for double
   template<>
-  bool Vec<double>::set(const char *values);
+  void Vec<double>::set(const std::string &str);
   //! Specialization of \c set() for std::complex<double>
   template<>
-  bool Vec<std::complex<double> >::set(const char *values);
-  //! Specialization of \c set() for itpp::bin
-  template<>
-  bool Vec<bin>::set(const char *values);
+  void Vec<std::complex<double> >::set(const std::string &str);
   //! Specialization of \c set() for int
   template<>
-  bool Vec<int>::set(const char *values);
+  void Vec<int>::set(const std::string &str);
   //! Specialization of \c set() for short int
   template<>
-  bool Vec<short int>::set(const char *values);
+  void Vec<short int>::set(const std::string &str);
+  //! Specialization of \c set() for itpp::bin
+  template<>
+  void Vec<bin>::set(const std::string &str);
 
   template<class Num_T>
-  bool Vec<Num_T>::set(const char *values)
+  void Vec<Num_T>::set(const std::string &str)
   {
-    it_error("Vec::set(): Only `double', `complex<double>', `int', `short int' and `bin' types supported");
-    return true;
+    it_error("Vec::set(): Only `double', `complex<double>', `int', "
+	     "`short int' and `bin' types supported");
   }
 
   template<class Num_T>
-  bool Vec<Num_T>::set(const std::string &str)
+  void Vec<Num_T>::set(const char *str)
   {
-    return set(str.c_str());
+    set(std::string(str));
   }
 
 
@@ -913,13 +922,14 @@ namespace itpp {
     return blas::ddot_(&v1.datasize, v1.data, &incr, v2.data, &incr);
   }
 
+  // zdotusub_ is not available in MKL
   template<> inline
   std::complex<double> dot(const cvec &v1, const cvec &v2)
   {
     it_assert_debug(v1.datasize == v2.datasize, "cvec::dot: wrong sizes");
     int incr = 1;
     std::complex<double> output;
-    blas::zdotusub_(&v1.datasize, v1.data, &incr, v2.data, &incr, &output);
+    blas::zdotusub_(&output, &v1.datasize, v1.data, &incr, v2.data, &incr);
     return output;
   }
 #endif // HAVE_BLAS
@@ -936,6 +946,13 @@ namespace itpp {
 
     return r;
   }
+
+  template<class Num_T> inline
+  Num_T operator*(const Vec<Num_T> &v1, const Vec<Num_T> &v2)
+  {
+    return dot(v1, v2);
+  }
+
 
 #if defined(HAVE_BLAS)
   template<> inline
@@ -1832,8 +1849,10 @@ namespace itpp {
 #if !defined(HAVE_BLAS)
   //! Template instantiation of dot
   extern template double dot(const vec &v1, const vec &v2);
+#if defined(HAVE_MKL) && defined(_MSC_VER)
   //! Template instantiation of dot
   extern template std::complex<double> dot(const cvec &v1, const cvec &v2);
+#endif
 #endif
   //! Template instantiation of dot
   extern template int dot(const ivec &v1, const ivec &v2);
@@ -1842,6 +1861,15 @@ namespace itpp {
   //! Template instantiation of dot
   extern template bin dot(const bvec &v1, const bvec &v2);
 
+#if !defined(HAVE_BLAS)
+  //! Template instantiation of operator*
+  extern template double operator*(const vec &v1, const vec &v2);
+#if defined(HAVE_MKL) && defined(_MSC_VER)
+  //! Template instantiation of operator*
+  extern template std::complex<double> operator*(const cvec &v1,
+						 const cvec &v2);
+#endif
+#endif
   //! Template instantiation of operator*
   extern template int operator*(const ivec &v1, const ivec &v2);
   //! Template instantiation of operator*

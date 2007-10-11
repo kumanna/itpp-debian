@@ -33,11 +33,17 @@ build_triplet = @build@
 host_triplet = @host@
 DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in \
 	$(top_srcdir)/Makefile.common
-@ENABLE_COMM_TRUE@am__append_1 = $(COMM_TESTS)
-@ENABLE_FIXED_TRUE@am__append_2 = $(FIXED_TESTS)
-@ENABLE_OPTIM_TRUE@am__append_3 = $(OPTIM_TESTS)
-@ENABLE_SIGNAL_TRUE@am__append_4 = $(SIGNAL_TESTS)
-check_PROGRAMS = $(am__EXEEXT_11)
+@RUN_LAPACK_TESTS_TRUE@am__append_1 = $(BASE_LAP_TESTS) $(STAT_LAP_TESTS)
+@ENABLE_COMM_TRUE@am__append_2 = $(COMM_TESTS)
+@ENABLE_COMM_TRUE@@RUN_LAPACK_TESTS_TRUE@am__append_3 = $(COMM_LAP_TESTS)
+@ENABLE_COMM_TRUE@@RUN_FFT_TESTS_TRUE@am__append_4 = $(COMM_FFT_TESTS)
+@ENABLE_FIXED_TRUE@am__append_5 = $(FIXED_TESTS)
+@ENABLE_OPTIM_TRUE@am__append_6 = $(OPTIM_TESTS)
+@ENABLE_SIGNAL_TRUE@am__append_7 = $(SIGNAL_TESTS)
+@ENABLE_SIGNAL_TRUE@@RUN_LAPACK_TESTS_TRUE@am__append_8 = $(SIGNAL_LAP_TESTS)
+@ENABLE_SIGNAL_TRUE@@RUN_FFT_TESTS_TRUE@am__append_9 = $(SIGNAL_FFT_TESTS)
+@ENABLE_SIGNAL_TRUE@@RUN_FFT_TESTS_TRUE@@RUN_LAPACK_TESTS_TRUE@am__append_10 = $(SIGNAL_LAP_FFT_TESTS)
+check_PROGRAMS = $(am__EXEEXT_24)
 subdir = tests
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/config/acx_blas.m4 \
@@ -49,35 +55,52 @@ mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/itpp/config.h
 CONFIG_CLEAN_FILES =
 am__EXEEXT_1 = array_test$(EXEEXT) bessel_test$(EXEEXT) \
-	blas_test$(EXEEXT) cholesky_test$(EXEEXT) \
-	circular_buffer_test$(EXEEXT) det_test$(EXEEXT) \
-	eigen_test$(EXEEXT) fastmath_test$(EXEEXT) \
-	gf2mat_test$(EXEEXT) integration_test$(EXEEXT) \
-	inv_test$(EXEEXT) itfile_test$(EXEEXT) ls_solve_test$(EXEEXT) \
-	lu_test$(EXEEXT) matfunc_test$(EXEEXT) mat_test$(EXEEXT) \
-	parser_test$(EXEEXT) qr_test$(EXEEXT) rand_test$(EXEEXT) \
-	schur_test$(EXEEXT) sort_test$(EXEEXT) sparse_test$(EXEEXT) \
-	svd_test$(EXEEXT) timer_test$(EXEEXT) vec_test$(EXEEXT)
-am__EXEEXT_2 = histogram_test$(EXEEXT) stat_test$(EXEEXT)
-am__EXEEXT_3 = bch_test$(EXEEXT) channel_test$(EXEEXT) \
-	commfunc_test$(EXEEXT) convcode_test$(EXEEXT) \
-	galois_test$(EXEEXT) interleaver_test$(EXEEXT) \
-	ldpc_test$(EXEEXT) llr_test$(EXEEXT) modulator_test$(EXEEXT) \
-	modulator_nd_test$(EXEEXT) pulse_shape_test$(EXEEXT) \
+	blas_test$(EXEEXT) circular_buffer_test$(EXEEXT) \
+	fastmath_test$(EXEEXT) gf2mat_test$(EXEEXT) \
+	integration_test$(EXEEXT) itfile_test$(EXEEXT) \
+	mat_test$(EXEEXT) parser_test$(EXEEXT) rand_test$(EXEEXT) \
+	sort_test$(EXEEXT) sparse_test$(EXEEXT) timer_test$(EXEEXT) \
+	vec_test$(EXEEXT)
+am__EXEEXT_2 = histogram_test$(EXEEXT)
+am__EXEEXT_3 = cholesky_test$(EXEEXT) det_test$(EXEEXT) \
+	eigen_test$(EXEEXT) inv_test$(EXEEXT) ls_solve_test$(EXEEXT) \
+	lu_test$(EXEEXT) matfunc_test$(EXEEXT) qr_test$(EXEEXT) \
+	schur_test$(EXEEXT) svd_test$(EXEEXT)
+am__EXEEXT_4 = stat_test$(EXEEXT)
+@RUN_LAPACK_TESTS_TRUE@am__EXEEXT_5 = $(am__EXEEXT_3) $(am__EXEEXT_4)
+am__EXEEXT_6 = bch_test$(EXEEXT) commfunc_test$(EXEEXT) \
+	convcode_test$(EXEEXT) galois_test$(EXEEXT) \
+	interleaver_test$(EXEEXT) ldpc_test$(EXEEXT) llr_test$(EXEEXT) \
+	modulator_test$(EXEEXT) pulse_shape_test$(EXEEXT) \
 	rec_syst_conv_code_test$(EXEEXT) reedsolomon_test$(EXEEXT) \
 	turbo_test$(EXEEXT)
-@ENABLE_COMM_TRUE@am__EXEEXT_4 = $(am__EXEEXT_3)
-am__EXEEXT_5 = fix_test$(EXEEXT)
-@ENABLE_FIXED_TRUE@am__EXEEXT_6 = $(am__EXEEXT_5)
-am__EXEEXT_7 = newton_search_test$(EXEEXT)
-@ENABLE_OPTIM_TRUE@am__EXEEXT_8 = $(am__EXEEXT_7)
-am__EXEEXT_9 = fastica_test$(EXEEXT) filter_test$(EXEEXT) \
-	filter_design_test$(EXEEXT) freq_filt_test$(EXEEXT) \
-	poly_test$(EXEEXT) sigfun_test$(EXEEXT) source_test$(EXEEXT) \
-	transforms_test$(EXEEXT) window_test$(EXEEXT)
-@ENABLE_SIGNAL_TRUE@am__EXEEXT_10 = $(am__EXEEXT_9)
-am__EXEEXT_11 = $(am__EXEEXT_1) $(am__EXEEXT_2) $(am__EXEEXT_4) \
-	$(am__EXEEXT_6) $(am__EXEEXT_8) $(am__EXEEXT_10)
+@ENABLE_COMM_TRUE@am__EXEEXT_7 = $(am__EXEEXT_6)
+am__EXEEXT_8 = modulator_nd_test$(EXEEXT)
+@ENABLE_COMM_TRUE@@RUN_LAPACK_TESTS_TRUE@am__EXEEXT_9 =  \
+@ENABLE_COMM_TRUE@@RUN_LAPACK_TESTS_TRUE@	$(am__EXEEXT_8)
+am__EXEEXT_10 = channel_test$(EXEEXT)
+@ENABLE_COMM_TRUE@@RUN_FFT_TESTS_TRUE@am__EXEEXT_11 =  \
+@ENABLE_COMM_TRUE@@RUN_FFT_TESTS_TRUE@	$(am__EXEEXT_10)
+am__EXEEXT_12 = fix_test$(EXEEXT)
+@ENABLE_FIXED_TRUE@am__EXEEXT_13 = $(am__EXEEXT_12)
+am__EXEEXT_14 = newton_search_test$(EXEEXT)
+@ENABLE_OPTIM_TRUE@am__EXEEXT_15 = $(am__EXEEXT_14)
+am__EXEEXT_16 = filter_test$(EXEEXT) source_test$(EXEEXT) \
+	window_test$(EXEEXT)
+@ENABLE_SIGNAL_TRUE@am__EXEEXT_17 = $(am__EXEEXT_16)
+am__EXEEXT_18 = fastica_test$(EXEEXT) poly_test$(EXEEXT)
+@ENABLE_SIGNAL_TRUE@@RUN_LAPACK_TESTS_TRUE@am__EXEEXT_19 =  \
+@ENABLE_SIGNAL_TRUE@@RUN_LAPACK_TESTS_TRUE@	$(am__EXEEXT_18)
+am__EXEEXT_20 = freq_filt_test$(EXEEXT) sigfun_test$(EXEEXT) \
+	transforms_test$(EXEEXT)
+@ENABLE_SIGNAL_TRUE@@RUN_FFT_TESTS_TRUE@am__EXEEXT_21 =  \
+@ENABLE_SIGNAL_TRUE@@RUN_FFT_TESTS_TRUE@	$(am__EXEEXT_20)
+am__EXEEXT_22 = filter_design_test$(EXEEXT)
+@ENABLE_SIGNAL_TRUE@@RUN_FFT_TESTS_TRUE@@RUN_LAPACK_TESTS_TRUE@am__EXEEXT_23 = $(am__EXEEXT_22)
+am__EXEEXT_24 = $(am__EXEEXT_1) $(am__EXEEXT_2) $(am__EXEEXT_5) \
+	$(am__EXEEXT_7) $(am__EXEEXT_9) $(am__EXEEXT_11) \
+	$(am__EXEEXT_13) $(am__EXEEXT_15) $(am__EXEEXT_17) \
+	$(am__EXEEXT_19) $(am__EXEEXT_21) $(am__EXEEXT_23)
 am_array_test_OBJECTS = array_test.$(OBJEXT)
 array_test_OBJECTS = $(am_array_test_OBJECTS)
 array_test_LDADD = $(LDADD)
@@ -397,6 +420,7 @@ INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 LAPACK_LIBS = @LAPACK_LIBS@
 LDFLAGS = @LDFLAGS@
+LDLIBS = @LDLIBS@
 LIBOBJS = @LIBOBJS@
 LIBS = @LIBS@
 LIBTOOL = @LIBTOOL@
@@ -480,75 +504,36 @@ top_srcdir = @top_srcdir@
 AM_CPPFLAGS = -I$(top_builddir) -I$(top_srcdir)
 LDADD = $(top_builddir)/itpp/libitpp.la
 AM_CXXFLAGS = $(CXXFLAGS_OPT)
-BASE_TESTS = \
-	array_test \
-	bessel_test \
-	blas_test \
-	cholesky_test \
-	circular_buffer_test \
-	det_test \
-	eigen_test \
-	fastmath_test \
-	gf2mat_test \
-	integration_test \
-	inv_test \
-	itfile_test \
-	ls_solve_test \
-	lu_test \
-	matfunc_test \
-	mat_test \
-	parser_test \
-	qr_test \
-	rand_test \
-	schur_test \
-	sort_test \
-	sparse_test \
-	svd_test \
-	timer_test \
-	vec_test
+BASE_TESTS = array_test bessel_test blas_test circular_buffer_test	\
+  fastmath_test gf2mat_test integration_test itfile_test mat_test	\
+  parser_test rand_test sort_test sparse_test timer_test vec_test
 
-COMM_TESTS = \
-	bch_test \
-	channel_test \
-	commfunc_test \
-	convcode_test \
-	galois_test \
-	interleaver_test \
-	ldpc_test \
-	llr_test \
-	modulator_test \
-	modulator_nd_test \
-	pulse_shape_test \
-	rec_syst_conv_code_test \
-	reedsolomon_test \
-	turbo_test
+BASE_LAP_TESTS = cholesky_test det_test eigen_test inv_test ls_solve_test \
+  lu_test matfunc_test qr_test schur_test svd_test
 
-FIXED_TESTS = \
-	fix_test
+COMM_TESTS = bch_test commfunc_test convcode_test galois_test		\
+  interleaver_test ldpc_test llr_test modulator_test pulse_shape_test	\
+  rec_syst_conv_code_test reedsolomon_test turbo_test
 
-OPTIM_TESTS = \
-	newton_search_test
-
-SIGNAL_TESTS = \
-	fastica_test \
-	filter_test \
-	filter_design_test \
-	freq_filt_test \
-	poly_test \
-	sigfun_test \
-	source_test \
-	transforms_test \
-	window_test
-
-STAT_TESTS = \
-	histogram_test \
-	stat_test
-
-ALL_TESTS = $(BASE_TESTS) $(COMM_TESTS) $(FIXED_TESTS) $(OPTIM_TESTS) \
-	$(SIGNAL_TESTS) $(STAT_TESTS)
+COMM_LAP_TESTS = modulator_nd_test
+COMM_FFT_TESTS = channel_test
+FIXED_TESTS = fix_test
+OPTIM_TESTS = newton_search_test
+SIGNAL_TESTS = filter_test source_test window_test
+SIGNAL_LAP_TESTS = fastica_test poly_test
+SIGNAL_FFT_TESTS = freq_filt_test sigfun_test transforms_test
+SIGNAL_LAP_FFT_TESTS = filter_design_test
+STAT_TESTS = histogram_test
+STAT_LAP_TESTS = stat_test
+ALL_TESTS = $(BASE_TESTS) $(BASE_LAP_TESTS) $(COMM_TESTS) $(COMM_LAP_TESTS) \
+  $(COMM_FFT_TESTS) $(FIXED_TESTS) $(OPTIM_TESTS) $(SIGNAL_TESTS) \
+  $(SIGNAL_LAP_TESTS) $(SIGNAL_FFT_TESTS) $(SIGNAL_LAP_FFT_TESTS) \
+  $(STAT_TESTS) $(STAT_LAP_TESTS)
 
 USED_TESTS = $(BASE_TESTS) $(STAT_TESTS) $(am__append_1) \
-	$(am__append_2) $(am__append_3) $(am__append_4)
+	$(am__append_2) $(am__append_3) $(am__append_4) \
+	$(am__append_5) $(am__append_6) $(am__append_7) \
+	$(am__append_8) $(am__append_9) $(am__append_10)
 array_test_SOURCES = array_test.cpp
 bch_test_SOURCES = bch_test.cpp
 bessel_test_SOURCES = bessel_test.cpp
@@ -607,7 +592,7 @@ window_test_SOURCES = window_test.cpp
 tmp_files = $(USED_TESTS:=.tmp)
 ref_files = $(ALL_TESTS:=.ref)
 EXTRA_DIST = itfile_test_data.it fastica_test_data.txt parser_test_data.txt \
-	$(ref_files) 
+	$(ref_files)
 
 all: all-am
 
@@ -1116,17 +1101,31 @@ uninstall-am:
 @SET_MAKE@
 
 check-local: $(check_PROGRAMS) $(ref_files)
-	@for i in $(USED_TESTS); do \
-		echo ------------------------------------------------------------------------------; \
-		./$$i$(EXEEXT) 2> /dev/null | sed 's/^M$$//' | sed 's/\(-\?[0-9]\+\.\?[0-9]*e[+-]\)0\([0-9][0-9]\)/\1\2/g' > $$i.tmp; \
-		diff $$i.tmp $(srcdir)/$$i.ref > /dev/null; \
-		if test "x$$?" = "x0"; then \
+	@total=0; failed=0; \
+	for i in $(USED_TESTS); \
+	do \
+		echo "------------------------------------------------------------------------------"; \
+		./$$i$(EXEEXT) 2>/dev/null | sed -e 's/^M$$//' -e 's/\(-\?[0-9]\+\.\?[0-9]*e[+-]\)0\([0-9][0-9]\)/\1\2/g' > $$i.tmp; \
+		diff $(srcdir)/$$i.ref $$i.tmp >/dev/null; \
+		if [ "x$$?" = "x0" ]; \
+		then \
 			echo "Test \`$$i' PASSED."; \
 		else \
 			echo "Test \`$$i' FAILED!!!"; \
+			failed=$$(($$failed + 1)); \
 		fi; \
+		total=$$(($$total + 1)); \
 	done; \
-	echo ------------------------------------------------------------------------------
+	echo "------------------------------------------------------------------------------"; \
+	if [ $$failed -gt 0 ]; \
+	then \
+		echo ""; \
+		echo "******************************************************************************"; \
+		echo "*** ERROR: $$failed/$$total tests failed!!!"; \
+		echo "******************************************************************************"; \
+		echo ""; \
+		exit 1; \
+	fi
 
 clean-local:
 	-rm -f $(tmp_files) gf2mat_test.alist ldpc_test.codec

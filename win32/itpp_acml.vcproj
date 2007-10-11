@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="Windows-1252"?>
+<?xml version="1.0" encoding="windows-1250"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
 	Version="8,00"
@@ -40,7 +40,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				Optimization="0"
-				AdditionalIncludeDirectories="..;&quot;C:\Program Files\AMD\acml3.6.0\pgi32\include&quot;"
+				AdditionalIncludeDirectories="..;&quot;C:\Program Files\AMD\acml\pgi32\include&quot;"
 				PreprocessorDefinitions="_WIN32;_DEBUG;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;HAVE_ACML"
 				MinimalRebuild="true"
 				BasicRuntimeChecks="3"
@@ -106,7 +106,7 @@
 			/>
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalIncludeDirectories="..;&quot;C:\Program Files\AMD\acml3.6.0\pgi32\include&quot;"
+				AdditionalIncludeDirectories="..;&quot;C:\Program Files\AMD\acml\pgi32\include&quot;"
 				PreprocessorDefinitions="_WIN32;NDEBUG;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;HAVE_ACML"
 				RuntimeLibrary="0"
 				RuntimeTypeInfo="true"
@@ -171,6 +171,10 @@
 				</File>
 				<File
 					RelativePath="..\itpp\base\converters.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\itpp\base\factory.cpp"
 					>
 				</File>
 				<File

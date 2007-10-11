@@ -3,19 +3,21 @@
 	ProjectType="Visual C++"
 	Version="8,00"
 	Name="array_test"
-	ProjectGUID="{F680E2E1-48D2-4721-9FFC-F570AD40B47A}"
+	ProjectGUID="{DB816023-6103-4696-8A96-A08C611686D5}"
 	RootNamespace="array_test"
 	Keyword="Win32Proj"
 	>
 	<Platforms>
-		<Platform Name="Win32"/>
+		<Platform
+			Name="Win32"
+		/>
 	</Platforms>
 	<ToolFiles>
 	</ToolFiles>
 	<Configurations>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)\bin"
+			OutputDirectory="$(SolutionDir)\..\bin"
 			IntermediateDirectory="$(ProjectName)_build\$(ConfigurationName)"
 			ConfigurationType="1"
 			CharacterSet="1"
@@ -39,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="..\.."
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;HAVE_MKL"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
@@ -59,7 +61,7 @@
 				Name="VCLinkerTool"
 				AdditionalDependencies="itpp.lib mkl_c_dll.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;C:\Program Files\Intel\MKL\9.1.025\ia32\lib&quot;;..\lib"
+				AdditionalLibraryDirectories="&quot;C:\Program Files\Intel\MKL\ia32\lib&quot;;..\lib"
 				IgnoreDefaultLibraryNames="uuid.lib"
 				GenerateDebugInformation="false"
 				SubSystem="1"
@@ -96,7 +98,10 @@
 	<References>
 	</References>
 	<Files>
-	<File RelativePath="..\..\tests\array_test.cpp"></File>
+		<File
+			RelativePath="..\..\tests\array_test.cpp"
+			>
+		</File>
 	</Files>
 	<Globals>
 	</Globals>

@@ -3,7 +3,7 @@
 	ProjectType="Visual C++"
 	Version="8,00"
 	Name="bessel_test"
-	ProjectGUID="{37339973-FEAB-479D-B664-2906ACED9EB6}"
+	ProjectGUID="{CD5F15E7-9A8B-4541-B585-2278EC085ABE}"
 	RootNamespace="bessel_test"
 	Keyword="Win32Proj"
 	>
@@ -17,7 +17,7 @@
 	<Configurations>
 		<Configuration
 			Name="Release|Win32"
-			OutputDirectory="$(SolutionDir)\bin"
+			OutputDirectory="$(SolutionDir)\..\bin"
 			IntermediateDirectory="$(ProjectName)_build\$(ConfigurationName)"
 			ConfigurationType="1"
 			CharacterSet="1"
@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="..\.."
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;HAVE_MKL"
 				RuntimeLibrary="0"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
@@ -59,9 +59,9 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="itpp.lib mkl_c.lib"
+				AdditionalDependencies="itpp.lib mkl_c_dll.lib"
 				LinkIncremental="1"
-				AdditionalLibraryDirectories="&quot;C:\Program Files\Intel\MKL\9.1.025\ia32\lib&quot;;..\lib"
+				AdditionalLibraryDirectories="&quot;C:\Program Files\Intel\MKL\ia32\lib&quot;;..\lib"
 				IgnoreDefaultLibraryNames="uuid.lib"
 				GenerateDebugInformation="false"
 				SubSystem="1"
