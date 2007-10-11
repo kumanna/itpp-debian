@@ -1,0 +1,16 @@
+IT++ for Debian
+---------------
+
+Note that this version of IT++ is compiled without explicitly
+depending on the atlas3 libraries, since they are in need of updation
+in Debian. However, their presence on the system will allow the atlas
+libraries to be used, since they are alternative dependencies.
+
+Also, because of lapack3 requiring an old compiler (due to libg2c0),
+an old gcc-3.4 compiler is being used. Since the lapack features
+cannot be missed, I have persisted with this, though this solution is
+not permanent. Any suggestions on this, or efforts to make lapack3
+compile with gfortran are welcome. See BTS bug #379288 for details.
+
+ -- Kumar Appaiah <akumar@ee.iitm.ac.in>, Tue Jul  3 09:57:32 IST 2007
+

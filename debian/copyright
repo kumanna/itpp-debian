@@ -1,0 +1,55 @@
+This package was debianized by Kumar Appaiah <akumar@ee.iitm.ac.in> on
+Mon,  1 Jan 2007 14:00:00 +0530.
+
+It was downloaded from http://itpp.sourceforget.net
+
+Upstream Authors:
+Project Admins
+  o Tony Ottosson <tonyottosson@users.sourceforge.net> (N)
+  o Adam Piatyszek <ediap@users.sourceforge.net> (N)
+
+Developers
+  o Johan Bergman <emwjohb@users.sourceforge.net>
+  o Hakan Eriksson <hakanbe@users.sourceforge.net>
+  o Thomas Eriksson <thomases2@users.sourceforge.net>
+  o Pal Frenger <frenger@users.sourceforge.net>
+  o Fredrik Huss <frehu@users.sourceforge.net>
+  o Erik G. Larsson <erik_g_larsson@users.sourceforge.net>
+  o Simon Wood <sgwoodjr@users.sourceforge.net>
+
+
+Copyright: (C) 1995-2006  (above authors and contributors)
+
+fastica code Copyright (C) 2004 by:
+Francois CAYRE and Teddy FURON
+TEMICS Project
+INRIA/Rennes (IRISA)
+Campus Universitaire de Beaulieu
+35042 RENNES cedex FRANCE
+Email : firstname.lastname@irisa.fr
+
+tcp.h and tcp.c: Copyright (c) 2000-2004 IKR (formerly IND),
+University of Stuttgart
+
+
+License:
+
+   This package is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
+
+   This package is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
+
+   You should have received a copy of the GNU General Public License
+   along with this package; if not, write to the Free Software
+   Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301 USA
+
+On Debian systems, the complete text of the GNU General
+Public License can be found in `/usr/share/common-licenses/GPL'.
+
+The Debian packaging is (C) 2007, Kumar Appaiah <akumar@ee.iitm.ac.in> and
+is licensed under the GPL, see above.

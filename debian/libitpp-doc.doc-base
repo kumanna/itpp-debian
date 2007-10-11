@@ -1,0 +1,14 @@
+Document: libitpp
+Title: IT++ Manual
+Author: Tony Ottosson, Adam Piatyszek
+Abstract: This manual is the IT++ documentation
+ which documents the various features and toolkits provided in
+ the IT++ library for mathematics, communication and signal
+ processing.
+Section: Apps/Math
+
+Format: HTML
+Index: /usr/share/doc/libitpp-dev/html/index.html
+Files: /usr/share/doc/libitpp-dev/html/*.html
+
+  

@@ -1,0 +1,3 @@
+version=3
+#http://sf.net/itpp/itpp-(.*)\.tar\.gz
+http://itpp.sourceforge.net/ .*/itpp-(.*)\.tar\.gz

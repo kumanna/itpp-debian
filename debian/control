@@ -1,0 +1,65 @@
+Source: libitpp
+Priority: optional
+Maintainer: Kumar Appaiah <akumar@ee.iitm.ac.in>
+Build-Depends: debhelper (>= 5), autotools-dev, doxygen (>= 1.5.1-1), refblas3-dev, fftw3-dev, texlive-latex-base, gs, lapack3-dev
+Standards-Version: 3.7.2
+Section: libs
+
+Package: libitpp-dev
+Section: libdevel
+Architecture: any
+Depends: libitpp6 (= ${binary:Version})
+Description: C++ signal processing and communication library: Development headers
+ IT++ is a C++ library of mathematical, signal processing, speech
+ processing, and communications classes and functions. It is being
+ developed and is widely used by researchers, both in the
+ communications industry and universities.
+ .
+ This package has the development librariesand headers for IT++.
+ .
+  Homepage: http://itpp.sourceforge.net
+
+Package: libitpp6
+Section: libs
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: C++ signal processing and communication library
+ IT++ is a C++ library of mathematical, signal processing, speech
+ processing, and communications classes and functions. It is being
+ developed and is widely used by researchers, both in the
+ communications industry and universities.
+ .
+ This package has the debugging symbols for IT++ which may
+ be useful while debugging IT++ based applications.
+ .
+  Homepage: http://itpp.sourceforge.net
+
+Package: libitpp6-dbg
+Section: libs
+Priority: extra
+Architecture: any
+Depends: libitpp6 (= ${binary:Version})
+Description: C++ signal processing and communication library: Debug symbols
+ IT++ is a C++ library of mathematical, signal processing, speech
+ processing, and communications classes and functions. It is being
+ developed and is widely used by researchers, both in the
+ communications industry and universities.
+ .
+ This package has the debugging symbols for IT++ which may
+ be useful while debugging IT++ based applications.
+ .
+  Homepage: http://itpp.sourceforge.net
+
+Package: libitpp-doc
+Section: doc
+Architecture: all
+Recommends: dwww, www-browser
+Description: C++ signal processing and communication library: Documentation
+ IT++ is a C++ library of mathematical, signal processing, speech
+ processing, and communications classes and functions. It is being
+ developed and is widely used by researchers, both in the
+ communications industry and universities.
+ .
+ This package has the documentation for IT++.
+ .
+  Homepage: http://itpp.sourceforge.net
