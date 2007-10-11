@@ -1,3 +1,13 @@
+libitpp (4.0.0.rc2-1) UNRELEASED; urgency=low
+
+  * New upstream release.
+  * debian/control:
+    + Add Homepage field.
+  * debian/rules:
+    + Ensure the right CXXFLAGS are specified while running configure.
+  
+ -- Kumar Appaiah <akumar@ee.iitm.ac.in>  Mon, 08 Oct 2007 13:33:15 +0530
+
 libitpp (3.99.3.1-2) unstable; urgency=low
 
   * Use upstream provided manpage for itpp-config
