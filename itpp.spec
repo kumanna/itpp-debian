@@ -1,5 +1,5 @@
 Name:           itpp
-Version:        4.0.0-rc2
+Version:        4.0.0
 Release:        1
 Summary:        C++ library of math, signal/speech processing and communications
 

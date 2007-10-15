@@ -1,3 +1,92 @@
+2007-10-14  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* IT++ 4.0.0 released (SVN tag: release-4-0-0)
+
+	* NEWS: Updated for 4.0.0 stable release
+
+	* configure.ac: Version number updated
+
+2007-10-12  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* itpp/base/converters.h, itpp/base/help_functions.h,
+	itpp/base/mat.h, itpp/base/matfunc.cpp, itpp/base/matfunc.h,
+	itpp/base/smat.cpp, itpp/base/smat.h, itpp/base/svec.cpp,
+	itpp/base/svec.h, itpp/base/vec.cpp, itpp/base/vec.h,
+	itpp/comm/error_counters.cpp, itpp/comm/interleave.cpp,
+	itpp/comm/interleave.h, itpp/comm/pulse_shape.cpp,
+	itpp/comm/pulse_shape.h, itpp/fixed/cfixed.h,
+	itpp/fixed/fix_operators.h, itpp/fixed/fixed.h,
+	itpp/signal/filter.cpp, itpp/signal/filter.h,
+	itpp/signal/transforms.cpp, itpp/signal/transforms.h: Use
+	HAVE_EXTERN_TEMPLATE where necessary
+
+2007-10-11  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* config/ac_cxx_extern_template.m4, configure.ac,
+	itpp/config_msvc.h: Check for C++ "extern template" when
+	configuring IT++
+
+	Previously, it was assumed that all C++ compilers except MSVC++
+	support extern template instantiation. Now this feature is checked
+	with the configure script and HAVE_EXTERN_TEMPLATE is defined
+	accordingly.
+
+	* doc/doxygen_html.cfg.in: Doxygen configuration updated with
+	Doxygen 1.4.7
+
+	* doc/local/authors.doc, itpp/base/bessel/bessel_internal.h,
+	itpp/base/blas.h, itpp/base/converters.cpp,
+	itpp/base/converters.h, itpp/base/copy_vector.h,
+	itpp/base/factory.cpp, itpp/base/help_functions.cpp,
+	itpp/base/help_functions.h, itpp/base/itassert.cpp,
+	itpp/base/mat.cpp, itpp/base/mat.h, itpp/base/matfunc.h,
+	itpp/base/math/elem_math.h, itpp/base/specmat.cpp,
+	itpp/base/vec.cpp, itpp/base/vec.h, itpp/comm/convcode.cpp,
+	itpp/comm/crc.cpp, itpp/comm/ldpc.h,
+	itpp/comm/rec_syst_conv_code.cpp, itpp/fixed/cfixed.h,
+	itpp/fixed/fix_factory.h, itpp/fixed/fix_functions.h,
+	itpp/fixed/fixed.h, itpp/protocol/events.h,
+	itpp/protocol/front_drop_queue.h, itpp/protocol/packet.h,
+	itpp/protocol/packet_channel.h, itpp/protocol/packet_generator.h,
+	itpp/protocol/selective_repeat.cpp,
+	itpp/protocol/selective_repeat.h, itpp/protocol/signals_slots.h,
+	itpp/protocol/tcp.cpp, itpp/protocol/tcp.h,
+	itpp/protocol/tcp_client_server.h, itpp/signal/freq_filt.cpp,
+	itpp/srccode/audiofile.cpp, itpp/srccode/audiofile.h,
+	itpp/srccode/gmm.cpp, itpp/srccode/gmm.h,
+	itpp/srccode/lpcfunc.cpp, itpp/srccode/pnm.cpp,
+	itpp/srccode/pnm.h, itpp/srccode/vq.cpp, itpp/srccode/vq.h,
+	itpp/srccode/vqtrain.cpp, itpp/srccode/vqtrain.h,
+	itpp/stat/mog_diag.h, itpp/stat/mog_diag_em.h,
+	itpp/stat/mog_diag_kmeans.h, itpp/stat/mog_generic.h: Cleanup of
+	Doxygen documentation
+
+	Missing documentation reported by Doxygen have been marked by "ADD
+	DOCUMENTATION HERE" string. Besides, code fragments that do not
+	require documentation have been disabled from parsing by using
+	"\cond" and "\endcond" Doxygen's commands.
+
+	* itpp/base/converters.cpp, itpp/base/converters.h: Moved
+	templated functions' definitions into a header file
+
+2007-10-10  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* itpp/base/vec.cpp, itpp/base/vec.cpp: Removed unnecessary
+	conditional checks for MKL & MSVC++
+
+2007-10-09  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* INSTALL, configure.ac, doc/Makefile.am,
+	doc/local/installation.doc: Removed redundant "--with-docdir=DIR"
+	switch
+
+	This switch is not needed any more, because recent autoconf
+	provides "--docdir=DIR" switch with the same functionality by
+	default. Installation manual updated accordingly. Thanks to
+	Guenter Dannoritzer for reporting this problem.
+
+------------------------------------------------------------------------------
+
 2007-10-06  Adam Piatyszek  <ediap@users.sourceforge.net>
 
 	* IT++ 4.0.0-rc2 released (SVN tag: release-4-0-0-rc2)

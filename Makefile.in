@@ -43,7 +43,8 @@ DIST_COMMON = README $(am__configure_deps) $(dist_man_MANS) \
 	config/ltmain.sh config/missing
 subdir = .
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/config/acx_blas.m4 \
+am__aclocal_m4_deps = $(top_srcdir)/config/ac_cxx_extern_template.m4 \
+	$(top_srcdir)/config/acx_blas.m4 \
 	$(top_srcdir)/config/acx_fft.m4 \
 	$(top_srcdir)/config/acx_lapack.m4 $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
