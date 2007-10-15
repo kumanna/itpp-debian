@@ -7481,6 +7481,7 @@ AC_SUBST([am__tar])
 AC_SUBST([am__untar])
 ]) # _AM_PROG_TAR
 
+m4_include([config/ac_cxx_extern_template.m4])
 m4_include([config/acx_blas.m4])
 m4_include([config/acx_fft.m4])
 m4_include([config/acx_lapack.m4])

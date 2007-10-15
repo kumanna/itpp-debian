@@ -2,7 +2,7 @@
 #-------------------------------------------------------------------
 AC_PREREQ(2.59)
 AC_COPYRIGHT([Copyright (C) 2006, 2007  Adam Piatyszek <ediap@users.sourceforge.net>])
-AC_INIT([IT++],[4.0.0-rc2],[ediap@users.sourceforge.net],[itpp])
+AC_INIT([IT++],[4.0.0],[ediap@users.sourceforge.net],[itpp])
 AC_CONFIG_HEADER([itpp/config.h])
 AC_CONFIG_SRCDIR([itpp/base/vec.cpp])
 AC_CONFIG_AUX_DIR([config])
@@ -113,19 +113,6 @@ AM_CONDITIONAL([ENABLE_PROTOCOL], [test "x$enable_protocol" = xyes])
 AM_CONDITIONAL([ENABLE_SIGNAL], [test "x$enable_signal" = xyes])
 AM_CONDITIONAL([ENABLE_SRCCODE], [test "x$enable_srccode" = xyes])
 
-# Provide --with-docdir
-AC_ARG_WITH(docdir,
-            [AS_HELP_STRING([--with-docdir=DIR],
-                            [set documentation directory to DIR])],
-            [DOC_DIR="$withval"],
-            [DOC_DIR=""])
-if test "x$DOC_DIR" != x; then
-  docdir="$DOC_DIR"
-else
-  docdir="${datadir}/doc/$PACKAGE-$VERSION"
-fi
-AC_SUBST(docdir)
-
 
 PACKAGE_DEBUG="$PACKAGE"
 # Set debug flags
@@ -233,6 +220,10 @@ AC_CHECK_SIZEOF(long)
 AC_CHECK_SIZEOF(unsigned long)
 AC_CHECK_SIZEOF(long long)
 AC_CHECK_SIZEOF(unsigned long long)
+
+
+# Check if C++ compiler supports "extern template"
+AC_CXX_EXTERN_TEMPLATE
 
 
 # Check if we have Fortran compiler
@@ -374,6 +365,7 @@ Directories:
   - exec_prefix .... : ${exec_prefix}
   - includedir ..... : ${includedir}
   - libdir ......... : ${libdir}
+  - datarootdir .... : ${datarootdir}
   - docdir ......... : ${docdir}
 
 Switches:

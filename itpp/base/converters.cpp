@@ -31,163 +31,24 @@
 #include <itpp/base/matfunc.h>
 #include <itpp/base/math/log_exp.h>
 
+//! \cond
 
 namespace itpp {
 
   // ----------------------------------------------------------------------
-  // Converters for vectors
+  // Vector converters
   // ----------------------------------------------------------------------
 
-  template <class T>
-  bvec to_bvec(const Vec<T> &v)
+  ivec to_ivec(int s) { ivec out(1); out(0) = s; return out; }
+
+  vec to_vec(double s) { vec out(1); out(0) = s; return out; }
+
+  cvec to_cvec(double real, double imag)
   {
-    bvec temp(v.length());
-    for (int i=0;i<v.length();i++){
-      temp(i)=static_cast<bin>(v(i));
-    }
-    return temp;
+    cvec out(1);
+    out(0) = std::complex<double>(real, imag);
+    return out;
   }
-
-  template <class T>
-  svec to_svec(const Vec<T> &v)
-  {
-    svec temp(v.length());
-    for (int i=0;i<v.length();i++){
-      temp(i)=static_cast<short>(v(i));
-    }
-    return temp;
-  }
-
-  template <class T>
-  ivec to_ivec(const Vec<T> &v)
-  {
-    ivec temp(v.length());
-    for (int i=0;i<v.length();i++){
-      temp(i)=static_cast<int>(v(i));
-    }
-    return temp;
-  }
-
-  template <class T>
-  vec to_vec(const Vec<T> &v)
-  {
-    vec temp(v.length());
-    for (int i=0;i<v.length();i++){
-      temp(i)=static_cast<double>(v(i));
-    }
-    return temp;
-  }
-
-  template <class T>
-  cvec to_cvec(const Vec<T> &v)
-  {
-    cvec temp(v.length());
-    for (int i=0;i<v.length();i++){
-      temp(i) = std::complex<double>(static_cast<double>(v(i)), 0.0);
-    }
-    return temp;
-  }
-
-  template <class T>
-  cvec to_cvec(const Vec<T> &real, const Vec<T> &imag)
-  {
-    it_assert(real.length() == imag.length(),
-	      "to_cvec(): real and imaginary parts must have the same length");
-    cvec temp(real.length());
-    for(int i=0;i<real.length();i++){
-      temp(i) = std::complex<double>(static_cast<double>(real(i)),
-				     static_cast<double>(imag(i)));
-    }
-
-    return temp;
-  }
-
-  ivec to_ivec(int s) {ivec out(1); out(0) = s; return out;}
-
-  vec to_vec(double s) {vec out(1); out(0) = s; return out;}
-
-  cvec to_cvec(double real, double imag) {cvec out(1); out(0) = std::complex<double>(real,imag); return out;}
-
-
-  // ----------------------------------------------------------------------
-  // Converters for matrices
-  // ----------------------------------------------------------------------
-
-  template <class T>
-  bmat to_bmat(const Mat<T> &m)
-  {
-    bmat temp(m.rows(),m.cols());
-    for (int i=0;i<temp.rows();i++) {
-      for (int j=0;j<temp.cols();j++) {
-	temp(i,j) = static_cast<bin>(m(i,j));
-      }
-    }
-    return temp;
-  }
-
-  template <class T>
-  smat to_smat(const Mat<T> &m)
-  {
-    smat temp(m.rows(),m.cols());
-    for (int i=0;i<temp.rows();i++) {
-      for (int j=0;j<temp.cols();j++) {
-	temp(i,j) = static_cast<short>(m(i,j));
-      }
-    }
-    return temp;
-  }
-
-  template <class T>
-  imat to_imat(const Mat<T> &m)
-  {
-    imat temp(m.rows(),m.cols());
-    for (int i=0;i<temp.rows();i++) {
-      for (int j=0;j<temp.cols();j++) {
-	temp(i,j) = static_cast<int>(m(i,j));
-      }
-    }
-    return temp;
-  }
-
-  template <class T>
-  mat to_mat(const Mat<T> &m)
-  {
-    mat temp(m.rows(),m.cols());
-    for (int i=0;i<temp.rows();i++) {
-      for (int j=0;j<temp.cols();j++) {
-	temp(i,j) = static_cast<double>(m(i,j));
-      }
-    }
-    return temp;
-  }
-
-  template <class T>
-  cmat to_cmat(const Mat<T> &m)
-  {
-    cmat temp(m.rows(),m.cols());
-    for (int i=0;i<temp.rows();i++) {
-      for (int j=0;j<temp.cols();j++) {
-	temp(i,j) = std::complex<double>(static_cast<double>(m(i,j)), 0.0);
-      }
-    }
-    return temp;
-  }
-
-  template <class T>
-  cmat to_cmat(const Mat<T> &real, const Mat<T> &imag)
-  {
-    it_assert_debug((real.rows() == imag.rows()) && (real.cols() == imag.cols()),
-		    "to_cmat(): real and imag part sizes does not match");
-    cmat temp(real.rows(),real.cols());
-    for (int i=0;i<temp.rows();i++) {
-      for (int j=0;j<temp.cols();j++) {
-	temp(i,j) = std::complex<double>(static_cast<double>(real(i,j)),
-					 static_cast<double>(imag(i,j)));
-      }
-    }
-    return temp;
-  }
-
 
   // ----------------------------------------------------------------------
   // Miscellaneous converters
@@ -340,7 +201,9 @@ namespace itpp {
     return ss.str();
   }
 
-  // ---------------------- Instantiations -----------------------------------------
+  // ----------------------------------------------------------------------
+  // Instantiations
+  // ----------------------------------------------------------------------
 
   template bvec to_bvec(const svec &v);
   template bvec to_bvec(const ivec &v);
@@ -393,3 +256,5 @@ namespace itpp {
   template cmat to_cmat(const mat &real, const mat &imag);
 
 } // namespace itpp
+
+//! \endcond
