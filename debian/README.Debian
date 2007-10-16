@@ -12,5 +12,4 @@ cannot be missed, I have persisted with this, though this solution is
 not permanent. Any suggestions on this, or efforts to make lapack3
 compile with gfortran are welcome. See BTS bug #379288 for details.
 
- -- Kumar Appaiah <akumar@ee.iitm.ac.in>, Tue Jul  3 09:57:32 IST 2007
-
+ -- Kumar Appaiah <akumar@ee.iitm.ac.in>, Mon, 15 Oct 2007 13:03:48 +0530

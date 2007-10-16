@@ -17,6 +17,9 @@ else
 endif
 
 config.status: configure
+# Workaround to end up with a clean state equal to a fresh tarball unpack.
+	-cp itpp-config.1 itpp-config.1.backup
+	-cp itpp.spec itpp.spec.backup
 	dh_testdir
 	./configure --host=$(DEB_HOST_GNU_TYPE) --build=$(DEB_BUILD_GNU_TYPE) --prefix=/usr --mandir=\$${prefix}/share/man --infodir=\$${prefix}/share/info CXXFLAGS="$(CXXFLAGS)" LDFLAGS="-Wl,-z,defs"
 
@@ -32,14 +35,11 @@ clean:
 	dh_testdir
 	dh_testroot
 	rm -f build-stamp config.log
-
 	[ ! -f Makefile ] || $(MAKE) distclean
-ifneq "$(wildcard /usr/share/misc/config.sub)" ""
-	cp -f /usr/share/misc/config.sub config.sub
-endif
-ifneq "$(wildcard /usr/share/misc/config.guess)" ""
-	cp -f /usr/share/misc/config.guess config.guess
-endif
+	rm -f config.status config.sub
+# Workaround to end up with a clean state equal to a fresh tarball unpack.
+	-mv itpp-config.1.backup itpp-config.1
+	-mv itpp.spec.backup itpp.spec
 	dh_clean 
 
 install: build
