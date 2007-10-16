@@ -1,3 +1,9 @@
+libitpp (4.0.0-3) unstable; urgency=low
+
+  * Fix watch file to handle upstream's "rc" naming.
+
+ -- Kumar Appaiah <akumar@ee.iitm.ac.in>  Tue, 16 Oct 2007 08:02:06 +0530
+
 libitpp (4.0.0-2) unstable; urgency=low
 
   * Add debian/patches/01_dontremove_files to prevent removal of
