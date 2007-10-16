@@ -1,7 +1,7 @@
 Source: libitpp
 Priority: optional
 Maintainer: Kumar Appaiah <akumar@ee.iitm.ac.in>
-Build-Depends: debhelper (>= 5), autotools-dev, doxygen (>= 1.5.1-1), refblas3-dev, fftw3-dev, texlive-latex-base, gs, lapack3-dev
+Build-Depends: debhelper (>= 5), autotools-dev, doxygen (>= 1.5.1-1), refblas3-dev, fftw3-dev, texlive-latex-base, gs, lapack3-dev, dpatch
 Standards-Version: 3.7.2
 Section: libs
 Homepage: http://itpp.sourceforge.net
