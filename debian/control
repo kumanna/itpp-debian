@@ -18,7 +18,7 @@ Description: C++ signal processing and communication library: Development header
  developed and is widely used by researchers, both in the
  communications industry and universities.
  .
- This package has the development librariesand headers for IT++.
+ This package has the development libraries and headers for IT++.
 
 Package: libitpp6gf
 Section: libs
