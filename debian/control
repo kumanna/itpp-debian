@@ -29,9 +29,6 @@ Description: C++ signal processing and communication library
  processing, and communications classes and functions. It is being
  developed and is widely used by researchers, both in the
  communications industry and universities.
- .
- This package has the debugging symbols for IT++ which may
- be useful while debugging IT++ based applications.
 
 Package: libitpp6-dbg
 Section: libs
