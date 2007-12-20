@@ -1,15 +1,16 @@
 # Process this file with autoconf to produce a configure script
 #-------------------------------------------------------------------
-AC_PREREQ(2.59)
+AC_PREREQ([2.60])
 AC_COPYRIGHT([Copyright (C) 2006, 2007  Adam Piatyszek <ediap@users.sourceforge.net>])
-AC_INIT([IT++],[4.0.0],[ediap@users.sourceforge.net],[itpp])
+AC_INIT([IT++],[4.0.1],[ediap@users.sourceforge.net],[itpp])
 AC_CONFIG_HEADER([itpp/config.h])
 AC_CONFIG_SRCDIR([itpp/base/vec.cpp])
-AC_CONFIG_AUX_DIR([config])
-AM_INIT_AUTOMAKE
+AC_CONFIG_MACRO_DIR([m4])
+AC_CONFIG_AUX_DIR([build-aux])
+AM_INIT_AUTOMAKE([-Wall -Werror])
 
 # Shared library versioning
-GENERIC_LIBRARY_VERSION="6:0:0"
+GENERIC_LIBRARY_VERSION="6:1:0"
 #                        | | |
 #                 +------+ | +---+
 #                 |        |     |
@@ -26,10 +27,20 @@ AC_SUBST(GENERIC_LIBRARY_VERSION)
 
 # Check for host and disable building a shared library in Windows
 AC_CANONICAL_HOST
-case $host in
-  *-*-msdos* | *-*-go32* | *-*-mingw32* | *-*-cygwin* | *-*-windows*)
+case $host_os in
+  cygwin* | mingw* | pw32*)
     AC_DISABLE_SHARED
     AC_ENABLE_STATIC
+    ;;
+  freebsd5* | freebsd6*)
+    AC_ENABLE_SHARED
+    AC_DISABLE_STATIC
+    freebsd_broken_std_isnan=yes
+    ;;
+  darwin*)
+    AC_ENABLE_SHARED
+    AC_DISABLE_STATIC
+    enable_explicit_deps=yes
     ;;
   *)
     AC_ENABLE_SHARED
@@ -46,7 +57,30 @@ AC_PROG_F77
 AC_PROG_INSTALL
 AC_PROG_LIBTOOL
 AC_PROG_LN_S
-AC_PROG_MAKE_SET
+AC_PROG_SED
+
+# See whether to include shared library dependencies (taken from gtk+)
+AC_ARG_ENABLE(explicit-deps,
+  [AS_HELP_STRING([--enable-explicit-deps=@<:@yes/no/auto@:>@],
+                  [use explicit dependencies in .pc files [default=auto]])],,
+  [enable_explicit_deps=auto])
+
+AC_MSG_CHECKING([whether to use explicit library dependencies])
+case $enable_explicit_deps in
+  auto)
+    if test "x$lt_cv_deplibs_check_method" != xpass_all || \
+       test "x$enable_shared" = xno; then
+      enable_explicit_deps=yes
+    else
+      enable_explicit_deps=no
+    fi
+  ;;
+  yes|no)
+  ;;
+  *) AC_MSG_ERROR([Value given to --enable-explicit-deps must be one of yes, no or auto])
+  ;;
+esac
+AC_MSG_RESULT($enable_explicit_deps)
 
 # Set default language to C++
 AC_LANG([C++])
@@ -122,12 +156,12 @@ if test "x$enable_debug" = xyes; then
     CXXFLAGS_DEBUG="-g"
     # Only for GCC compiler
     if test "x$GXX" = xyes; then
-      CXXFLAGS_DEBUG="-Wall -Werror $CXXFLAGS_DEBUG -pipe"
+      CXXFLAGS_DEBUG="-Wall $CXXFLAGS_DEBUG -pipe"
     fi
   fi
 fi
 # Remove unnecesary white spaces from LIBS
-CXXFLAGS_DEBUG="`echo \"$CXXFLAGS_DEBUG\" | sed -e 's/  */ /g' -e 's/^ //' -e 's/ $//'`"
+CXXFLAGS_DEBUG="`echo \"$CXXFLAGS_DEBUG\" | $SED -e 's/  */ /g' -e 's/^ //' -e 's/ $//'`"
 AC_SUBST(CXXFLAGS_DEBUG)
 AC_SUBST(PACKAGE_DEBUG)
 
@@ -142,7 +176,7 @@ else
   CXXFLAGS_OPT="$CXXFLAGS"
   CXXFLAGS=""
 fi
-CXXFLAGS_OPT="`echo \"$CXXFLAGS_OPT\" | sed -e 's/  */ /g' -e 's/^ //' -e 's/ $//'`"
+CXXFLAGS_OPT="`echo \"$CXXFLAGS_OPT\" | $SED -e 's/  */ /g' -e 's/^ //' -e 's/ $//'`"
 AC_SUBST(CXXFLAGS_OPT)
 
 
@@ -162,16 +196,13 @@ AM_CONDITIONAL([HTML_DOC], [test "x$enable_html_doc" = xyes])
 
 
 # Check for diff program used for tests
-AC_CHECK_PROG([diff_ok], [diff], [yes], [no])
-AC_CHECK_PROG([sed_ok], [sed], [yes], [no])
-enable_tests=yes
-test "x$diff_ok" != xyes && enable_tests=no
-test "x$sed_ok" != xyes && enable_tests=no
-AM_CONDITIONAL([RUN_TESTS], [test "x$enable_tests" = xyes])
+AC_PATH_PROGS(DIFF, [gdiff gnudiff diff], [no])
+diff_ok=no
+test "$DIFF" != no && diff_ok=yes
+AM_CONDITIONAL([RUN_TESTS], [test "$DIFF" != no])
 
 
 # Checks for header files
-AC_HEADER_STDC
 AC_HEADER_TIME
 AC_CHECK_HEADERS([cmath \
   complex \
@@ -179,8 +210,38 @@ AC_CHECK_HEADERS([cmath \
 
 
 # Checks for global declarations
-AC_CHECK_DECLS(signgam, , , [#include <cmath>])
+AC_CHECK_DECLS([signgam, isfinite, isinf, isnan],,,
+[#if defined(HAVE_CMATH)
+#  include <cmath>
+#endif
+#if defined(HAVE_IEEEFP_H)
+#  include <ieeefp.h>
+#endif
+])
 
+# Check for isfinite, isnan and isinf in std namespace
+# except FreeBSD 5-6, where these functions are broken
+if test "x$freebsd_broken_std_isnan" != xyes; then
+  for f in std::isfinite std::isinf std::isnan; do
+    AC_MSG_CHECKING([for $f])
+    AC_LINK_IFELSE([AC_LANG_SOURCE(
+[[#include <cmath>
+int main() { return $f(0.7) ? 1 : 0; }
+]])],
+      [AC_MSG_RESULT([yes])
+       if test $f = "std::isfinite"; then
+         AC_DEFINE(HAVE_STD_ISFINITE, 1,
+		   [Define to 1 if you have the `std::isfinite' function.])
+       elif test $f = "std::isinf"; then
+         AC_DEFINE(HAVE_STD_ISINF, 1,
+                   [Define to 1 if you have the `std::isinf' function.])
+       elif test $f = "std::isnan"; then
+         AC_DEFINE(HAVE_STD_ISNAN, 1,
+	           [Define to 1 if you have the `std::isnan' function.])
+       fi],
+      [AC_MSG_RESULT([no])])
+  done
+fi
 
 # Checks for functions
 AC_CHECK_FUNCS([asinh \
@@ -201,16 +262,6 @@ AC_CHECK_FUNCS([asinh \
   tgamma])
 
 
-# Check for finite and fpclass on Solaris
-AC_CHECK_FUNC(finite, ,
-  [AC_CHECK_FUNC(isfinite, ,
-    [AC_TRY_LINK([[#include <ieeefp.h>]], [[float f = 0.0; isfinite(f);]],
-      [AC_DEFINE(HAVE_ISFINITE)])])])
-AC_CHECK_FUNC(fpclass, ,
-  [AC_TRY_LINK([[#include <ieeefp.h>]], [[float f = 0.0; fpclass(f);]],
-    [AC_DEFINE(HAVE_FPCLASS)])])
-
-
 # Check for types
 AC_CHECK_SIZEOF(short)
 AC_CHECK_SIZEOF(unsigned short)
@@ -226,47 +277,56 @@ AC_CHECK_SIZEOF(unsigned long long)
 AC_CXX_EXTERN_TEMPLATE
 
 
-# Check if we have Fortran compiler
+# If we have a Fortran compiler
 if test "x$F77" != x; then
-  # Checks for BLAS (ACML, MKL, ATLAS or NETLIB)
-  ACX_BLAS
-  # Checks for LAPACK (ACML, MKL, ATLAS or NETLIB)
-  ACX_LAPACK
-else
-  acx_blas_ok=nofortran;
-  blas_mkl_ok=no;
-  blas_acml_ok=no;
-  blas_atlas_ok=no;
-  acx_lapack_ok=noblas;
+  # Check for additional libs required for linking C/C++ with Fortran
+  AC_F77_LIBRARY_LDFLAGS
+  # Clean up -L/../.. paths from FLIBS
+  MY_FLIBS="`echo \"$FLIBS\" | sed 's/-L[[^ ]]* //g'`"
+  # Check for a Fortran name mangling scheme
+  AC_F77_FUNC(sgemm)
+  AC_F77_FUNC(dgemm)
+  AC_F77_FUNC(cheev)
 fi
+
+# Checks for BLAS (ACML, MKL, ATLAS or NetLib's reference)
+ACX_BLAS
+
+# Checks for LAPACK (ACML, MKL, ATLAS or NetLib's reference)
+ACX_LAPACK
 
 # Checks for FFT (ACML, MKL or FFTW3)
 ACX_FFT
 
 # Set LIBS
-if test $acx_blas_ok = yes; then
-  LIBS="$BLAS_LIBS $LIBS"
-  if test "x$LAPACK_LIBS" != x; then
-    LIBS="$LAPACK_LIBS $LIBS"
-  fi
-fi
-if test "x$FFT_LIBS" != x; then
-  LIBS="$FFT_LIBS $LIBS"
-fi
+test "x$BLAS_LIBS" != x && LIBS="$BLAS_LIBS $LIBS"
+test "x$LAPACK_LIBS" != x && LIBS="$LAPACK_LIBS $LIBS"
+test "x$FFT_LIBS" != x && LIBS="$FFT_LIBS $LIBS"
 
 # Remove unnecesary white spaces from CPPFLAGS, LDFLAGS and LIBS
 CPPFLAGS="`echo \"$CPPFLAGS\" | sed -e 's/  */ /g' -e 's/^ //' -e 's/ $//'`"
 LDFLAGS="`echo \"$LDFLAGS\" | sed -e 's/  */ /g' -e 's/^ //' -e 's/ $//'`"
 LIBS="`echo \"$LIBS\" | sed -e 's/  */ /g' -e 's/^ //' -e 's/ $//'`"
 LDLIBS="`echo \"$LDFLAGS $LIBS\" | sed -e 's/^ //' -e 's/ $//'`"
-AC_SUBST(LDLIBS)
+
+if test $enable_explicit_deps = yes; then
+  EXPLICIT_LIBS=" $LDLIBS" # the leading space is important here...
+  PRIVATE_LIBS=""
+else
+  EXPLICIT_LIBS=""
+  PRIVATE_LIBS=" $LDLIBS" # ... and also here!
+fi
+AC_SUBST(EXPLICIT_LIBS)
+AC_SUBST(PRIVATE_LIBS)
+
 
 # Set conditional BUILD_ZDOTUSUB flag for ZDOTU Fortran wrapper
-AM_CONDITIONAL([BUILD_ZDOTUSUB], [test "x$acx_blas_ok" = xyes])
+AM_CONDITIONAL([BUILD_ZDOTUSUB], [test "x$ax_build_zdotusub" = xyes])
 
 # Set conditionals for runing test programs
 AM_CONDITIONAL([RUN_LAPACK_TESTS], [test "x$acx_lapack_ok" = xyes])
 AM_CONDITIONAL([RUN_FFT_TESTS], [test "x$acx_fft_ok" = xyes])
+
 
 # config.h top and bottom
 AH_TOP([
@@ -289,10 +349,14 @@ AH_BOTTOM([
 #  include <cfloat>
 #  define HAVE_FINITE 1
 #  define finite(x) _finite(x)
+#  define HAVE_ISFINITE 1
+#  define isfinite(x) _finite(x)
 #  define HAVE_ISNAN 1
 #  define isnan(x) _isnan(x)
 #  define HAVE_FPCLASS 1
 #  define fpclass(x) _fpclass(x)
+#  define FP_NINF _FPCLASS_NINF
+#  define FP_PINF _FPCLASS_PINF
 #  define HAVE_JN 1
 #  define jn(a, b) _jn(a, b)
 #  define HAVE_YN 1
@@ -303,20 +367,18 @@ AH_BOTTOM([
 #  define j1(a) _j1(a)
 #endif /* defined(_MSC_VER) */
 
-#if (! defined(HAVE_ISINF) && defined(HAVE_FPCLASS))
-#  define HAVE_ISINF 1
-#  define isinf(a) (fpclass(a) == FP_NINF || fpclass(a) == FP_PINF)
+/* IT++ uses only std::min() and std::max() functions, not macros */
+#ifdef min
+#  undef min
+#endif
+#ifdef max
+#  undef max
 #endif
 
-#if (! defined (HAVE_FINITE) && defined (HAVE_ISFINITE))
-#  define HAVE_FINITE 1
-#  define finite(a) isfinite(a)
-#endif
-
-#if (! defined(HAVE_FINITE) && defined(HAVE_ISNAN) && defined(HAVE_ISINF))
-#  define HAVE_FINITE 1
-#  define finite(a) (! isnan(a) && ! isinf(a))
-#endif
+/* Represent GCC version in a concise form */
+#define GCC_VERSION (__GNUC__ * 10000           \
+                     + __GNUC_MINOR__ * 100     \
+                     + __GNUC_PATCHLEVEL__)
 
 #endif /* #ifndef CONFIG_H */
 ])
@@ -349,13 +411,14 @@ AC_CONFIG_FILES([Makefile \
   win32/itpp_acml_tests/Makefile \
   win32/itpp_mkl_tests/Makefile \
   itpp.pc \
-  itpp-config \
-  itpp-config.1 \
-  itpp.spec])
+  itpp_debug.pc \
+  itpp-config])
 
 AC_OUTPUT
 
-echo "
+# Display configuration summary
+AC_MSG_NOTICE([displaying configuration summary
+
 ------------------------------------------------------------------------------
 $PACKAGE-$VERSION library configuration:
 ------------------------------------------------------------------------------
@@ -374,6 +437,7 @@ Switches:
   - html-doc ....... : ${enable_html_doc}
   - shared ......... : ${enable_shared}
   - static ......... : ${enable_static}
+  - explicit deps .. : ${enable_explicit_deps}
 
 Documentation tools:
   - doxygen ........ : ${doxygen_ok}
@@ -383,7 +447,6 @@ Documentation tools:
 
 Testing tools:
   - diff ........... : ${diff_ok}
-  - sed ............ : ${sed_ok}
 
 Optional modules:
   - comm ........... : ${enable_comm}
@@ -416,4 +479,4 @@ Compiler/linker flags/libs/defs:
 ------------------------------------------------------------------------------
 Now type 'make && make install' to build and install $PACKAGE-$VERSION library
 ------------------------------------------------------------------------------
-"
+])

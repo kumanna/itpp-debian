@@ -32,14 +32,8 @@
 
 #include <itpp/base/bessel/bessel_internal.h>
 #include <itpp/base/math/elem_math.h>
+#include <itpp/base/itassert.h>
 
-#ifndef _MSC_VER
-#  include <itpp/config.h>
-#else
-#  include <itpp/config_msvc.h>
-#endif
-
-using namespace itpp;
 
 /*
  * Bessel function of noninteger order
@@ -250,7 +244,7 @@ double jv(double n, double x)
 
       if( n < 0.0 )
 	{
-	  it_warning("besselj:: partial loss of precision");
+	  it_warning("jv(): partial loss of precision");
 	  y = 0.0;
 	  goto done;
 	}
@@ -315,8 +309,7 @@ static double recur(double *n, double x, double *newn, int cancel)
 
       if( ++ctr > 1000 )
 	{
-	  it_warning("besselj:: Underflow");
-	  //mtherr( "jv", UNDERFLOW );
+	  it_warning("recur(): underflow range error");
 	  goto done;
 	}
 
@@ -435,16 +428,16 @@ static double jvs(double n, double x)
        && (n > 0.0)
        && (n < (MAXGAM-1.0)) )
     {
-      t = pow( 0.5*x, n ) / itpp::gamma( n + 1.0 );
+      t = pow( 0.5*x, n ) / gam( n + 1.0 );
 
       y *= t;
     }
   else
     {
-      t = n * log(0.5*x) - lgamma(n + 1.0);
+      t = n * log(0.5*x) - lgam(n + 1.0);
       if( y < 0 )
 	{
-	  signgam = -signgam;
+	  sgngam = -sgngam;
 	  y = -y;
 	}
       t += log(y);
@@ -456,11 +449,10 @@ static double jvs(double n, double x)
 
       if( t > MAXLOG )
 	{
-	  it_warning("besselj:: Overflow");
-	  //mtherr( "Jv", OVERFLOW );
+	  it_warning("jvs(): overflow range error");
 	  return( MAXNUM );
 	}
-      y = signgam * exp( t );
+      y = sgngam * exp( t );
     }
   return(y);
 }

@@ -1,3 +1,414 @@
+2007-12-15  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* IT++ 4.0.1 released (SVN tag: release-4-0-1)
+
+	* NEWS: Release notes for IT++ 4.0.1 added
+
+2007-12-13  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* doc/local/installation.doc, doc/local/linking.doc: Documentation
+	updated to reflect changes in MSVC++ project files
+
+	* win32/itpp_acml.vcproj, win32/itpp_acml_tests/*.vcproj,
+	win32/itpp_mkl.vcproj, win32/itpp_mkl_tests/*.vcproj: Replace
+	explicit paths with LIB and INCLUDE environment variables
+
+	With this change the user is responsible for setting the LIB and
+	INCLUDE environment variables with proper directories to MKL or
+	ACML librarary and include files.
+
+	Besides, build multi-threaded DLL libraries by default.
+
+	* itpp/base/binfile.cpp, itpp/base/copy_vector.h: Include missing
+	header files to fix compilation using GCC 4.3
+
+2007-12-11  Erik G. Larsson  <erik_g_larsson@users.sourceforge.net>
+
+	* itpp/comm/ldpc.h, itpp/comm/ldpc.cpp: Improvements to the
+	generation of regular LDPC codes
+
+2007-12-10  Erik G. Larsson  <erik_g_larsson@users.sourceforge.net>
+
+	* doc/tutorial/src/ldpc_bersim_awgn.cpp: Changed tutorial so it
+	counts bit errors in entire block, not only systematic bits
+
+	* itpp/comm/ldpc.cpp, tests/ldpc_test.ref: Fixed spelling error
+
+2007-12-10  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* m4/acx_blas.m4: Improve autodetection of ACML libraries
+
+	* itpp/base/algebra/qr.cpp, itpp/base/algebra/svd.cpp: Added a
+	workspace query for each of the SVD and QR routines
+
+	The query returns the optimal value of the memory workspace size
+	used in SVD and QR decompositions. Setting the workspace size to
+	an optimum value greatly improves the speed of calculations.
+
+	Thanks to Simon Wood for initial implementation of these
+	improvements.
+
+2007-12-08  Erik G. Larsson  <erik_g_larsson@users.sourceforge.net>
+
+	* doc/tutorial/src/ldpc_bersim_awgn.cpp: Fixes in tutorial
+	examples.
+
+2007-12-07  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* Makefile.am, configure.ac.in, doc/local/linking.doc,
+	itpp_debug.pc.in: Provide itpp_debug.pc pkg-config's file
+
+	This additional file can be used to obtain the debugging compiler
+	flags and libraries. It is only installed, when IT++ is configured
+	with the --enable-debug option.
+
+2007-12-06  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* INSTALL, doc/local/installation.doc: Installation manual updated
+	to reflect recent changes
+
+	* itpp/base/math/misc.h, itpp/srccode/audiofile.h: Fix minor
+	Doxygen warnings
+
+	* configure.ac.in, itpp/base/converters.h, itpp/config_msvc.h:
+	Move GCC_VERSION macro to the generated config.h file
+
+	* itpp/comm/convcode.cpp: Replace ambiguous expression with a
+	correct one
+
+	"i = ++i;" is ambiguous in C/C++. For more information, see
+	question 3.3 of the comp.lang.c FAQ list:
+	http://c-faq.com/expr/ieqiplusplus.html
+
+	* configure.ac.in: Use AC_MSG_NOTICE for printing configuration
+	summary
+
+	Thanks to this change, the configuration summary is automatically
+	included in config.log, so there is no need to create a separate
+	config_summary.log file.
+
+	* configure.ac.in: Simplify detection of explicit library
+	dependencies
+
+	There is no need to check for "deplibs_check_method" by executing
+	the "./libtool --config" command. This information is already
+	available in a cached variable "lt_cv_deplibs_check_method"
+	provided by the AC_PROG_LIBTOOL macro.
+
+	* configure.ac.in: Use "host_os" instead of "host" to simplify
+	case statements
+
+	* configure.ac.in: Enable explicit library dependencies on Mac
+	OS X
+
+	Dynamic linking on Mac OS X requires passing explicit library
+	dependencies to the linker, even if libtool thinks it is not
+	necessary. Therefore "enable_explicit_deps" is set to "yes"
+	for this operating system. The solution is taken from pkg-config
+	Portfile from macports.
+
+	* itpp/base/random.cpp: Use tgamma() function instead of
+	deprecated ambiguous gamma()
+
+	* itpp/base/math/elem_math.h: Make sure itpp::gamma() use correct
+	gamma implementation
+
+	BTW, denote that this function name is deprecated due to its
+	different implementation (and meaning) in BSD and glibc.
+
+	* configure.ac.in: std::isfinite, std::isinf and std::isnan are
+	broken on FreeBSD
+
+	The use of these functions on FreeBSD with GCC 3.4.x compilers
+	causes infinite loops or segmentation faults in bessel_test.
+	Therefore, do not check for these functions and override them
+	with local inlined implementations defined in
+	itpp/base/math/main.h.
+
+	* configure.ac.in, itpp/base/bessel/gamma.cpp
+	itpp/base/math/misc.h itpp/config_msvc.h
+	itpp/stat/mog_generic.cpp: Add full support of std::isfinite(),
+	std::isinf() and std::isnan()
+
+	Instead of using isnan(), isinf() C99 macros and deprecated
+	finite() function switch to their equivalents in std library. This
+	should solve recent portability problems under MinGW/MSYS.
+
+	* itpp/base/bessel/hyperg.cpp, itpp/base/bessel/iv.cpp,
+	itpp/base/bessel/jv.cpp, itpp/base/bessel/k1.cpp,
+	itpp/base/bessel/kn.cpp: Unify warning messages
+
+	* itpp/base/bessel/airy.cpp, itpp/base/bessel/bessel_internal.h,
+	itpp/base/bessel/chbevl.cpp, itpp/base/bessel/hyperg.cpp,
+	itpp/base/bessel/i0.cpp, itpp/base/bessel/i1.cpp,
+	itpp/base/bessel/iv.cpp, itpp/base/bessel/jv.cpp,
+	itpp/base/bessel/k0.cpp, itpp/base/bessel/k1.cpp,
+	itpp/base/bessel/kn.cpp, itpp/base/bessel/polevl.cpp: Clean up
+	"include" and "using namespace" statements
+
+	* itpp/base/bessel/bessel_internal.h, itpp/base/bessel/gamma.cpp,
+	itpp/base/bessel/hyperg.cpp, itpp/base/bessel/iv.cpp,
+	itpp/base/bessel/jv.cpp, itpp/base/bessel/sources.mk,
+	itpp/base/bessel/struve.cpp, win32/itpp_acml.vcproj,
+	win32/itpp_mkl.vcproj: Fixed wrong calculation of bessely()
+	detected on Intel C++ compiler
+
+	When IT++ was compiled with Intel C++ (icpc) compiler, the
+	bessel_test failed on calculation of bessely() function for
+	non-integer orders. This bug was caused by the fact that the
+	ported bessel functions from Cephes Math Library should use
+	a gamma function, which sets "signgam" global variable. But
+	instead C99 tgamma() was used, which does not set "signgam".
+
+	This patch adds explicit gam() and lgam() definitions, ported
+	from the original Cephes Math Library, so all bessel functions
+	in IT++ now use the proper gamma implementations.
+
+	* configure.ac.in, m4/acx_blas.m4, m4/acx_lapack.m4: Do not
+	require Fortran compiler for BLAS/LAPACK linking
+
+	BLAS and LAPACK libraries should be checked even if no Fortran
+	compiler is available. For instance, BLAS/LAPACK routines from MKL
+	can be used without additional Fortran libraries. This patch
+	changes IT++ configuration scripts to make this possible.
+
+	* configure.ac.in, itpp/base/blas.h, itpp/base/vec.h,
+	itpp/config_msvc.h, m4/acx_blas.m4, m4/ax_func_zdotu.m4: Detect
+	incompatible g77/gfortran calling conventions of zdotu_
+
+	The calling conventions of zdotu_ BLAS function are different
+	for g77 and gfortran compilers. In the case of g77, the result
+	is passed using a first argument of zdotu_ function, whereas for
+	gfortran the result is simply returned.
+
+	To avoid building an extra Fortran wrapper, which workarounds
+	this issue, IT++ needs to know which calling convention should be
+	used. This patch adds two macros to the configure scripts that
+	compile and try to run simple C++ programs using zdotu_ BLAS
+	function, As a result of these checks the correct calling convention
+	is used in itpp::dot() function. The Fortran zdotusub_ wrapper
+	function can still be linked and used as a fallback solution.
+
+	For more information on this issue, please have a look at this
+	bug report: http://gcc.gnu.org/bugzilla/show_bug.cgi?id=20178
+
+2007-12-04  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* itpp/optim/newton_search.cpp: Initialize variables with zeros to
+	suppress compiler warnings
+
+	* itpp/base/math/misc.h: Add missing right parenthesis in isnan()
+	definition
+
+2007-12-03  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* configure.ac.in, itpp/base/math/misc.h, itpp/config_msvc.h: Fix
+	improper use of HAVE_DECL_XXX definitions
+
+	HAVE_DECL_XXX are always defined as 0 or 1, so one can not simply
+	check if these names are defined.
+
+2007-11-30  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* m4/acx_blas.m4: Add support for MKL 10
+
+	MKL 10 requires explicit linking to -lguide and -lpthread
+	libraries. With this patch MKL 8.1.1 or newer versions should be
+	automatically detected on both 32- and 64-bit (em64t) Linux
+	systems.
+
+	* configure.ac.in, itpp/config_msvc.h: Get rid of "min" and "max"
+	macro definitions
+
+	MSVC++ compiler defines these two macros and they might clash with
+	our proper C++ code using std::min() and std::max() functions
+	only. This patch removes such macros conditionally in the
+	generated config.h and config_msvc.h header files.
+
+2007-11-23  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* itpp/base/factory.h: Add explicit constructor definition in a
+	default Factory class
+
+	Without this explicit empty constructor in the Factory class, some
+	compilers (PGI, HP C/aC++) give warnings or errors on a constant
+	DEFAULT_FACTORY.
+
+	* configure.ac.in, itpp/base/math/misc.h, itpp/config_msvc.h: Add
+	additional checks for isinf() and isfinite() macros
+
+	Without these new checks the compilation might fail on
+	redeclaration of these macros with inline functions in
+	itpp/base/math/misc.h. This problem occurs for instance on a
+	HP-UX system.
+
+2007-11-21  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* configure.ac.in, itpp/base/math/misc.h, itpp/config_msvc.h:
+	Clean up checks for finite(), isfinite() and isnan()
+
+	isnan() is defined as a macro on some systems in <math.h>, so we
+	should check for it. BTW, removed macro definition of finite(),
+	which is also defined as inline function in
+	"itpp/base/math/misc.h".
+
+	* configure.ac.in: Removed duplicated checks
+
+	AC_HEADER_STDC is invoked when AC_LANG([C++]) is used, whereas
+	AC_PROG_MAKE_SET is executed by AM_INIT_AUTOMAKE.
+
+	* m4/ac_cxx_extern_template.m4: Obsolete macros replaced with the
+	ones recommended by autoconf
+
+	AC_LANG_SAVE + AC_LANG_CPLUSPLUS  ->  AC_LANG_PUSH([C++])
+	AC_LANG_RESTORE  ->  AC_LANG_POP([C++])
+	AC_TRY_COMPILE  ->  AC_COMPILE_IFELSE + AC_LANG_PROGRAM
+
+	* configure.ac.in, m4/acx_blas.m4, m4/acx_lapack.m4,
+	m4/acx_fft.m4: Use AS_HELP_STRING macros instead of obsolete
+	AC_HELP_STRING ones
+
+	* Makefile.am, autogen.sh, configure.ac.in,
+	m4/ac_cxx_extern_template.m4, m4/acx_blas.m4, m4/acx_lapack.m4,
+	m4/acx_fft.m4: Renamed "config" directory to "m4" to reflect its
+	contents
+
+	* autogen.sh, configure.ac.in: Use "build-aux" directory for
+	auxiliary building scripts
+
+	This directory name is suggested in the autoconf manual as a
+	standard placeholder for auxiliary build scripts. If this
+	directory does not exist, create it before invoking autotools.
+
+	* autogen.sh: On error return the exit code of the failing command
+
+	* autogen.sh: Allow runing autogen.sh using an absolute path
+
+	After checking the necessary tools the script now enters the
+	IT++ source directory for the bootstrap process.
+
+	* configure.ac.in: Report all automake warnings and treat them as
+	errors
+
+	This should give the maintainer and people building IT++ from SVN
+	a better detection of possible bugs in Makefiles.
+
+2007-11-16  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* configure.ac.in, tests/Makefile.am: Bump autoconf requirement to
+	2.60 and use AC_PROG_SED
+
+	The $datarootdir and $docdir variables, which are used for HTML
+	documentation installation, were introduced in autoconf 2.60.
+	Therefore we need to check for this version. Besides, manual check
+	for sed program is now replaced with AC_PROG_SED macro, which
+	makes sed as a required dependency. Additionally, gdiff and
+	gnudiff are searched as diff replacement.
+
+	* tests/parser_test.cpp: Prevent warnings about string to char*
+	conversions
+
+	GCC >=4.2 uses "-Wwrite-string" in when "-Wall" flag is used and
+	this results in warnings about deprecated conversions from
+	constant strings to char*. This patch workarounds this problem by
+	a bit different initialisation of arrays of char* strings.
+
+2007-11-12  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* configure.ac.in, itpp-config.in, itpp.pc.in: Improved
+	itpp-config and itpp.pc scripts
+
+	This patch adds an additional configure check to see whether
+	external libraries' dependencies need to be explicitly added to
+	the output of "itpp-config --libs" command. As a result it should
+	be always possible to use "itpp-config --libs" or "pkg-config itpp
+	--libs" without adding an extra --static switch. Besides,
+	"itpp-config --libs" should now return exactly the same libraries
+	as "pkg-config itpp --libs" on Mac OS X.
+
+	* itpp/base/binfile.h: Fixed invalid cast from bool to enum
+
+	The Apple's g++3.3 compiler from Mac Developer Tools v1.2 reports
+	an error on a static cast from bool to enum. This patch changes
+	the problematic code, so it should be accepted by older compilers.
+
+	* Makefile.am, configure.ac.in: Save configuration summary to
+	config_summary.log file
+
+2007-11-02  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* doc/tutorial/src/mimoconv.cpp: Updated MIMO with convolutional
+	coding example program
+
+2007-11-01  Erik G. Larsson  <erik_g_larsson@users.sourceforge.net>
+
+	* doc/local/installation.doc: Updated the "no root" installation
+	description
+
+2007-10-30  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* itpp/base/mat.h: operator*(Vec &v, Mat &m) documented as
+	deprecated
+
+	The existence of this operator in IT++ is questionable, since its
+	behaviour is equivalent to "outer_product(v, m.get_row(0))".
+	Moreover, the documentation was wrong so many users had problems
+	using it correctly. This patch marks this operator as deprecated,
+	both in the documentation and through a run-time warning message.
+
+2007-10-25  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* AUTHORS, doc/local/authors.doc: List of authors updated
+
+	* configure.ac.in: Do not use "-Werror" flag for debugging library
+	by default
+
+	This flag was propagated into itpp-config and itpp.pc scripts and
+	this resulted in reporting each warning in users' programs as an
+	error.
+
+2007-10-23  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* tests/gf2mat_test.cpp: Suppress compilation warning about string
+	to "char*" conversion
+
+	* itpp/base/converters.cpp, itpp/base/converters.h: Workaround for
+	compilation errors when using GCC 3.3.x
+
+	GCC 3.3.x has problems with compilation of a few explicit
+	instantiations in converters.cpp from IT++ 4.0.0. This only
+	happens when -finline-functions flag is used. This flag is
+	included in -03 optimisations. This patch conditionally disables
+	these problematic instantiation when GCC version < 3.4.0.
+
+2007-10-22  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* itpp/base/algebra/svd.h, itpp/base/matfunc.h: Documentation of
+	diag() and svd() updated
+
+2007-10-18  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* doc/doxygen_html.cfg.in: Reset TAB_SIZE to 8 spaces
+
+	Some of the IT++ codes still use tabs of 8 spaces for indenting.
+	Thus this patch resets the TAB_SIZE to 8 (default value) in
+	Doxygen's configuration file.
+
+2007-10-16  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* Makefile.am, VERSION, autogen.sh, configure.ac.in
+	extras/itpp-config.t2t, itpp-config.1.in, itpp.spec.in:
+	Changed the way version numbers are handled
+
+	This patch fixes the problem of removing the "itpp.spec" and
+	"itpp-config.1" files during "make distclean". These files should
+	not be removed, since they are distributed in packages. Since now,
+	version numbers in these two files and in "configure.ac" are
+	updated according to a VERSION file content, when "autogen.sh"
+	bootstrapping script is executed.
+
+------------------------------------------------------------------------------
+
 2007-10-14  Adam Piatyszek  <ediap@users.sourceforge.net>
 
 	* IT++ 4.0.0 released (SVN tag: release-4-0-0)

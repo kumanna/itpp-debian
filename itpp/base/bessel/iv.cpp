@@ -31,10 +31,8 @@
  */
 
 #include <itpp/base/bessel/bessel_internal.h>
-#include <itpp/base/math/elem_math.h>
-//#include <cmath>
+#include <itpp/base/itassert.h>
 
-using namespace itpp;
 
 /*
  * Modified Bessel function of noninteger order
@@ -103,8 +101,7 @@ double iv(double v, double x)
     {
       if( t != v )
 	{
-	  it_warning("besseli:: argument domain error");
-	  //mtherr( "iv", DOMAIN );
+	  it_warning("iv(): argument domain error");
 	  return( 0.0 );
 	}
       if( v != 2.0 * floor(v/2.0) )
@@ -118,8 +115,7 @@ double iv(double v, double x)
 	return( 1.0 );
       if( v < 0.0 )
 	{
-	  it_warning("besseli:: overflow");
-	  //mtherr( "iv", OVERFLOW );
+	  it_warning("iv(): overflow range error");
 	  return( MAXNUM );
 	}
       else
@@ -128,7 +124,7 @@ double iv(double v, double x)
 
   ax = fabs(x);
   t = v * log( 0.5 * ax )  -  x;
-  t = sign * exp(t) / itpp::gamma( v + 1.0 );
+  t = sign * exp(t) / gam( v + 1.0 );
   ax = v + 0.5;
   return( t * hyperg( ax,  2.0 * ax,  2.0 * x ) );
 }

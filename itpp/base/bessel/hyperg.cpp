@@ -31,10 +31,8 @@
  */
 
 #include <itpp/base/bessel/bessel_internal.h>
-#include <itpp/base/math/elem_math.h>
+#include <itpp/base/itassert.h>
 
-
-using namespace itpp;
 
 /*
  * Confluent hypergeometric function
@@ -127,8 +125,7 @@ double hyperg(double a, double b, double x)
 
  done:
   if( pcanc > 1.0e-12 )
-    it_warning("besselj::Potential precision loss");
-  //mtherr( "hyperg", PLOSS );
+    it_warning("hyperg(): partial loss of precision");
 
   return( psum );
 }
@@ -155,8 +152,7 @@ static double hy1f1p(double a, double b, double x, double *err)
     {
       if( bn == 0 )			/* check bn first since if both	*/
 	{
-	  it_warning("besselj::Function singularity");
-	  //mtherr( "hyperg", SING );
+	  it_warning("hy1f1p(): function singularity");
 	  return( MAXNUM );	/* an and bn are zero it is	*/
 	}
       if( an == 0 )			/* a singularity		*/
@@ -239,23 +235,23 @@ static double hy1f1a(double a, double b, double x, double *err)
 
   if( b > 0 )
     {
-      temp = lgamma(b);
+      temp = lgam(b);
       t += temp;
       u += temp;
     }
 
   h1 = hyp2f0( a, a-b+1, -1.0/x, 1, &err1 );
 
-  temp = exp(u) / itpp::gamma(b-a);
+  temp = exp(u) / gam(b-a);
   h1 *= temp;
   err1 *= temp;
 
   h2 = hyp2f0( b-a, 1.0-a, 1.0/x, 2, &err2 );
 
   if( a < 0 )
-    temp = exp(t) / itpp::gamma(a);
+    temp = exp(t) / gam(a);
   else
-    temp = exp( t - lgamma(a) );
+    temp = exp( t - lgam(a) );
 
   h2 *= temp;
   err2 *= temp;
@@ -270,7 +266,7 @@ static double hy1f1a(double a, double b, double x, double *err)
 
   if( b < 0 )
     {
-      temp = itpp::gamma(b);
+      temp = gam(b);
       asum *= temp;
       acanc *= fabs(temp);
     }
@@ -383,7 +379,6 @@ double hyp2f0(double a, double b, double x, int type, double *err)
   /* series blew up: */
  error:
   *err = MAXNUM;
-  it_warning("besselj:: Potential precision loss");
-  //mtherr( "hyperg", TLOSS );
+  it_warning("hy1f1a(): total loss of precision");
   return( sum );
 }
