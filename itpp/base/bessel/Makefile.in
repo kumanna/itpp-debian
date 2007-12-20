@@ -37,10 +37,10 @@ DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in \
 @ENABLE_DEBUG_TRUE@am__append_1 = libbessel_debug.la
 subdir = itpp/base/bessel
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/config/ac_cxx_extern_template.m4 \
-	$(top_srcdir)/config/acx_blas.m4 \
-	$(top_srcdir)/config/acx_fft.m4 \
-	$(top_srcdir)/config/acx_lapack.m4 $(top_srcdir)/configure.ac
+am__aclocal_m4_deps = $(top_srcdir)/m4/ac_cxx_extern_template.m4 \
+	$(top_srcdir)/m4/acx_blas.m4 $(top_srcdir)/m4/acx_fft.m4 \
+	$(top_srcdir)/m4/acx_lapack.m4 \
+	$(top_srcdir)/m4/ax_func_zdotu.m4 $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
@@ -50,9 +50,10 @@ LTLIBRARIES = $(noinst_LTLIBRARIES)
 libbessel_la_LIBADD =
 am__objects_1 =
 am__objects_2 = libbessel_la-airy.lo libbessel_la-chbevl.lo \
-	libbessel_la-hyperg.lo libbessel_la-i0.lo libbessel_la-i1.lo \
-	libbessel_la-iv.lo libbessel_la-jv.lo libbessel_la-k0.lo \
-	libbessel_la-k1.lo libbessel_la-kn.lo libbessel_la-polevl.lo \
+	libbessel_la-gamma.lo libbessel_la-hyperg.lo \
+	libbessel_la-i0.lo libbessel_la-i1.lo libbessel_la-iv.lo \
+	libbessel_la-jv.lo libbessel_la-k0.lo libbessel_la-k1.lo \
+	libbessel_la-kn.lo libbessel_la-polevl.lo \
 	libbessel_la-struve.lo
 am_libbessel_la_OBJECTS = $(am__objects_1) $(am__objects_2)
 libbessel_la_OBJECTS = $(am_libbessel_la_OBJECTS)
@@ -61,12 +62,12 @@ libbessel_la_LINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) \
 	$(CXXFLAGS) $(AM_LDFLAGS) $(LDFLAGS) -o $@
 libbessel_debug_la_LIBADD =
 am__objects_3 = libbessel_debug_la-airy.lo \
-	libbessel_debug_la-chbevl.lo libbessel_debug_la-hyperg.lo \
-	libbessel_debug_la-i0.lo libbessel_debug_la-i1.lo \
-	libbessel_debug_la-iv.lo libbessel_debug_la-jv.lo \
-	libbessel_debug_la-k0.lo libbessel_debug_la-k1.lo \
-	libbessel_debug_la-kn.lo libbessel_debug_la-polevl.lo \
-	libbessel_debug_la-struve.lo
+	libbessel_debug_la-chbevl.lo libbessel_debug_la-gamma.lo \
+	libbessel_debug_la-hyperg.lo libbessel_debug_la-i0.lo \
+	libbessel_debug_la-i1.lo libbessel_debug_la-iv.lo \
+	libbessel_debug_la-jv.lo libbessel_debug_la-k0.lo \
+	libbessel_debug_la-k1.lo libbessel_debug_la-kn.lo \
+	libbessel_debug_la-polevl.lo libbessel_debug_la-struve.lo
 am_libbessel_debug_la_OBJECTS = $(am__objects_1) $(am__objects_3)
 libbessel_debug_la_OBJECTS = $(am_libbessel_debug_la_OBJECTS)
 libbessel_debug_la_LINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) \
@@ -75,7 +76,7 @@ libbessel_debug_la_LINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) \
 	$(LDFLAGS) -o $@
 @ENABLE_DEBUG_TRUE@am_libbessel_debug_la_rpath =
 DEFAULT_INCLUDES = -I. -I$(top_builddir)/itpp@am__isrc@
-depcomp = $(SHELL) $(top_srcdir)/config/depcomp
+depcomp = $(SHELL) $(top_srcdir)/build-aux/depcomp
 am__depfiles_maybe = depfiles
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -122,12 +123,14 @@ CXXFLAGS_OPT = @CXXFLAGS_OPT@
 CYGPATH_W = @CYGPATH_W@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
+DIFF = @DIFF@
 ECHO = @ECHO@
 ECHO_C = @ECHO_C@
 ECHO_N = @ECHO_N@
 ECHO_T = @ECHO_T@
 EGREP = @EGREP@
 EXEEXT = @EXEEXT@
+EXPLICIT_LIBS = @EXPLICIT_LIBS@
 F77 = @F77@
 FFLAGS = @FFLAGS@
 FFT_LIBS = @FFT_LIBS@
@@ -141,7 +144,6 @@ INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 LAPACK_LIBS = @LAPACK_LIBS@
 LDFLAGS = @LDFLAGS@
-LDLIBS = @LDLIBS@
 LIBOBJS = @LIBOBJS@
 LIBS = @LIBS@
 LIBTOOL = @LIBTOOL@
@@ -159,6 +161,7 @@ PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 PERL = @PERL@
+PRIVATE_LIBS = @PRIVATE_LIBS@
 RANLIB = @RANLIB@
 SED = @SED@
 SET_MAKE = @SET_MAKE@
@@ -186,7 +189,6 @@ build_vendor = @build_vendor@
 builddir = @builddir@
 datadir = @datadir@
 datarootdir = @datarootdir@
-diff_ok = @diff_ok@
 docdir = @docdir@
 doxygen_ok = @doxygen_ok@
 dvidir = @dvidir@
@@ -215,7 +217,6 @@ prefix = @prefix@
 program_transform_name = @program_transform_name@
 psdir = @psdir@
 sbindir = @sbindir@
-sed_ok = @sed_ok@
 sharedstatedir = @sharedstatedir@
 srcdir = @srcdir@
 sysconfdir = @sysconfdir@
@@ -229,6 +230,7 @@ noinst_h_base_bessel_sources = \
 cpp_base_bessel_sources = \
 	$(top_srcdir)/itpp/base/bessel/airy.cpp \
 	$(top_srcdir)/itpp/base/bessel/chbevl.cpp \
+	$(top_srcdir)/itpp/base/bessel/gamma.cpp \
 	$(top_srcdir)/itpp/base/bessel/hyperg.cpp \
 	$(top_srcdir)/itpp/base/bessel/i0.cpp \
 	$(top_srcdir)/itpp/base/bessel/i1.cpp \
@@ -304,6 +306,7 @@ distclean-compile:
 
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libbessel_debug_la-airy.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libbessel_debug_la-chbevl.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libbessel_debug_la-gamma.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libbessel_debug_la-hyperg.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libbessel_debug_la-i0.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libbessel_debug_la-i1.Plo@am__quote@
@@ -316,6 +319,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libbessel_debug_la-struve.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libbessel_la-airy.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libbessel_la-chbevl.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libbessel_la-gamma.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libbessel_la-hyperg.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libbessel_la-i0.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/libbessel_la-i1.Plo@am__quote@
@@ -361,6 +365,13 @@ libbessel_la-chbevl.lo: $(top_srcdir)/itpp/base/bessel/chbevl.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$(top_srcdir)/itpp/base/bessel/chbevl.cpp' object='libbessel_la-chbevl.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbessel_la_CXXFLAGS) $(CXXFLAGS) -c -o libbessel_la-chbevl.lo `test -f '$(top_srcdir)/itpp/base/bessel/chbevl.cpp' || echo '$(srcdir)/'`$(top_srcdir)/itpp/base/bessel/chbevl.cpp
+
+libbessel_la-gamma.lo: $(top_srcdir)/itpp/base/bessel/gamma.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbessel_la_CXXFLAGS) $(CXXFLAGS) -MT libbessel_la-gamma.lo -MD -MP -MF $(DEPDIR)/libbessel_la-gamma.Tpo -c -o libbessel_la-gamma.lo `test -f '$(top_srcdir)/itpp/base/bessel/gamma.cpp' || echo '$(srcdir)/'`$(top_srcdir)/itpp/base/bessel/gamma.cpp
+@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/libbessel_la-gamma.Tpo $(DEPDIR)/libbessel_la-gamma.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$(top_srcdir)/itpp/base/bessel/gamma.cpp' object='libbessel_la-gamma.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbessel_la_CXXFLAGS) $(CXXFLAGS) -c -o libbessel_la-gamma.lo `test -f '$(top_srcdir)/itpp/base/bessel/gamma.cpp' || echo '$(srcdir)/'`$(top_srcdir)/itpp/base/bessel/gamma.cpp
 
 libbessel_la-hyperg.lo: $(top_srcdir)/itpp/base/bessel/hyperg.cpp
 @am__fastdepCXX_TRUE@	$(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbessel_la_CXXFLAGS) $(CXXFLAGS) -MT libbessel_la-hyperg.lo -MD -MP -MF $(DEPDIR)/libbessel_la-hyperg.Tpo -c -o libbessel_la-hyperg.lo `test -f '$(top_srcdir)/itpp/base/bessel/hyperg.cpp' || echo '$(srcdir)/'`$(top_srcdir)/itpp/base/bessel/hyperg.cpp
@@ -445,6 +456,13 @@ libbessel_debug_la-chbevl.lo: $(top_srcdir)/itpp/base/bessel/chbevl.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$(top_srcdir)/itpp/base/bessel/chbevl.cpp' object='libbessel_debug_la-chbevl.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbessel_debug_la_CXXFLAGS) $(CXXFLAGS) -c -o libbessel_debug_la-chbevl.lo `test -f '$(top_srcdir)/itpp/base/bessel/chbevl.cpp' || echo '$(srcdir)/'`$(top_srcdir)/itpp/base/bessel/chbevl.cpp
+
+libbessel_debug_la-gamma.lo: $(top_srcdir)/itpp/base/bessel/gamma.cpp
+@am__fastdepCXX_TRUE@	$(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbessel_debug_la_CXXFLAGS) $(CXXFLAGS) -MT libbessel_debug_la-gamma.lo -MD -MP -MF $(DEPDIR)/libbessel_debug_la-gamma.Tpo -c -o libbessel_debug_la-gamma.lo `test -f '$(top_srcdir)/itpp/base/bessel/gamma.cpp' || echo '$(srcdir)/'`$(top_srcdir)/itpp/base/bessel/gamma.cpp
+@am__fastdepCXX_TRUE@	mv -f $(DEPDIR)/libbessel_debug_la-gamma.Tpo $(DEPDIR)/libbessel_debug_la-gamma.Plo
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$(top_srcdir)/itpp/base/bessel/gamma.cpp' object='libbessel_debug_la-gamma.lo' libtool=yes @AMDEPBACKSLASH@
+@AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
+@am__fastdepCXX_FALSE@	$(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbessel_debug_la_CXXFLAGS) $(CXXFLAGS) -c -o libbessel_debug_la-gamma.lo `test -f '$(top_srcdir)/itpp/base/bessel/gamma.cpp' || echo '$(srcdir)/'`$(top_srcdir)/itpp/base/bessel/gamma.cpp
 
 libbessel_debug_la-hyperg.lo: $(top_srcdir)/itpp/base/bessel/hyperg.cpp
 @am__fastdepCXX_TRUE@	$(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbessel_debug_la_CXXFLAGS) $(CXXFLAGS) -MT libbessel_debug_la-hyperg.lo -MD -MP -MF $(DEPDIR)/libbessel_debug_la-hyperg.Tpo -c -o libbessel_debug_la-hyperg.lo `test -f '$(top_srcdir)/itpp/base/bessel/hyperg.cpp' || echo '$(srcdir)/'`$(top_srcdir)/itpp/base/bessel/hyperg.cpp

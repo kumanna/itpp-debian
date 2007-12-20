@@ -32,9 +32,7 @@
 
 #include <itpp/base/bessel/bessel_internal.h>
 #include <itpp/base/itassert.h>
-#include <cmath>
 
-using namespace itpp;
 
 /*
  * Modified Bessel function, third kind, order one (should be second kind?)
@@ -160,8 +158,7 @@ double k1(double x)
   z = 0.5 * x;
   if( z <= 0.0 )
     {
-      it_warning("besselk:: argument domain error");
-      //mtherr( "k1", DOMAIN );
+      it_warning("k1(): argument domain error");
       return( MAXNUM );
     }
 
@@ -182,8 +179,7 @@ double k1e(double x)
 
   if( x <= 0.0 )
     {
-      it_warning("besselk:: argument domain error");
-      //mtherr( "k1e", DOMAIN );
+      it_warning("k1e(): argument domain error");
       return( MAXNUM );
     }
 

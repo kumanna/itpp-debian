@@ -46,10 +46,10 @@ DIST_COMMON = $(srcdir)/Makefile.am $(srcdir)/Makefile.in \
 check_PROGRAMS = $(am__EXEEXT_24)
 subdir = tests
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
-am__aclocal_m4_deps = $(top_srcdir)/config/ac_cxx_extern_template.m4 \
-	$(top_srcdir)/config/acx_blas.m4 \
-	$(top_srcdir)/config/acx_fft.m4 \
-	$(top_srcdir)/config/acx_lapack.m4 $(top_srcdir)/configure.ac
+am__aclocal_m4_deps = $(top_srcdir)/m4/ac_cxx_extern_template.m4 \
+	$(top_srcdir)/m4/acx_blas.m4 $(top_srcdir)/m4/acx_fft.m4 \
+	$(top_srcdir)/m4/acx_lapack.m4 \
+	$(top_srcdir)/m4/ax_func_zdotu.m4 $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
@@ -314,7 +314,7 @@ window_test_OBJECTS = $(am_window_test_OBJECTS)
 window_test_LDADD = $(LDADD)
 window_test_DEPENDENCIES = $(top_builddir)/itpp/libitpp.la
 DEFAULT_INCLUDES = -I. -I$(top_builddir)/itpp@am__isrc@
-depcomp = $(SHELL) $(top_srcdir)/config/depcomp
+depcomp = $(SHELL) $(top_srcdir)/build-aux/depcomp
 am__depfiles_maybe = depfiles
 CXXCOMPILE = $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) \
 	$(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CXXFLAGS) $(CXXFLAGS)
@@ -402,12 +402,14 @@ CXXFLAGS_OPT = @CXXFLAGS_OPT@
 CYGPATH_W = @CYGPATH_W@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
+DIFF = @DIFF@
 ECHO = @ECHO@
 ECHO_C = @ECHO_C@
 ECHO_N = @ECHO_N@
 ECHO_T = @ECHO_T@
 EGREP = @EGREP@
 EXEEXT = @EXEEXT@
+EXPLICIT_LIBS = @EXPLICIT_LIBS@
 F77 = @F77@
 FFLAGS = @FFLAGS@
 FFT_LIBS = @FFT_LIBS@
@@ -421,7 +423,6 @@ INSTALL_SCRIPT = @INSTALL_SCRIPT@
 INSTALL_STRIP_PROGRAM = @INSTALL_STRIP_PROGRAM@
 LAPACK_LIBS = @LAPACK_LIBS@
 LDFLAGS = @LDFLAGS@
-LDLIBS = @LDLIBS@
 LIBOBJS = @LIBOBJS@
 LIBS = @LIBS@
 LIBTOOL = @LIBTOOL@
@@ -439,6 +440,7 @@ PACKAGE_TARNAME = @PACKAGE_TARNAME@
 PACKAGE_VERSION = @PACKAGE_VERSION@
 PATH_SEPARATOR = @PATH_SEPARATOR@
 PERL = @PERL@
+PRIVATE_LIBS = @PRIVATE_LIBS@
 RANLIB = @RANLIB@
 SED = @SED@
 SET_MAKE = @SET_MAKE@
@@ -466,7 +468,6 @@ build_vendor = @build_vendor@
 builddir = @builddir@
 datadir = @datadir@
 datarootdir = @datarootdir@
-diff_ok = @diff_ok@
 docdir = @docdir@
 doxygen_ok = @doxygen_ok@
 dvidir = @dvidir@
@@ -495,7 +496,6 @@ prefix = @prefix@
 program_transform_name = @program_transform_name@
 psdir = @psdir@
 sbindir = @sbindir@
-sed_ok = @sed_ok@
 sharedstatedir = @sharedstatedir@
 srcdir = @srcdir@
 sysconfdir = @sysconfdir@
@@ -1107,7 +1107,7 @@ check-local: $(check_PROGRAMS) $(ref_files)
 	do \
 		echo "------------------------------------------------------------------------------"; \
 		./$$i$(EXEEXT) 2>/dev/null | sed -e 's/^M$$//' -e 's/\(-\?[0-9]\+\.\?[0-9]*e[+-]\)0\([0-9][0-9]\)/\1\2/g' > $$i.tmp; \
-		diff $(srcdir)/$$i.ref $$i.tmp >/dev/null; \
+		$(DIFF) $(srcdir)/$$i.ref $$i.tmp >/dev/null; \
 		if [ "x$$?" = "x0" ]; \
 		then \
 			echo "Test \`$$i' PASSED."; \

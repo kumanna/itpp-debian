@@ -1,5 +1,5 @@
 Name:           itpp
-Version:        4.0.0
+Version:        4.0.1
 Release:        1
 Summary:        C++ library of math, signal/speech processing and communications
 
@@ -45,7 +45,7 @@ make
 make install DESTDIR=$RPM_BUILD_ROOT
 mkdir -p $RPM_BUILD_ROOT/%{_docdir}/%{name}-%{version}
 cp -p AUTHORS ChangeLog ChangeLog-2005 ChangeLog-2006 INSTALL NEWS \
-  NEWS-3.10 NEWS-3.9 README TODO \
+  NEWS-3.10 NEWS-3.9 NEWS-3.99 README \
   $RPM_BUILD_ROOT/%{_docdir}/%{name}-%{version}
 
 
