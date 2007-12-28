@@ -37,13 +37,15 @@ build-stamp: patch config.status
 	$(MAKE) check
 	touch $@
 
-clean: unpatch
+clean_real:
 	dh_testdir
 	dh_testroot
 	rm -f build-stamp config.log
 	[ ! -f Makefile ] || $(MAKE) distclean
-	rm -f config.status config.sub
 	dh_clean 
+
+clean: clean_real unpatch
+	rm -f config.status config.sub
 
 install: build
 	dh_testdir
@@ -75,4 +77,4 @@ binary-arch: build install
 
 binary: binary-indep binary-arch
 
-.PHONY: build clean binary-indep binary-arch binary install 
+.PHONY: build clean binary-indep binary-arch binary install clean_real

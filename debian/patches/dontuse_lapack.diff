@@ -1,0 +1,14 @@
+Index: b/configure
+===================================================================
+--- a/configure
++++ b/configure
+@@ -25936,7 +25936,8 @@
+ fi
+ 
+ # BLAS in ATLAS library? (http://math-atlas.sourceforge.net/)
+-if test "$acx_blas_ok" = no; then
++if false; then
++#if test "$acx_blas_ok" = no; then
+   save_LIBS="$LIBS"; LIBS="$LIBS$MY_FLIBS"
+   { echo "$as_me:$LINENO: checking for ATL_xerbla in -latlas" >&5
+ echo $ECHO_N "checking for ATL_xerbla in -latlas... $ECHO_C" >&6; }
