@@ -27,7 +27,7 @@ endif
 
 config.status: configure
 	dh_testdir
-	./configure $(CROSS) --prefix=/usr --mandir=\$${prefix}/share/man --infodir=\$${prefix}/share/info CXXFLAGS="$(CXXFLAGS)" LDFLAGS="-Wl,-z,defs"
+	./configure $(CROSS) --prefix=/usr --mandir=\$${prefix}/share/man --infodir=\$${prefix}/share/info CXXFLAGS="$(CXXFLAGS)" --with-blas=-lblas --with-lapack=-llapack LDFLAGS="-Wl,-z,defs"
 
 build: build-stamp
 
