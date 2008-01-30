@@ -27,7 +27,7 @@ endif
 
 config.status: configure
 	dh_testdir
-	F77=gfortran-4.3 ./configure $(CROSS) --prefix=/usr --mandir=\$${prefix}/share/man --infodir=\$${prefix}/share/info CXXFLAGS="$(CXXFLAGS)" --with-blas=-lblas --with-lapack=-llapackgf-3 LDFLAGS="-Wl,-z,defs"
+	F77=gfortran ./configure $(CROSS) --prefix=/usr --mandir=\$${prefix}/share/man --infodir=\$${prefix}/share/info CXXFLAGS="$(CXXFLAGS)" --with-blas=-lblas --with-lapack=-llapackgf-3 LDFLAGS="-Wl,-z,defs"
 
 build: build-stamp
 
