@@ -1,7 +1,7 @@
 Source: libitpp
 Priority: optional
 Maintainer: Kumar Appaiah <akumar@ee.iitm.ac.in>
-Build-Depends: debhelper (>= 5), doxygen (>= 1.5.1-1), refblas3-dev, libfftw3-dev, texlive-latex-base, ghostscript, lapack3-dev, quilt
+Build-Depends: debhelper (>= 6), doxygen (>= 1.5.1-1), refblas3-dev, libfftw3-dev, texlive-latex-base, ghostscript, lapack3-dev, quilt
 Standards-Version: 3.7.3
 Section: libs
 Homepage: http://itpp.sourceforge.net
