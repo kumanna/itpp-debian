@@ -5,20 +5,45 @@ It was downloaded from http://itpp.sourceforge.net
 
 Upstream Authors:
 Project Admins
-  o Tony Ottosson <tonyottosson@users.sourceforge.net> (N)
-  o Adam Piatyszek <ediap@users.sourceforge.net> (N)
+  - Tony Ottosson <tonyottosson (at) users.sourceforge.net>
+  - Adam Piątyszek <ediap (at) users.sourceforge.net>
 
-Developers
-  o Johan Bergman <emwjohb@users.sourceforge.net>
-  o Hakan Eriksson <hakanbe@users.sourceforge.net>
-  o Thomas Eriksson <thomases2@users.sourceforge.net>
-  o Pal Frenger <frenger@users.sourceforge.net>
-  o Fredrik Huss <frehu@users.sourceforge.net>
-  o Erik G. Larsson <erik_g_larsson@users.sourceforge.net>
-  o Simon Wood <sgwoodjr@users.sourceforge.net>
+Developers:
+  - Johan Bergman <emwjohb (at) users.sourceforge.net>
+  - Håkan Eriksson <hakanbe (at) users.sourceforge.net>
+  - Thomas Eriksson <thomases2 (at) users.sourceforge.net>
+  - Pål Frenger <frenger (at) users.sourceforge.net>
+  - Fredrik Huss <frehu (at) users.sourceforge.net>
+  - Erik G. Larsson <erik_g_larsson (at) users.sourceforge.net>
+  - Conrad Sanderson <conrad_s (at) users.sourceforge.net>
+  - Andreas Wolfgang <andreas-w (at) users.sourceforge.net>
+  - Simon Wood <sgwoodjr (at) users.sourceforge.net>
+
+Retired Developers:
+  - Thomas Lemaire
+  - Anders Persson
+  - Tobias Ringstrom
+  - Jonas Samuelsson
+
+Contributors:
+  - Mattias Andersson
+  - Francois Cayre
+  - Zbigniew Długaszewski
+  - Mark Dobossy
+  - Sean Finney
+  - Teddy Furon
+  - Bjorn Furugard
+  - Kenneth Hilmersson
+  - Peter Klotz
+  - Krister Norlund
+  - Andy Panov
+  - Steve Peters
+  - Svante Signell
+  - Erik Stoy
+  - Tobias Tynderfeldt
 
 
-Copyright: (C) 1995-2006  (above authors and contributors)
+Copyright: (C) 1995-2008  (above authors and contributors)
 
 fastica code Copyright (C) 2004 by:
 Francois CAYRE and Teddy FURON
@@ -30,7 +55,6 @@ Email : firstname.lastname@irisa.fr
 
 tcp.h and tcp.c: Copyright (c) 2000-2004 IKR (formerly IND),
 University of Stuttgart
-
 
 License:
 
