@@ -1,8 +1,8 @@
 Source: libitpp
 Priority: optional
 Maintainer: Kumar Appaiah <akumar@ee.iitm.ac.in>
-Build-Depends: debhelper (>= 6), doxygen (>= 1.5.1-1), refblas3-dev, libfftw3-dev, texlive-latex-base, ghostscript, lapack3-dev, quilt
 Standards-Version: 3.7.3
+Build-Depends: debhelper (>= 6), doxygen (>= 1.5.1-1), libblas-dev, libfftw3-dev, texlive-latex-base, ghostscript, liblapack-dev, quilt, gfortran
 Section: libs
 Homepage: http://itpp.sourceforge.net
 Vcs-Git: git://git.debian.org/git/collab-maint/libitpp.git
@@ -11,7 +11,7 @@ Vcs-Browser: http://git.debian.org/?p=collab-maint/libitpp.git
 Package: libitpp-dev
 Section: libdevel
 Architecture: any
-Depends: libitpp6 (= ${binary:Version})
+Depends: libitpp6gf (= ${binary:Version})
 Description: C++ signal processing and communication library: Development headers
  IT++ is a C++ library of mathematical, signal processing, speech
  processing, and communications classes and functions. It is being
@@ -20,9 +20,11 @@ Description: C++ signal processing and communication library: Development header
  .
  This package has the development libraries and headers for IT++.
 
-Package: libitpp6
+Package: libitpp6gf
 Section: libs
 Architecture: any
+Conflicts: libitpp6
+Replaces: libitpp6
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: C++ signal processing and communication library
  IT++ is a C++ library of mathematical, signal processing, speech
@@ -34,7 +36,7 @@ Package: libitpp6-dbg
 Section: libs
 Priority: extra
 Architecture: any
-Depends: libitpp6 (= ${binary:Version})
+Depends: libitpp6gf (= ${binary:Version})
 Description: C++ signal processing and communication library: Debug symbols
  IT++ is a C++ library of mathematical, signal processing, speech
  processing, and communications classes and functions. It is being
