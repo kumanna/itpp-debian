@@ -10,7 +10,7 @@
  * IT++ - C++ library of mathematical, signal processing, speech processing,
  *        and communications classes and functions
  *
- * Copyright (C) 1995-2007  (see AUTHORS file for a list of contributors)
+ * Copyright (C) 1995-2008  (see AUTHORS file for a list of contributors)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -350,7 +350,7 @@ namespace itpp {
     out = ivec(findname(name, error_flag, print_flag, num));
     if (error_flag) {
       if (VERBOSE) {
-	cout << name << " = " << out << ";" << endl;
+	cout << name << " = " << var << ";" << endl;
       }
     } else {
       it_assert(out.size() == 1, "Parser::get(int): Improper variable string: "
@@ -373,7 +373,7 @@ namespace itpp {
     ss = findname(name, error_flag, print_flag, num);
     if (error_flag) {
       if (VERBOSE) {
-	cout << name << " = " << ss << ";" << endl;
+	cout << name << " = " << var << ";" << endl;
       }
     } else {
       if ((ss == "true") || (ss == "1")) {

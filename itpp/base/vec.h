@@ -8,7 +8,7 @@
  * IT++ - C++ library of mathematical, signal processing, speech processing,
  *        and communications classes and functions
  *
- * Copyright (C) 1995-2007  (see AUTHORS file for a list of contributors)
+ * Copyright (C) 1995-2008  (see AUTHORS file for a list of contributors)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -925,13 +925,13 @@ namespace itpp {
     it_assert_debug(v1.datasize == v2.datasize, "cvec::dot: wrong sizes");
     int incr = 1;
     std::complex<double> output;
-#if defined(HAVE_ZDOTU_RETURN)
-    output = blas::zdotu_(&v1.datasize, v1.data, &incr, v2.data, &incr);
-#elif defined(HAVE_ZDOTU_VOID)
+#if defined(HAVE_ZDOTU_VOID)
     blas::zdotu_(&output, &v1.datasize, v1.data, &incr, v2.data, &incr);
+#elif defined(HAVE_ZDOTU_RETURN)
+    output = blas::zdotu_(&v1.datasize, v1.data, &incr, v2.data, &incr);
 #else
     blas::zdotusub_(&output, &v1.datasize, v1.data, &incr, v2.data, &incr);
-#endif // HAVE_ZDOTU_RETURN
+#endif // HAVE_ZDOTU_VOID
     return output;
   }
 #endif // HAVE_BLAS
