@@ -8,7 +8,7 @@
  * IT++ - C++ library of mathematical, signal processing, speech processing,
  *        and communications classes and functions
  *
- * Copyright (C) 1995-2007  (see AUTHORS file for a list of contributors)
+ * Copyright (C) 1995-2008  (see AUTHORS file for a list of contributors)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -37,6 +37,7 @@
 #endif
 
 #include <itpp/base/help_functions.h>
+#include <itpp/base/math/misc.h>
 #include <limits>
 
 
@@ -179,7 +180,7 @@ namespace itpp {
       log_b = tmp;
     }
     double negdelta = log_b - log_a;
-    if (negdelta < log_double_min)
+    if ((negdelta < log_double_min) || std::isnan(negdelta))
       return log_a;
     else
       return (log_a + log1p(std::exp(negdelta)));

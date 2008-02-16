@@ -1,8 +1,8 @@
 # Process this file with autoconf to produce a configure script
 #-------------------------------------------------------------------
 AC_PREREQ([2.60])
-AC_COPYRIGHT([Copyright (C) 2006, 2007  Adam Piatyszek <ediap@users.sourceforge.net>])
-AC_INIT([IT++],[4.0.1],[ediap@users.sourceforge.net],[itpp])
+AC_COPYRIGHT([Copyright (C) 2006-2008  Adam Piatyszek <ediap@users.sourceforge.net>])
+AC_INIT([IT++],[4.0.2],[ediap@users.sourceforge.net],[itpp])
 AC_CONFIG_HEADER([itpp/config.h])
 AC_CONFIG_SRCDIR([itpp/base/vec.cpp])
 AC_CONFIG_MACRO_DIR([m4])
@@ -10,7 +10,7 @@ AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([-Wall -Werror])
 
 # Shared library versioning
-GENERIC_LIBRARY_VERSION="6:1:0"
+GENERIC_LIBRARY_VERSION="6:2:0"
 #                        | | |
 #                 +------+ | +---+
 #                 |        |     |
@@ -28,9 +28,13 @@ AC_SUBST(GENERIC_LIBRARY_VERSION)
 # Check for host and disable building a shared library in Windows
 AC_CANONICAL_HOST
 case $host_os in
-  cygwin* | mingw* | pw32*)
+  cygwin* | mingw*)
     AC_DISABLE_SHARED
     AC_ENABLE_STATIC
+    if test "x$enable_shared" = xyes; then
+      NO_UNDEFINED="-no-undefined"
+      AC_SUBST(NO_UNDEFINED)
+    fi
     ;;
   freebsd5* | freebsd6*)
     AC_ENABLE_SHARED
@@ -319,9 +323,6 @@ fi
 AC_SUBST(EXPLICIT_LIBS)
 AC_SUBST(PRIVATE_LIBS)
 
-
-# Set conditional BUILD_ZDOTUSUB flag for ZDOTU Fortran wrapper
-AM_CONDITIONAL([BUILD_ZDOTUSUB], [test "x$ax_build_zdotusub" = xyes])
 
 # Set conditionals for runing test programs
 AM_CONDITIONAL([RUN_LAPACK_TESTS], [test "x$acx_lapack_ok" = xyes])

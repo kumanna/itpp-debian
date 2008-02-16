@@ -14,9 +14,9 @@ endif
 
 SUBDIRS = itpp extras win32 $(HTML_DOC_DIR) $(TEST_DIR)
 
-EXTRA_DIST = autogen.sh ChangeLog-2005 ChangeLog-2006 configure.ac.in \
-	itpp-config.1.in itpp.spec itpp.spec.in Makefile.common NEWS-3.10 \
-	NEWS-3.9 NEWS-3.99 TODO VERSION
+EXTRA_DIST = autogen.sh ChangeLog-2005 ChangeLog-2006 ChangeLog-2007	\
+	configure.ac.in itpp-config.1.in itpp.spec itpp.spec.in		\
+	Makefile.common NEWS-3.10 NEWS-3.9 NEWS-3.99 TODO VERSION
 
 man_MANS = itpp-config.1
 dist_man_MANS = itpp-config.1
@@ -38,11 +38,3 @@ uninstall-local:
 dist-html:
 	$(MAKE) -C doc dist-html
 
-snapshot_suffix = _pre`date +"%Y%m%d"`
-
-snapshot:
-	$(MAKE) dist distdir=@PACKAGE@-@VERSION@$(snapshot_suffix)
-
-snapshot-html:
-	$(MAKE) -C doc dist-html \
-		distdir_html=@PACKAGE@-html-doc-@VERSION@$(snapshot_suffix)

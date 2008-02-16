@@ -129,6 +129,7 @@ LN_S = @LN_S@
 LTLIBOBJS = @LTLIBOBJS@
 MAKEINFO = @MAKEINFO@
 MKDIR_P = @MKDIR_P@
+NO_UNDEFINED = @NO_UNDEFINED@
 OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
 PACKAGE_BUGREPORT = @PACKAGE_BUGREPORT@
@@ -317,9 +318,6 @@ cpp_base_sources = \
 	$(top_srcdir)/itpp/base/svec.cpp \
 	$(top_srcdir)/itpp/base/timing.cpp \
 	$(top_srcdir)/itpp/base/vec.cpp
-
-f_base_sources = \
-	$(top_srcdir)/itpp/base/zdotusub.f
 
 noinst_h_base_algebra_sources = \
 	$(top_srcdir)/itpp/base/algebra/lapack.h

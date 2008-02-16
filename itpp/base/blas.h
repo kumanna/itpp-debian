@@ -8,7 +8,7 @@
  * IT++ - C++ library of mathematical, signal processing, speech processing,
  *        and communications classes and functions
  *
- * Copyright (C) 1995-2007  (see AUTHORS file for a list of contributors)
+ * Copyright (C) 1995-2008  (see AUTHORS file for a list of contributors)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -88,21 +88,21 @@ extern "C" {
 	       const double *x, const int *incx,
 	       const double *y, const int *incy);
 
-#if defined(HAVE_ZDOTU_RETURN)
-  std::complex<double> zdotu_(const int *n,
-                              const std::complex<double> *x, const int *incx,
-                              const std::complex<double> *y, const int *incy);
-#elif defined(HAVE_ZDOTU_VOID)
+#if defined(HAVE_ZDOTU_VOID)
   void zdotu_(std::complex<double> *dot,
               const int *n,
               const std::complex<double> *x, const int *incx,
               const std::complex<double> *y, const int *incy);
+#elif defined(HAVE_ZDOTU_RETURN)
+  std::complex<double> zdotu_(const int *n,
+                              const std::complex<double> *x, const int *incx,
+                              const std::complex<double> *y, const int *incy);
 #else
   void zdotusub_(std::complex<double> *dot,
                  const int *n,
                  const std::complex<double> *x, const int *incx,
                  const std::complex<double> *y, const int *incy);
-#endif
+#endif // HAVE_ZDOTU_VOID
 
   // ----------------------------------------------------------------------
   // BLAS 2 functions
