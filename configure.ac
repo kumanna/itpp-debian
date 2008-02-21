@@ -2,7 +2,7 @@
 #-------------------------------------------------------------------
 AC_PREREQ([2.60])
 AC_COPYRIGHT([Copyright (C) 2006-2008  Adam Piatyszek <ediap@users.sourceforge.net>])
-AC_INIT([IT++],[4.0.2],[ediap@users.sourceforge.net],[itpp])
+AC_INIT([IT++],[4.0.3],[ediap@users.sourceforge.net],[itpp])
 AC_CONFIG_HEADER([itpp/config.h])
 AC_CONFIG_SRCDIR([itpp/base/vec.cpp])
 AC_CONFIG_MACRO_DIR([m4])
@@ -10,7 +10,7 @@ AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([-Wall -Werror])
 
 # Shared library versioning
-GENERIC_LIBRARY_VERSION="6:2:0"
+GENERIC_LIBRARY_VERSION="6:3:0"
 #                        | | |
 #                 +------+ | +---+
 #                 |        |     |
@@ -324,6 +324,9 @@ AC_SUBST(EXPLICIT_LIBS)
 AC_SUBST(PRIVATE_LIBS)
 
 
+# Set conditional BUILD_ZDOTUSUB flag for ZDOTU Fortran wrapper
+AM_CONDITIONAL([BUILD_ZDOTUSUB], [test "x$acx_zdotu" = xzdotusub])
+
 # Set conditionals for runing test programs
 AM_CONDITIONAL([RUN_LAPACK_TESTS], [test "x$acx_lapack_ok" = xyes])
 AM_CONDITIONAL([RUN_FFT_TESTS], [test "x$acx_fft_ok" = xyes])
@@ -439,6 +442,7 @@ Switches:
   - shared ......... : ${enable_shared}
   - static ......... : ${enable_static}
   - explicit deps .. : ${enable_explicit_deps}
+  - zdotu .......... : ${acx_zdotu}
 
 Documentation tools:
   - doxygen ........ : ${doxygen_ok}

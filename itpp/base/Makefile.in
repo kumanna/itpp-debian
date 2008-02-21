@@ -36,12 +36,13 @@ DIST_COMMON = $(pkginclude_HEADERS) $(srcdir)/Makefile.am \
 	$(srcdir)/Makefile.in $(srcdir)/sources.mk \
 	$(top_srcdir)/Makefile.common
 @ENABLE_DEBUG_TRUE@am__append_1 = libbase_debug.la
+@BUILD_ZDOTUSUB_TRUE@am__append_2 = $(f_base_sources)
+@BUILD_ZDOTUSUB_TRUE@am__append_3 = $(f_base_sources)
 subdir = itpp/base
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
 am__aclocal_m4_deps = $(top_srcdir)/m4/ac_cxx_extern_template.m4 \
 	$(top_srcdir)/m4/acx_blas.m4 $(top_srcdir)/m4/acx_fft.m4 \
-	$(top_srcdir)/m4/acx_lapack.m4 \
-	$(top_srcdir)/m4/ax_func_zdotu.m4 $(top_srcdir)/configure.ac
+	$(top_srcdir)/m4/acx_lapack.m4 $(top_srcdir)/configure.ac
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 mkinstalldirs = $(install_sh) -d
@@ -52,6 +53,51 @@ libbase_la_DEPENDENCIES =  \
 	$(top_builddir)/@PACKAGE@/base/algebra/libalgebra.la \
 	$(top_builddir)/@PACKAGE@/base/bessel/libbessel.la \
 	$(top_builddir)/@PACKAGE@/base/math/libmath.la
+am__libbase_la_SOURCES_DIST = $(top_srcdir)/itpp/base/array.h \
+	$(top_srcdir)/itpp/base/bessel.h \
+	$(top_srcdir)/itpp/base/binary.h \
+	$(top_srcdir)/itpp/base/binfile.h \
+	$(top_srcdir)/itpp/base/blas.h \
+	$(top_srcdir)/itpp/base/circular_buffer.h \
+	$(top_srcdir)/itpp/base/converters.h \
+	$(top_srcdir)/itpp/base/copy_vector.h \
+	$(top_srcdir)/itpp/base/factory.h \
+	$(top_srcdir)/itpp/base/fastmath.h \
+	$(top_srcdir)/itpp/base/gf2mat.h \
+	$(top_srcdir)/itpp/base/help_functions.h \
+	$(top_srcdir)/itpp/base/itassert.h \
+	$(top_srcdir)/itpp/base/itfile.h \
+	$(top_srcdir)/itpp/base/ittypes.h \
+	$(top_srcdir)/itpp/base/matfunc.h \
+	$(top_srcdir)/itpp/base/mat.h \
+	$(top_srcdir)/itpp/base/operators.h \
+	$(top_srcdir)/itpp/base/parser.h \
+	$(top_srcdir)/itpp/base/random.h \
+	$(top_srcdir)/itpp/base/smat.h $(top_srcdir)/itpp/base/sort.h \
+	$(top_srcdir)/itpp/base/specmat.h \
+	$(top_srcdir)/itpp/base/stack.h $(top_srcdir)/itpp/base/svec.h \
+	$(top_srcdir)/itpp/base/timing.h $(top_srcdir)/itpp/base/vec.h \
+	$(top_srcdir)/itpp/base/bessel.cpp \
+	$(top_srcdir)/itpp/base/binary.cpp \
+	$(top_srcdir)/itpp/base/binfile.cpp \
+	$(top_srcdir)/itpp/base/converters.cpp \
+	$(top_srcdir)/itpp/base/factory.cpp \
+	$(top_srcdir)/itpp/base/fastmath.cpp \
+	$(top_srcdir)/itpp/base/gf2mat.cpp \
+	$(top_srcdir)/itpp/base/help_functions.cpp \
+	$(top_srcdir)/itpp/base/itassert.cpp \
+	$(top_srcdir)/itpp/base/itfile.cpp \
+	$(top_srcdir)/itpp/base/mat.cpp \
+	$(top_srcdir)/itpp/base/matfunc.cpp \
+	$(top_srcdir)/itpp/base/operators.cpp \
+	$(top_srcdir)/itpp/base/parser.cpp \
+	$(top_srcdir)/itpp/base/random.cpp \
+	$(top_srcdir)/itpp/base/smat.cpp \
+	$(top_srcdir)/itpp/base/specmat.cpp \
+	$(top_srcdir)/itpp/base/svec.cpp \
+	$(top_srcdir)/itpp/base/timing.cpp \
+	$(top_srcdir)/itpp/base/vec.cpp \
+	$(top_srcdir)/itpp/base/zdotusub.f
 am__objects_1 =
 am__objects_2 = libbase_la-bessel.lo libbase_la-binary.lo \
 	libbase_la-binfile.lo libbase_la-converters.lo \
@@ -62,7 +108,10 @@ am__objects_2 = libbase_la-bessel.lo libbase_la-binary.lo \
 	libbase_la-parser.lo libbase_la-random.lo libbase_la-smat.lo \
 	libbase_la-specmat.lo libbase_la-svec.lo libbase_la-timing.lo \
 	libbase_la-vec.lo
-am_libbase_la_OBJECTS = $(am__objects_1) $(am__objects_2)
+am__objects_3 = zdotusub.lo
+@BUILD_ZDOTUSUB_TRUE@am__objects_4 = $(am__objects_3)
+am_libbase_la_OBJECTS = $(am__objects_1) $(am__objects_2) \
+	$(am__objects_4)
 libbase_la_OBJECTS = $(am_libbase_la_OBJECTS)
 libbase_la_LINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CXXLD) $(libbase_la_CXXFLAGS) \
@@ -71,7 +120,52 @@ libbase_debug_la_DEPENDENCIES =  \
 	$(top_builddir)/@PACKAGE@/base/algebra/libalgebra_debug.la \
 	$(top_builddir)/@PACKAGE@/base/bessel/libbessel_debug.la \
 	$(top_builddir)/@PACKAGE@/base/math/libmath_debug.la
-am__objects_3 = libbase_debug_la-bessel.lo libbase_debug_la-binary.lo \
+am__libbase_debug_la_SOURCES_DIST = $(top_srcdir)/itpp/base/array.h \
+	$(top_srcdir)/itpp/base/bessel.h \
+	$(top_srcdir)/itpp/base/binary.h \
+	$(top_srcdir)/itpp/base/binfile.h \
+	$(top_srcdir)/itpp/base/blas.h \
+	$(top_srcdir)/itpp/base/circular_buffer.h \
+	$(top_srcdir)/itpp/base/converters.h \
+	$(top_srcdir)/itpp/base/copy_vector.h \
+	$(top_srcdir)/itpp/base/factory.h \
+	$(top_srcdir)/itpp/base/fastmath.h \
+	$(top_srcdir)/itpp/base/gf2mat.h \
+	$(top_srcdir)/itpp/base/help_functions.h \
+	$(top_srcdir)/itpp/base/itassert.h \
+	$(top_srcdir)/itpp/base/itfile.h \
+	$(top_srcdir)/itpp/base/ittypes.h \
+	$(top_srcdir)/itpp/base/matfunc.h \
+	$(top_srcdir)/itpp/base/mat.h \
+	$(top_srcdir)/itpp/base/operators.h \
+	$(top_srcdir)/itpp/base/parser.h \
+	$(top_srcdir)/itpp/base/random.h \
+	$(top_srcdir)/itpp/base/smat.h $(top_srcdir)/itpp/base/sort.h \
+	$(top_srcdir)/itpp/base/specmat.h \
+	$(top_srcdir)/itpp/base/stack.h $(top_srcdir)/itpp/base/svec.h \
+	$(top_srcdir)/itpp/base/timing.h $(top_srcdir)/itpp/base/vec.h \
+	$(top_srcdir)/itpp/base/bessel.cpp \
+	$(top_srcdir)/itpp/base/binary.cpp \
+	$(top_srcdir)/itpp/base/binfile.cpp \
+	$(top_srcdir)/itpp/base/converters.cpp \
+	$(top_srcdir)/itpp/base/factory.cpp \
+	$(top_srcdir)/itpp/base/fastmath.cpp \
+	$(top_srcdir)/itpp/base/gf2mat.cpp \
+	$(top_srcdir)/itpp/base/help_functions.cpp \
+	$(top_srcdir)/itpp/base/itassert.cpp \
+	$(top_srcdir)/itpp/base/itfile.cpp \
+	$(top_srcdir)/itpp/base/mat.cpp \
+	$(top_srcdir)/itpp/base/matfunc.cpp \
+	$(top_srcdir)/itpp/base/operators.cpp \
+	$(top_srcdir)/itpp/base/parser.cpp \
+	$(top_srcdir)/itpp/base/random.cpp \
+	$(top_srcdir)/itpp/base/smat.cpp \
+	$(top_srcdir)/itpp/base/specmat.cpp \
+	$(top_srcdir)/itpp/base/svec.cpp \
+	$(top_srcdir)/itpp/base/timing.cpp \
+	$(top_srcdir)/itpp/base/vec.cpp \
+	$(top_srcdir)/itpp/base/zdotusub.f
+am__objects_5 = libbase_debug_la-bessel.lo libbase_debug_la-binary.lo \
 	libbase_debug_la-binfile.lo libbase_debug_la-converters.lo \
 	libbase_debug_la-factory.lo libbase_debug_la-fastmath.lo \
 	libbase_debug_la-gf2mat.lo libbase_debug_la-help_functions.lo \
@@ -81,7 +175,8 @@ am__objects_3 = libbase_debug_la-bessel.lo libbase_debug_la-binary.lo \
 	libbase_debug_la-random.lo libbase_debug_la-smat.lo \
 	libbase_debug_la-specmat.lo libbase_debug_la-svec.lo \
 	libbase_debug_la-timing.lo libbase_debug_la-vec.lo
-am_libbase_debug_la_OBJECTS = $(am__objects_1) $(am__objects_3)
+am_libbase_debug_la_OBJECTS = $(am__objects_1) $(am__objects_5) \
+	$(am__objects_4)
 libbase_debug_la_OBJECTS = $(am_libbase_debug_la_OBJECTS)
 libbase_debug_la_LINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) \
 	$(LIBTOOLFLAGS) --mode=link $(CXXLD) \
@@ -100,6 +195,13 @@ CXXLD = $(CXX)
 CXXLINK = $(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CXXLD) $(AM_CXXFLAGS) $(CXXFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
+F77COMPILE = $(F77) $(AM_FFLAGS) $(FFLAGS)
+LTF77COMPILE = $(LIBTOOL) --tag=F77 $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
+	--mode=compile $(F77) $(AM_FFLAGS) $(FFLAGS)
+F77LD = $(F77)
+F77LINK = $(LIBTOOL) --tag=F77 $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
+	--mode=link $(F77LD) $(AM_FFLAGS) $(FFLAGS) $(AM_LDFLAGS) \
+	$(LDFLAGS) -o $@
 COMPILE = $(CC) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) \
 	$(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 LTCOMPILE = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
@@ -110,7 +212,8 @@ LINK = $(LIBTOOL) --tag=CC $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) \
 	--mode=link $(CCLD) $(AM_CFLAGS) $(CFLAGS) $(AM_LDFLAGS) \
 	$(LDFLAGS) -o $@
 SOURCES = $(libbase_la_SOURCES) $(libbase_debug_la_SOURCES)
-DIST_SOURCES = $(libbase_la_SOURCES) $(libbase_debug_la_SOURCES)
+DIST_SOURCES = $(am__libbase_la_SOURCES_DIST) \
+	$(am__libbase_debug_la_SOURCES_DIST)
 RECURSIVE_TARGETS = all-recursive check-recursive dvi-recursive \
 	html-recursive info-recursive install-data-recursive \
 	install-dvi-recursive install-exec-recursive \
@@ -157,6 +260,7 @@ CYGPATH_W = @CYGPATH_W@
 DEFS = @DEFS@
 DEPDIR = @DEPDIR@
 DIFF = @DIFF@
+DSYMUTIL = @DSYMUTIL@
 ECHO = @ECHO@
 ECHO_C = @ECHO_C@
 ECHO_N = @ECHO_N@
@@ -184,6 +288,7 @@ LN_S = @LN_S@
 LTLIBOBJS = @LTLIBOBJS@
 MAKEINFO = @MAKEINFO@
 MKDIR_P = @MKDIR_P@
+NMEDIT = @NMEDIT@
 NO_UNDEFINED = @NO_UNDEFINED@
 OBJEXT = @OBJEXT@
 PACKAGE = @PACKAGE@
@@ -309,16 +414,21 @@ cpp_base_sources = \
 	$(top_srcdir)/itpp/base/timing.cpp \
 	$(top_srcdir)/itpp/base/vec.cpp
 
+f_base_sources = \
+	$(top_srcdir)/itpp/base/zdotusub.f
+
 SUBDIRS = algebra bessel math
 noinst_LTLIBRARIES = libbase.la $(am__append_1)
-libbase_la_SOURCES = $(h_base_sources) $(cpp_base_sources)
+libbase_la_SOURCES = $(h_base_sources) $(cpp_base_sources) \
+	$(am__append_2)
 libbase_la_CXXFLAGS = $(CXXFLAGS_OPT)
 libbase_la_LIBADD = \
 	$(top_builddir)/@PACKAGE@/base/algebra/libalgebra.la \
 	$(top_builddir)/@PACKAGE@/base/bessel/libbessel.la \
 	$(top_builddir)/@PACKAGE@/base/math/libmath.la
 
-libbase_debug_la_SOURCES = $(h_base_sources) $(cpp_base_sources)
+libbase_debug_la_SOURCES = $(h_base_sources) $(cpp_base_sources) \
+	$(am__append_3)
 libbase_debug_la_CXXFLAGS = $(CXXFLAGS_DEBUG)
 libbase_debug_la_LIBADD = \
 	$(top_builddir)/@PACKAGE@/base/algebra/libalgebra_debug.la \
@@ -329,7 +439,7 @@ pkginclude_HEADERS = $(h_base_sources)
 all: all-recursive
 
 .SUFFIXES:
-.SUFFIXES: .cpp .lo .o .obj
+.SUFFIXES: .cpp .f .lo .o .obj
 $(srcdir)/Makefile.in:  $(srcdir)/Makefile.am $(top_srcdir)/Makefile.common $(srcdir)/sources.mk $(am__configure_deps)
 	@for dep in $?; do \
 	  case '$(am__configure_deps)' in \
@@ -720,6 +830,18 @@ libbase_debug_la-vec.lo: $(top_srcdir)/itpp/base/vec.cpp
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	source='$(top_srcdir)/itpp/base/vec.cpp' object='libbase_debug_la-vec.lo' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCXX_FALSE@	DEPDIR=$(DEPDIR) $(CXXDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCXX_FALSE@	$(LIBTOOL) --tag=CXX $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(CXX) $(DEFS) $(DEFAULT_INCLUDES) $(INCLUDES) $(AM_CPPFLAGS) $(CPPFLAGS) $(libbase_debug_la_CXXFLAGS) $(CXXFLAGS) -c -o libbase_debug_la-vec.lo `test -f '$(top_srcdir)/itpp/base/vec.cpp' || echo '$(srcdir)/'`$(top_srcdir)/itpp/base/vec.cpp
+
+.f.o:
+	$(F77COMPILE) -c -o $@ $<
+
+.f.obj:
+	$(F77COMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
+
+.f.lo:
+	$(LTF77COMPILE) -c -o $@ $<
+
+zdotusub.lo: $(top_srcdir)/itpp/base/zdotusub.f
+	$(LIBTOOL) --tag=F77 $(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=compile $(F77) $(AM_FFLAGS) $(FFLAGS) -c -o zdotusub.lo `test -f '$(top_srcdir)/itpp/base/zdotusub.f' || echo '$(srcdir)/'`$(top_srcdir)/itpp/base/zdotusub.f
 
 mostlyclean-libtool:
 	-rm -f *.lo

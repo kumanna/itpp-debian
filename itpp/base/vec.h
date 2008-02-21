@@ -757,8 +757,10 @@ namespace itpp {
     return temp;
   }
 
+  //! \cond
   template<>
   Mat<std::complex<double> > Vec<std::complex<double> >::hermitian_transpose() const;
+  //! \endcond
 
   template<class Num_T>
   Mat<Num_T> Vec<Num_T>::hermitian_transpose() const
@@ -919,21 +921,17 @@ namespace itpp {
     return blas::ddot_(&v1.datasize, v1.data, &incr, v2.data, &incr);
   }
 
+#if defined(HAVE_ZDOTUSUB) || defined(HAVE_ZDOTU_VOID)
   template<> inline
   std::complex<double> dot(const cvec &v1, const cvec &v2)
   {
     it_assert_debug(v1.datasize == v2.datasize, "cvec::dot: wrong sizes");
     int incr = 1;
     std::complex<double> output;
-#if defined(HAVE_ZDOTU_VOID)
-    blas::zdotu_(&output, &v1.datasize, v1.data, &incr, v2.data, &incr);
-#elif defined(HAVE_ZDOTU_RETURN)
-    output = blas::zdotu_(&v1.datasize, v1.data, &incr, v2.data, &incr);
-#else
     blas::zdotusub_(&output, &v1.datasize, v1.data, &incr, v2.data, &incr);
-#endif // HAVE_ZDOTU_VOID
     return output;
   }
+#endif // HAVE_ZDOTUSUB || HAVE_ZDOTU_VOID
 #endif // HAVE_BLAS
 
   template<class Num_T> inline
@@ -1544,8 +1542,10 @@ namespace itpp {
     return *this;
   }
 
+  //! \cond
   template<>
   bvec Vec<std::complex<double> >::operator==(std::complex<double>) const;
+  //! \endcond
 
   template<class Num_T>
   bvec Vec<Num_T>::operator==(const Num_T value) const
@@ -1560,8 +1560,10 @@ namespace itpp {
     return temp;
   }
 
+  //! \cond
   template<>
   bvec Vec<std::complex<double> >::operator!=(std::complex<double>) const;
+  //! \endcond
 
   template<class Num_T>
   bvec Vec<Num_T>::operator!=(const Num_T value) const
@@ -1576,8 +1578,10 @@ namespace itpp {
     return temp;
   }
 
+  //! \cond
   template<>
   bvec Vec<std::complex<double> >::operator<(std::complex<double>) const;
+  //! \endcond
 
   template<class Num_T>
   bvec Vec<Num_T>::operator<(const Num_T value) const
@@ -1592,8 +1596,10 @@ namespace itpp {
     return temp;
   }
 
+  //! \cond
   template<>
   bvec Vec<std::complex<double> >::operator<=(std::complex<double>) const;
+  //! \endcond
 
   template<class Num_T>
   bvec Vec<Num_T>::operator<=(const Num_T value) const
@@ -1608,8 +1614,10 @@ namespace itpp {
     return temp;
   }
 
+  //! \cond
   template<>
   bvec Vec<std::complex<double> >::operator>(std::complex<double>) const;
+  //! \endcond
 
   template<class Num_T>
   bvec Vec<Num_T>::operator>(const Num_T value) const
@@ -1624,8 +1632,10 @@ namespace itpp {
     return temp;
   }
 
+  //! \cond
   template<>
   bvec Vec<std::complex<double> >::operator>=(std::complex<double>) const;
+  //! \endcond
 
   template<class Num_T>
   bvec Vec<Num_T>::operator>=(const Num_T value) const
@@ -1811,8 +1821,10 @@ namespace itpp {
 
 #if !defined(HAVE_BLAS)
   extern template double dot(const vec &v1, const vec &v2);
+#if !(defined(HAVE_ZDOTUSUB) || defined(HAVE_ZDOTU_VOID))
   extern template std::complex<double> dot(const cvec &v1, const cvec &v2);
-#endif
+#endif // !(HAVE_ZDOTUSUB || HAVE_ZDOTU_VOID)
+#endif // HAVE_BLAS
   extern template int dot(const ivec &v1, const ivec &v2);
   extern template short dot(const svec &v1, const svec &v2);
   extern template bin dot(const bvec &v1, const bvec &v2);

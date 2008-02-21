@@ -154,10 +154,10 @@
 /* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H
 
-/* Define if zdotu_ returns result. */
-#undef HAVE_ZDOTU_RETURN
+/* Define to use zdotusub_ Fortran wrapper. */
+#undef HAVE_ZDOTUSUB
 
-/* Define if zdotu_ passes result as its first argument. */
+/* Define to use "void zdotu_()". */
 #undef HAVE_ZDOTU_VOID
 
 /* Define if you want exceptions handling */
