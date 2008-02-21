@@ -32,10 +32,12 @@ acx_blas_ok=no
 blas_mkl_ok=no
 blas_acml_ok=no
 blas_atlas_ok=no
+acx_zdotu=auto
 
 # Parse "--with-blas=<lib>" option
 AC_ARG_WITH(blas,
-  [AS_HELP_STRING([--with-blas@<:@=LIB@:>@], [use BLAS library, optionally specified by LIB])])
+  [AS_HELP_STRING([--with-blas@<:@=LIB@:>@],
+                  [use BLAS library, optionally specified by LIB])])
 case $with_blas in
   yes | "") ;;
   no) acx_blas_ok=disabled ;;
@@ -75,7 +77,8 @@ fi
 # (http://www.intel.com/cd/software/products/asmo-na/eng/perflib/mkl/index.htm)
 if test "$acx_blas_ok" = no; then
   AC_CHECK_LIB([mkl], [$sgemm],
-    [acx_blas_ok=yes; blas_mkl_ok=yes; BLAS_LIBS="-lmkl -lguide -lpthread"],
+    [acx_blas_ok=yes; blas_mkl_ok=yes; acx_zdotu=void;
+       BLAS_LIBS="-lmkl -lguide -lpthread"],
     [],
     [-lguide -lpthread])
 fi
@@ -94,9 +97,11 @@ if test "$acx_blas_ok" = no; then
     [AC_CHECK_LIB([acml_mp], [$sgemm],
        [acx_blas_ok=yes; blas_acml_ok=yes; BLAS_LIBS="-lacml_mp$MY_FLIBS"],
        [AC_CHECK_LIB([acml], [$dgemm],
-          [acx_blas_ok=yes; blas_acml_ok=yes; BLAS_LIBS="-lacml -lacml_mv$MY_FLIBS"],
+          [acx_blas_ok=yes; blas_acml_ok=yes;
+             BLAS_LIBS="-lacml -lacml_mv$MY_FLIBS"],
           [AC_CHECK_LIB([acml_mp], [$dgemm],
-             [acx_blas_ok=yes; blas_acml_ok=yes; BLAS_LIBS="-lacml_mp -lacml_mv$MY_FLIBS"],
+             [acx_blas_ok=yes; blas_acml_ok=yes;
+                BLAS_LIBS="-lacml_mp -lacml_mv$MY_FLIBS"],
              [], [-lacml_mv])],
           [], [-lacml_mv])],
        [])],
@@ -177,7 +182,7 @@ if test "$acx_blas_ok" = yes && test "$blas_mkl_ok" = no \
     && test "$blas_acml_ok" = no && test "$blas_atlas_ok" = no; then
   save_LIBS="$LIBS"; LIBS="$BLAS_LIBS $LIBS"
   AC_MSG_CHECKING([for MKLGetVersion in $BLAS_LIBS])
-  AC_TRY_LINK_FUNC(MKLGetVersion, [blas_mkl_ok=yes])
+  AC_TRY_LINK_FUNC(MKLGetVersion, [blas_mkl_ok=yes; acx_zdotu=void])
   AC_MSG_RESULT($blas_mkl_ok)
   if test "$blas_mkl_ok" = no; then
     AC_MSG_CHECKING([for acmlversion in $BLAS_LIBS])
@@ -192,20 +197,42 @@ if test "$acx_blas_ok" = yes && test "$blas_mkl_ok" = no \
   LIBS="$save_LIBS"
 fi
 
-# Check if ZDOTU returning a complex value works
+# Parse "--with-zdotu=..." option
+AC_ARG_WITH(zdotu,
+  [AS_HELP_STRING([--with-zdotu=@<:@zdotusub|void|none@:>@],
+                  [use zdotu_ with a specified calling method])])
+case $with_zdotu in
+  zdotusub) acx_zdotu=zdotusub ;;
+  void) acx_zdotu=void ;;
+  none | no) acx_zdotu=disabled ;;
+  *) ;;
+esac
+
+# Check if zdotusub_ Fortran wrapper should be used
 if test "$acx_blas_ok" = yes; then
-  save_LIBS="$LIBS"; LIBS="$BLAS_LIBS $LIBS"
-  AX_FUNC_ZDOTU_RETURN
-  AX_FUNC_ZDOTU_VOID
-  LIBS="$save_LIBS"
-  if test "x$ax_cv_zdotu_ret_complex" = xno \
-     && test "x$ax_cv_zdotu_ret_void" = xno; then
-    AC_MSG_ERROR([could not detect proper calling conventions of zdotu_
-BLAS function.
-If your BLAS is a shared library, please make sure that it can be found at
-runtime. You can use LD_LIBRARY_PATH environment variable for this purpose.
-])
-  fi
+  case $acx_zdotu in
+    zdotusub)
+      if test "x$F77" = x; then
+        AC_MSG_ERROR([a Fortran compiler is required to use zdotusub_ wrapper])
+      fi
+      AC_DEFINE(HAVE_ZDOTUSUB, 1, [Define to use zdotusub_ Fortran wrapper.]) ;;
+    void)
+      AC_DEFINE(HAVE_ZDOTU_VOID, 1, [Define to use "void zdotu_()".]) ;;
+    disabled) ;;
+    auto)
+      if test "x$F77" != x; then
+        AC_DEFINE(HAVE_ZDOTUSUB, 1, [Define to use zdotusub_ Fortran wrapper.])
+        acx_zdotu=zdotusub
+      else
+        AC_MSG_WARN([do not know how to call the zdotu_ BLAS function.
+Not using this function in the Vec::dot() method. You might want to use
+"--with-zdotu=@<:@zdotusub|void|none@:>@" option to explicitly set the
+proper calling method of this BLAS function. Please report this problem
+on the IT++ Help forum.])
+        acx_zdotu=no
+      fi
+      ;;
+  esac
 fi
 
 AC_SUBST(BLAS_LIBS)

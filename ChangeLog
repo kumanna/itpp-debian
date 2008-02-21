@@ -1,3 +1,85 @@
+2008-02-21  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* IT++ 4.0.3 released (SVN tag: release-4-0-3)
+
+	* NEWS, VERSION: Release notes added and version number updated
+	for IT++ 4.0.3
+
+	* itpp/base/vec.h: Minor documentation fixes to prevent warnings
+	of the Doxygen
+
+2008-02-20  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* INSTALL, doc/local/installation.doc, itpp/base/blas.h,
+	itpp/base/vec.cpp, itpp/base/vec.h, itpp/config_msvc.h,
+	m4/acx_blas.m4: Removed non-portable "--with-zdotu=complex" method
+
+	It seems that there is no portable solution for calling from C++
+	the Fortran functions that returns a complex value. C99 introduces
+	"double _Complex" type, which is compatible with Fortran COMPLEX.
+	But this C99 type is not a valid C++ type. Therefore this patch
+	removes the "complex" method from "--with-zdotu" option. The valid
+	methods are now:
+	- "zdotusub" - use a zdotusub_ Fortran wrapper function
+	- "void" - compatible with BLAS libraries built with g77 compiler
+	- "none" - do not use zdotu_ function at all
+
+2008-02-19  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* INSTALL, configure.ac.in, doc/local/installation.doc,
+	itpp/base/blas.h, itpp/base/vec.cpp, itpp/base/vec.h,
+	itpp/config_msvc.h, m4/acx_blas.m4: Add "--with-zdotu" option to
+	select zdotu_ calling convention
+
+	The "--with-zdotu=<method>" option can be used to change the
+	default calling convention of BLAS zdotu_ Fortran function. The
+	BLAS libraries built with g77 compiler do not return the complex
+	result of a function, but pass it via the first argument of the
+	function. The implementations compiled with gfortran and other
+	vendor compilers return complex result as a typical function. By
+	using a "void" method with the "--with-zdotu=<method>" option, the
+	former approach is used (g77 compatible). To use the zdotu_ call
+	that returns the result by value, a "complex" method should be
+	passed. Without setting any of the two methods explicitly, IT++
+	tries to guess the proper method based on the detected BLAS
+	implementation. Otherwise, a Fortran wrapper function zdotusub_ is
+	used, which requires a working Fortran compiler. Finally, if this
+	is not the case, the zdotu_ BLAS method is not used at all and a
+	relevant warning message is displayed during the configuration
+	step.
+
+2008-02-18  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* autogen.sh: Cosmetic improvements
+
+	Replace back-ticks `...` with POSIX shell syntax $(...). BTW,
+	improve generation of a snapshot version string.
+
+	* itpp/base/blas.h, itpp/base/vec.cpp, itpp/base/vec.h,
+	itpp/config_msvc.h, m4/acx_blas.m4, m4/ax_func_zdotu.m4: Use
+	zdotusub_ Fortran wrapper by default
+
+	This patch removes the run-time checks for correct zdotu_ calling
+	conventions, which caused a lot of portability problems in IT++
+	4.0.1 and 4.0.2 releases. The preferred method is now to use the
+	locally provided zdotusub_ Fortran wrapper (as in 4.0.0 release).
+	This requires the availability of a Fortran compiler, unless an
+	Intel MKL library is used, in which zdotu_ can be called directly
+	from C++ without any problems. If no Fortran compiler is available
+	and Intel MKL is not used, the zdotu_ function is not called at
+	all. In such case, a relevant warning message is printed during
+	the configuration step.
+
+	* configure.ac.in, itpp/base/Makefile.am, itpp/base/sources.mk,
+	itpp/base/zdotusub.f, m4/acx_blas.m4: Revert "Removed redundant
+	zdotusub_ Fortran wrapper to zdotu_ function"
+
+2008-02-15  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* VERSION: Updated for SVN snapshot releases
+
+------------------------------------------------------------------------------
+
 2008-02-15  Adam Piatyszek  <ediap@users.sourceforge.net>
 
 	* IT++ 4.0.2 released (SVN tag: release-4-0-2)
