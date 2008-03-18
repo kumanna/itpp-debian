@@ -3,9 +3,6 @@
 # Uncomment this to turn on verbose mode.
 #export DH_VERBOSE=1
 
-# Use quilt for patch management.
-include /usr/share/quilt/quilt.make
-
 # These are used for cross-compiling and for saving the configure script
 # from having to guess our platform (since we know it already)
 DEB_HOST_GNU_TYPE   ?= $(shell dpkg-architecture -qDEB_HOST_GNU_TYPE)
@@ -31,21 +28,19 @@ config.status: configure
 
 build: build-stamp
 
-build-stamp: patch config.status
+build-stamp: config.status
 	dh_testdir
 	$(MAKE)
 	$(MAKE) check
 	touch $@
 
-clean_real:
+clean:
 	dh_testdir
 	dh_testroot
 	rm -f build-stamp config.log
 	[ ! -f Makefile ] || $(MAKE) distclean
-	dh_clean 
-
-clean: clean_real unpatch
 	rm -f config.status config.sub
+	dh_clean 
 
 install: build
 	dh_testdir
@@ -90,4 +85,4 @@ binary-arch: build install
 
 binary: binary-indep binary-arch
 
-.PHONY: build clean binary-indep binary-arch binary install clean_real
+.PHONY: build clean binary-indep binary-arch binary install
