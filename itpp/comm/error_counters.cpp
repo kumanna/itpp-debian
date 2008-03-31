@@ -42,14 +42,9 @@ namespace itpp {
   // The Bit error rate counter class (BERC)
   //-----------------------------------------------------------
 
-  BERC::BERC(int indelay, int inignorefirst, int inignorelast)
-  {
-    delay       = indelay;
-    ignorefirst = inignorefirst;
-    ignorelast  = inignorelast;
-    errors      = 0;
-    corrects    = 0;
-  }
+  BERC::BERC(int indelay, int inignorefirst, int inignorelast):
+    delay(indelay), ignorefirst(inignorefirst), ignorelast(inignorelast),
+    errors(0), corrects(0) {}
 
   void BERC::count(const bvec &in1, const bvec &in2)
   {
@@ -58,8 +53,7 @@ namespace itpp {
 
     if (delay >= 0) {
       for (int i = 0; i < countlength; i++) {
-	if (static_cast<short>(in1(i + ignorefirst)) ==
-	    static_cast<short>(in2(i + ignorefirst + delay))) {
+	if (in1(i + ignorefirst) == in2(i + ignorefirst + delay)) {
 	  corrects++;
 	}
 	else {
@@ -69,8 +63,7 @@ namespace itpp {
     }
     else {
       for (int i = 0; i < countlength; i++) {
-	if (static_cast<short>(in1(i + ignorefirst - delay)) ==
-	    static_cast<short>(in2(i + ignorefirst))) {
+	if (in1(i + ignorefirst - delay) == in2(i + ignorefirst)) {
 	  corrects++;
 	}
 	else {
@@ -102,7 +95,7 @@ namespace itpp {
     delay = bestdelay;
   }
 
-  void BERC::report()
+  void BERC::report() const
   {
     std::cout.setf(std::ios::fixed);
     std::cout << std::endl
@@ -131,16 +124,14 @@ namespace itpp {
 
     if (indelay >= 0) {
       for (int i = 0; i < countlength; i++) {
-	if (static_cast<short>(in1(i + inignorefirst)) !=
-	    static_cast<short>(in2(i + inignorefirst + indelay))) {
+	if (in1(i + inignorefirst) != in2(i + inignorefirst + indelay)) {
 	  local_errors++;
 	}
       }
     }
     else {
       for (int i = 0; i < countlength; i++) {
-	if (static_cast<short>(in1(i + inignorefirst - indelay)) !=
-	    static_cast<short>(in2(i + inignorefirst))) {
+	if (in1(i + inignorefirst - indelay) != in2(i + inignorefirst)) {
 	  local_errors++;
 	}
       }
@@ -154,11 +145,12 @@ namespace itpp {
   // The Block error rate counter class (BERC)
   //-----------------------------------------------------------
 
-  BLERC::BLERC(void): setup_done(false), errors(0), corrects(0) {}
+  BLERC::BLERC(): setup_done(false), blocksize(0), errors(0),
+                      corrects(0) {}
 
 
   BLERC::BLERC(int inblocksize): setup_done(true), blocksize(inblocksize),
-				  errors(0), corrects(0) {}
+                                 errors(0), corrects(0) {}
 
 
   void BLERC::set_blocksize(int inblocksize, bool clear)
@@ -183,8 +175,7 @@ namespace itpp {
     for (int i = 0; i < (min_input_length / blocksize); i++) {
       CORR = true;
       for (int j = 0; j < blocksize; j++) {
-	if (static_cast<short>(in1(i * blocksize + j)) !=
-	    static_cast<short>(in2(i * blocksize + j))) {
+	if (in1(i * blocksize + j) != in2(i * blocksize + j)) {
 	  CORR = false;
 	  break;
 	}

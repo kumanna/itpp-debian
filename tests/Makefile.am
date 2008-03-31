@@ -2,15 +2,15 @@ include $(top_srcdir)/Makefile.common
 LDADD = $(top_builddir)/itpp/libitpp.la
 AM_CXXFLAGS = $(CXXFLAGS_OPT)
 
-BASE_TESTS = array_test bessel_test blas_test circular_buffer_test	\
-  fastmath_test gf2mat_test integration_test itfile_test mat_test	\
-  parser_test rand_test sort_test sparse_test timer_test vec_test
+BASE_TESTS = array_test bessel_test blas_test circular_buffer_test	   \
+  converters_test fastmath_test gf2mat_test integration_test itfile_test   \
+  mat_test parser_test rand_test sort_test sparse_test timer_test vec_test
 BASE_LAP_TESTS = cholesky_test det_test eigen_test inv_test ls_solve_test \
   lu_test matfunc_test qr_test schur_test svd_test
 
-COMM_TESTS = bch_test commfunc_test convcode_test galois_test		\
-  interleaver_test ldpc_test llr_test modulator_test pulse_shape_test	\
-  rec_syst_conv_code_test reedsolomon_test turbo_test
+COMM_TESTS = bch_test commfunc_test convcode_test error_count_test	\
+  galois_test interleaver_test ldpc_test llr_test modulator_test	\
+  pulse_shape_test rec_syst_conv_code_test reedsolomon_test turbo_test
 COMM_LAP_TESTS = modulator_nd_test
 COMM_FFT_TESTS = channel_test
 
@@ -68,6 +68,7 @@ bch_test_SOURCES = bch_test.cpp
 bessel_test_SOURCES = bessel_test.cpp
 blas_test_SOURCES = blas_test.cpp
 channel_test_SOURCES = channel_test.cpp
+converters_test_SOURCES = converters_test.cpp
 itfile_test_SOURCES = itfile_test.cpp
 itfile_test_CPPFLAGS = -DITFILE_TEST_FILE=\"$(srcdir)/itfile_test_data.it\" $(AM_CPPFLAGS)
 cholesky_test_SOURCES = cholesky_test.cpp
@@ -76,6 +77,7 @@ commfunc_test_SOURCES = commfunc_test.cpp
 convcode_test_SOURCES = convcode_test.cpp
 det_test_SOURCES = det_test.cpp
 eigen_test_SOURCES = eigen_test.cpp
+error_count_test_SOURCES = error_count_test.cpp
 fastica_test_SOURCES = fastica_test.cpp
 fastica_test_CPPFLAGS = -DFASTICA_TEST_FILE=\"$(srcdir)/fastica_test_data.txt\" $(AM_CPPFLAGS)
 fastmath_test_SOURCES = fastmath_test.cpp

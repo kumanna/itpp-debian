@@ -93,7 +93,7 @@ int main()
   fw << Name("cd") << cd_ref;
   fw << Name("st") << st_ref;
   fw << Name("bv") << bv_ref;
-  fw << Name("iv") << iv_ref;
+  fw << Name("iv") << concat(iv_ref, iv_ref, iv_ref);
   fw << Name("v") << v_ref;
   fw << Name("cv") << cv_ref;
   fw << Name("bm") << bm_ref;
@@ -108,14 +108,15 @@ int main()
   fw << Name("aim") << aim_ref;
   fw << Name("am") << am_ref;
   fw << Name("acm") << acm_ref;
+  fw.remove("iv");
+  fw << Name("iv") << iv_ref;
   fw.close();
 #endif
   std::string name, type, desc;
   uint64_t size;
   int n = 0;
-  cout.setf(ios::fixed);
-  cout << "Name |      Type | Size | Description\n";
-  cout << "------------------------------------------------\n";
+  cout << "Name |      Type | Size | Description\n"
+       << "------------------------------------------------\n";
   it_ifile ff(string(ITFILE_TEST_FILE));
   while (ff.seek(n++)) {
     ff.info(name, type, desc, size);
@@ -123,7 +124,7 @@ int main()
 	 << "   " << desc << endl;
   }
   cout << "------------------------------------------------\n\n";
-  cout.setf(ios::scientific);
+
   ff >> Name("abm") >> abm;
   ff >> Name("abv") >> abv;
   ff >> Name("acm") >> acm;

@@ -723,28 +723,26 @@ namespace itpp {
     Z = exp_factor;
     H_b = base_matrix;
     H_b_valid = true;
-    bmat H_dense(H_b.rows() * Z, H_b.cols() * Z);
 
-    for (int r = 0; r < H_b.rows(); r++)
-      for (int c = 0; c < H_b.cols(); c++)
-	switch (H_b(r, c)) {
-	case -1:
-	  H_dense.set_submatrix(r*Z, c*Z, zeros_b(Z, Z));
-	  break;
-	case 0:
-	  H_dense.set_submatrix(r*Z, c*Z, eye_b(Z));
-	  break;
-	default:
-	  H_dense.set_submatrix(r*Z, c*Z, circular_eye_b(Z, H_b(r, c)));
-	  break;
-	}
-
-    initialize(H_dense.rows(), H_dense.cols());
-
-    for (int r = 0; r < ncheck; r++)
-      for (int c = 0; c < nvar; c++)
-	if (H_dense(r, c))
-	  set(r, c, 1);
+    initialize(H_b.rows() * Z, H_b.cols() * Z);
+    for (int r = 0; r < H_b.rows(); r++) {
+      for (int c = 0; c < H_b.cols(); c++) {
+        int rz = r * Z;
+        int cz = c * Z;
+        switch (H_b(r, c)) {
+        case -1:
+          break;
+        case 0:
+          for (int i = 0; i < Z; ++i)
+            set(rz + i, cz + i, 1);
+          break;
+        default:
+          for (int i = 0; i < Z; ++i)
+            set(rz + i, cz + (i + H_b(r, c)) % Z, 1);
+          break;
+        }
+      }
+    }
   }
 
 
@@ -826,46 +824,41 @@ namespace itpp {
   }
 
 
-  bmat BLDPC_Parity::circular_eye_b(int size, int shift)
-  {
-    bmat I = eye_b(size);
-    int c = I.cols();
-    int s = shift % c;
-    if (s > 0)
-      return concat_horizontal(I.get_cols(c-s, c-1), I.get_cols(0, c-1-s));
-    else
-      return I;
-  }
-
   void BLDPC_Parity::calculate_base_matrix()
   {
-    bmat H_dense = H.full();
-    int rows = H_dense.rows() / Z;
-    int cols = H_dense.cols() / Z;
-    it_assert((rows * Z == H_dense.rows()) && (cols * Z == H_dense.cols()),
-	      "BLDPC_Parity::calculate_base_matrix(): Parity check matrix "
-	      "does not match an expansion factor");
+    std::string error_str = "BLDPC_Parity::calculate_base_matrix(): "
+      "Invalid BLDPC matrix. Cannot calculate base matrix from it.";
+    int rows = H.rows() / Z;
+    int cols = H.cols() / Z;
+    it_assert((rows * Z == H.rows()) && (cols * Z == H.cols()), error_str);
     H_b.set_size(rows, cols);
 
-    for (int r = 0; r < rows; r++) {
-      for (int c = 0; c < cols; c++) {
-	bmat tmp = H_dense.get(r*Z, (r+1)*Z-1, c*Z, (c+1)*Z-1);
-	if (tmp == zeros_b(Z, Z)) {
-	  H_b(r, c) = -1;
-	}
-	else {
-	  int shift = 0;
-	  while (tmp != circular_eye_b(Z, shift) && shift < Z) {
-	    shift++;
-	  }
-	  it_assert(shift < Z, "BLDPC_Parity::calculate_base_matrix(): "
-		    "Parity check matrix was not constructed with expansion "
-		    "factor Z = " << Z);
-	  H_b(r, c) = shift;
-	}
-      }
-    }
+    for (int r = 0; r < rows; ++r) {
+      int rz = r * Z;
+      for (int c = 0; c < cols; ++c) {
+        int cz = c * Z;
+        GF2mat_sparse H_Z = H.get_submatrix(rz, rz+Z-1, cz, cz+Z-1);
 
+        if (H_Z.nnz() == 0) {
+          H_b(r, c) = -1;
+        }
+        else if (H_Z.nnz() == Z) {
+          // check for cyclic-shifted ZxZ matrix
+          int shift = 0;
+          while ((shift < Z) && (H_Z(0, shift) != 1))
+            ++shift;
+          it_assert(shift < Z, error_str);
+          for (int i = 1; i < Z; ++i)
+            it_assert(H_Z(0, shift) == H_Z(i, (i + shift) % Z), error_str);
+          H_b(r, c) = shift;
+        }
+        else {
+          it_error(error_str);
+        }
+      } // for (int c = 0; c < cols; ++c)
+    } // for (int r = 0; r < rows; ++r)
+
+    it_info("Base matrix calculated");
     H_b_valid = true;
   }
 
@@ -1352,7 +1345,7 @@ namespace itpp {
     QLLRvec qllrin = llrcalc.to_qllr(llr_in);
     QLLRvec qllrout;
     bp_decode(qllrin, qllrout);
-    syst_bits = (qllrout.left(ncheck) < 0);
+    syst_bits = (qllrout.left(nvar - ncheck) < 0);
   }
 
   bvec LDPC_Code::decode(const vec &llr_in)
