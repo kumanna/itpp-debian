@@ -13,10 +13,12 @@ Section: libdevel
 Architecture: any
 Depends: libitpp6gf (= ${binary:Version})
 Description: C++ signal processing and communication library: Development headers
- IT++ is a C++ library of mathematical, signal processing, speech
- processing, and communications classes and functions. It is being
- developed and is widely used by researchers, both in the
- communications industry and universities.
+ IT++ is a C++ library of mathematical, signal processing and
+ communication classes and functions. Its main use is in simulation of
+ communication systems and for performing research in the area of
+ communications. The kernel of the library consists of generic vector
+ and matrix classes, and a set of accompanying routines. Such a kernel
+ makes IT++ similar to MATLAB or GNU Octave .
  .
  This package has the development libraries and headers for IT++.
 
@@ -27,10 +29,12 @@ Conflicts: libitpp6
 Replaces: libitpp6
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: C++ signal processing and communication library
- IT++ is a C++ library of mathematical, signal processing, speech
- processing, and communications classes and functions. It is being
- developed and is widely used by researchers, both in the
- communications industry and universities.
+ IT++ is a C++ library of mathematical, signal processing and
+ communication classes and functions. Its main use is in simulation of
+ communication systems and for performing research in the area of
+ communications. The kernel of the library consists of generic vector
+ and matrix classes, and a set of accompanying routines. Such a kernel
+ makes IT++ similar to MATLAB or GNU Octave .
 
 Package: libitpp6-dbg
 Section: libs
@@ -38,10 +42,12 @@ Priority: extra
 Architecture: any
 Depends: libitpp6gf (= ${binary:Version})
 Description: C++ signal processing and communication library: Debug symbols
- IT++ is a C++ library of mathematical, signal processing, speech
- processing, and communications classes and functions. It is being
- developed and is widely used by researchers, both in the
- communications industry and universities.
+ IT++ is a C++ library of mathematical, signal processing and
+ communication classes and functions. Its main use is in simulation of
+ communication systems and for performing research in the area of
+ communications. The kernel of the library consists of generic vector
+ and matrix classes, and a set of accompanying routines. Such a kernel
+ makes IT++ similar to MATLAB or GNU Octave .
  .
  This package has the debugging symbols for IT++ which may
  be useful while debugging IT++ based applications.
@@ -51,9 +57,11 @@ Section: doc
 Architecture: all
 Recommends: dwww, www-browser
 Description: C++ signal processing and communication library: Documentation
- IT++ is a C++ library of mathematical, signal processing, speech
- processing, and communications classes and functions. It is being
- developed and is widely used by researchers, both in the
- communications industry and universities.
+ IT++ is a C++ library of mathematical, signal processing and
+ communication classes and functions. Its main use is in simulation of
+ communication systems and for performing research in the area of
+ communications. The kernel of the library consists of generic vector
+ and matrix classes, and a set of accompanying routines. Such a kernel
+ makes IT++ similar to MATLAB or GNU Octave .
  .
  This package has the documentation for IT++.
