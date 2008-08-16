@@ -2,7 +2,7 @@
 #-------------------------------------------------------------------
 AC_PREREQ([2.60])
 AC_COPYRIGHT([Copyright (C) 2006-2008  Adam Piatyszek <ediap@users.sourceforge.net>])
-AC_INIT([IT++],[4.0.4],[ediap@users.sourceforge.net],[itpp])
+AC_INIT([IT++],[4.0.5],[ediap@users.sourceforge.net],[itpp])
 AC_CONFIG_HEADER([itpp/config.h])
 AC_CONFIG_SRCDIR([itpp/base/vec.cpp])
 AC_CONFIG_MACRO_DIR([m4])
@@ -10,7 +10,7 @@ AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([-Wall -Werror])
 
 # Shared library versioning
-GENERIC_LIBRARY_VERSION="6:4:0"
+GENERIC_LIBRARY_VERSION="6:5:0"
 #                        | | |
 #                 +------+ | +---+
 #                 |        |     |
@@ -152,23 +152,6 @@ AM_CONDITIONAL([ENABLE_SIGNAL], [test "x$enable_signal" = xyes])
 AM_CONDITIONAL([ENABLE_SRCCODE], [test "x$enable_srccode" = xyes])
 
 
-PACKAGE_DEBUG="$PACKAGE"
-# Set debug flags
-if test "x$enable_debug" = xyes; then
-  PACKAGE_DEBUG="$PACKAGE"_debug
-  if test "x$CXXFLAGS_DEBUG" = x; then
-    CXXFLAGS_DEBUG="-g"
-    # Only for GCC compiler
-    if test "x$GXX" = xyes; then
-      CXXFLAGS_DEBUG="-Wall $CXXFLAGS_DEBUG -pipe"
-    fi
-  fi
-fi
-# Remove unnecesary white spaces from LIBS
-CXXFLAGS_DEBUG="`echo \"$CXXFLAGS_DEBUG\" | $SED -e 's/  */ /g' -e 's/^ //' -e 's/ $//'`"
-AC_SUBST(CXXFLAGS_DEBUG)
-AC_SUBST(PACKAGE_DEBUG)
-
 # Set optimised flags
 if test "x$CXXFLAGS" = x; then
   CXXFLAGS_OPT="-DNDEBUG -O3"
@@ -180,8 +163,32 @@ else
   CXXFLAGS_OPT="$CXXFLAGS"
   CXXFLAGS=""
 fi
+# Remove redundant whitespace
 CXXFLAGS_OPT="`echo \"$CXXFLAGS_OPT\" | $SED -e 's/  */ /g' -e 's/^ //' -e 's/ $//'`"
 AC_SUBST(CXXFLAGS_OPT)
+
+
+# Set debugging flags
+if test "x$CXXFLAGS_DEBUG" = x; then
+  # Only for GCC compiler
+  if test "x$GXX" = xyes; then
+    CXXFLAGS_DEBUG="-Wall -ggdb -O1 -pipe"
+  else
+    CXXFLAGS_DEBUG="-g -O1"
+  fi
+fi
+# Remove redundant whitespace
+CXXFLAGS_DEBUG="`echo \"$CXXFLAGS_DEBUG\" | $SED -e 's/  */ /g' -e 's/^ //' -e 's/ $//'`"
+AC_ARG_VAR(CXXFLAGS_DEBUG, [C++ compiler flags for the debugging library])
+
+
+# Set debugging library name
+if test "x$enable_debug" = xyes; then
+  PACKAGE_DEBUG="$PACKAGE"_debug
+else
+  PACKAGE_DEBUG="$PACKAGE"
+fi
+AC_SUBST(PACKAGE_DEBUG)
 
 
 # Checks for documentation build tools
