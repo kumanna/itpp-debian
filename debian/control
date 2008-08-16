@@ -1,6 +1,6 @@
 Source: libitpp
 Priority: optional
-Maintainer: Kumar Appaiah <akumar@ee.iitm.ac.in>
+Maintainer: Kumar Appaiah <akumar@debian.org>
 Standards-Version: 3.7.3
 Build-Depends: debhelper (>= 5), doxygen (>= 1.5.1), libblas-dev, libfftw3-dev, texlive-latex-base, ghostscript, liblapack-dev, gfortran
 Section: libs
@@ -12,7 +12,7 @@ Package: libitpp-dev
 Section: libdevel
 Architecture: any
 Depends: libitpp6gf (= ${binary:Version})
-Description: C++ library of math, signal processing and communication routines: Development headers
+Description: C++ library of signal processing and communication routines: Headers
  IT++ is a C++ library of mathematical, signal processing and
  communication classes and functions. Its main use is in simulation of
  communication systems and for performing research in the area of
@@ -28,7 +28,7 @@ Architecture: any
 Conflicts: libitpp6
 Replaces: libitpp6
 Depends: ${shlibs:Depends}, ${misc:Depends}
-Description: C++ library of math, signal processing and communication routines
+Description: C++ library of signal processing and communication routines
  IT++ is a C++ library of mathematical, signal processing and
  communication classes and functions. Its main use is in simulation of
  communication systems and for performing research in the area of
@@ -41,7 +41,7 @@ Section: libs
 Priority: extra
 Architecture: any
 Depends: libitpp6gf (= ${binary:Version})
-Description: C++ library of math, signal processing and communication routines: Debug symbols
+Description: C++ library of signal processing and communication routines: Debug symbols
  IT++ is a C++ library of mathematical, signal processing and
  communication classes and functions. Its main use is in simulation of
  communication systems and for performing research in the area of
@@ -56,7 +56,7 @@ Package: libitpp-doc
 Section: doc
 Architecture: all
 Recommends: dwww, www-browser
-Description: C++ library of math, signal processing and communication routines: Documentation
+Description: C++ library of signal processing and communication routines: Documentation
  IT++ is a C++ library of mathematical, signal processing and
  communication classes and functions. Its main use is in simulation of
  communication systems and for performing research in the area of
