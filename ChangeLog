@@ -1,3 +1,208 @@
+2008-07-18  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* IT++ 4.0.5 release (SVN tag: release-4-0-5)
+
+	* NEWS, VERSION: Add release notes and update version number for
+	IT++ 4.0.5
+
+	* tests/vec_test.cpp, tests/vec_test.ref: Add a test-case to
+	reproduce bug [2017948]
+
+	* itpp/base/vec.cpp: Fix bug [2017948] in parsing error of "a:b:c"
+	ivec initialisation
+
+	There was a bug in vec.cpp that caused an assertion error when
+	integer vectors were initialized using the "a:b:c" notation. For
+	example: ivec iv = "0:2:4"; raised an exception. This patch fixes
+	this bug by removing an unnecessary "seekg" operation.
+
+	Thanks to David Hammarwall for reporting the problem and solution
+	to it.
+
+2008-07-11  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* itpp/base/mat.h: Fix bug [2004345] causing incorrect result of
+	Mat::concat_vertical()
+
+	In case when one of the input matrices to concat_horizontal() or
+	concat_vertical() functions was empty, an error occurred. With
+	this patch the result of concatenating an empty matrix with
+	some other matrix is defined and a copy of the other matrix is
+	returned. This fixes bug [2004345].
+
+	Thanks to Carlos Pineda for reporting this problem.
+
+	* itpp/base/mat.h: Reset number of rows/columns if one of the
+	dimensions given to Mat::set_size() is zero
+
+	Without this patch, the Mat::set_size() function set number of
+	rows or cols to non zero value, even if the other matrix
+	dimension was zero. This was not compatible with the constructor.
+	Besides, setting one of the dimensions of a matrix to non zero
+	value, if the other one is zero does not makes sense and might
+	cause problems with other functions operating on matrices. This
+	patch fixes this problem.
+
+2008-06-17  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* itpp/comm/bch.cpp: Fix bug [1995743] in BCH::decode() function
+
+	The second argument of
+	  if ((delta == GF(n + 1, -1)) || (OldLambda.get_degree() > kk))
+	takes the degree of OldLambda. But get_degree() does not return
+	the true degree of that polynomial but its allocated space.
+	GFX::get_true_degree() does what we want.
+
+	If OldLambda's "degree" is larger than its "true degree", a wrong
+	decision is made in the if statement, resulting in a wrong
+	Lambda(x), which in general leads to a decoding failure, while the
+	code word should have been correctable in theory.
+
+	This patch fixes this bug and also removes a redundant "temp"
+	variable.
+
+	Signed-off-by: Stephan Ludwig <donludovico@users.sourceforge.net>
+
+	* itpp/base/mat.h, itpp/base/vec.h: Fix compilation bug caused by
+	SVN commit rev.1578
+
+2008-06-05  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* itpp/comm/modulator.cpp, itpp/comm/modulator.h: Remove redundant
+	argument from calculate_softbit_matrices() function
+
+	Since calculate_softbit_matrices() is a private method of a class,
+	in which "bits2symbols" variable is also declared, there is no need
+	to pass this variable as an argument of this method.
+
+	* itpp/base/itfile.h, itpp/base/random.h, itpp/comm/bch.h,
+	itpp/comm/rec_syst_conv_code.h, itpp/comm/reedsolomon.h: Suppress
+	MSVC++ warning C4512: "assignment operator could not be generated"
+
+	MSVC++ warns when an assignment operator can not be automatically
+	generated because of constant variables existing in a class. To
+	suppress this warning an dummy assignment operator can be added as
+	in this patch.
+
+	* itpp/base/vec.cpp, itpp/fixed/fix.cpp: Suppress MSVC++ warning
+	C4701: "potentially uninitialized local variable..."
+
+	* itpp/base/gf2mat.cpp, itpp/base/itfile.cpp, itpp/base/mat.h,
+	itpp/base/math/misc.h, itpp/base/vec.h, itpp/comm/galois.cpp,
+	itpp/srccode/audiofile.cpp, itpp/srccode/pnm.cpp: Suppress MSVC++
+	warning C4244: "conversion from 'int' to 'char'..."
+
+	Some of the expressions require explicit casts to "char". Where
+	appropriate "int get()" method of iostream class is replaced with
+	"get(char &)" function. Besides, GF::set_size() method is
+	re-factored a little bit, so the "mtemp" integer variable is no
+	longer necessary.
+
+	* itpp/base/factory.h, itpp/base/mat.h, itpp/base/matfunc.h,
+	itpp/base/timing.cpp, itpp/base/vec.h, itpp/comm/bch.cpp,
+	itpp/comm/channel.cpp, itpp/comm/convcode.cpp,
+	itpp/comm/egolay.cpp, itpp/comm/hammcode.cpp, itpp/comm/ldpc.h,
+	itpp/comm/modulator.cpp, itpp/comm/punct_convcode.cpp,
+	itpp/comm/reedsolomon.cpp, itpp/fixed/cfix.h, itpp/fixed/cfixed.h,
+	itpp/fixed/fix.h, itpp/fixed/fix_functions.h,
+	itpp/protocol/tcp.cpp, itpp/protocol/tcp.h,
+	itpp/stat/misc_stat.cpp, itpp/stat/mog_diag.cpp,
+	itpp/stat/mog_diag.h, itpp/stat/mog_diag_em.cpp: Suppress MSVC++
+	warning C4100: "unreferenced formal parameter"
+
+	This warning is suppressed by omitting named parameters in
+	arguments of functions. Only types of parameters are passed.
+
+	* configure.ac.in: Change default debugging flags to "-g -O1" or
+	"-Wall -ggdb -O1 -pipe"
+
+	The latter set is only used when GCC compiler is used, so it
+	implicitly assumes that GDB debugger will be used in such a case.
+
+2008-05-21  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* doc/local/users_guide.doc: Minor documentation fix in Users
+	Guide
+
+	There is no such functions as swap_row() and swap_col() in IT++.
+	swap_rows() and swap_cols() are the proper ones. This fixes bug
+	[1968377]. Thanks to Allan Murray for reporting this issue.
+
+2008-05-17  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* itpp/base/bessel/hyperg.cpp, itpp/base/itfile.cpp,
+	itpp/comm/punct_convcode.cpp, itpp/fixed/cfix.cpp,
+	itpp/fixed/fix.cpp, itpp/srccode/pnm.cpp,
+	itpp/stat/mog_diag_em.cpp, itpp/stat/mog_diag_kmeans.cpp,
+	itpp/stat/mog_generic.cpp: Fix GCC 4.3 warnings on "ambiguous
+	else" due to missing braces
+
+	The latest GCC compiler is much more picky when it comes to if/else
+	statements without explicit braces. This results in a lot of warnings
+	when "-Wall" flag is used. This patch adds missing braces or
+	refactors code for which such warnings were reported by GCC 4.3.
+
+2008-05-15  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* configure.ac.in: Set CXXFLAGS_DEBUG to CXXFLAGS when
+	--enable-debug is not used
+
+	This new behaviour is consistent with setting the same set of
+	libraries for both the debug and optimised cases, when
+	--enable-debug is not used. Besides, the CXXFLAGS_DEBUG variable
+	is now documented when "configure --help" is used.
+
+2008-05-09  Erik G. Larsson  <erik_g_larsson@users.sourceforge.net>
+
+	* doc/tutorial/matlab_itpp.doc: Documentation improvement
+
+2008-04-25  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* tests/modulator_nd_test.cpp: Cosmetic fix - remove doubled
+	semicolon
+
+	* Unify coding style using an astyle source code formatter
+
+	This huge patch is intended to unify the coding style for all IT++
+	source and header files. The formatting has been performed with
+	the astyle v1.22 program, using the configuration stored in
+	extras/astylerc file.
+
+2008-04-15  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* itpp/base/vec.h: Fix regression of a missing inline keyword in
+	outer_product() specialisation
+
+	The inline keyword is necessary for template specialisations that
+	are defined in the header file. This bug resulted in linking
+	problems without any external BLAS library, when this particular
+	specialisation was used.
+
+	Thanks to Markus Dittrich for investigating this problem and
+	providing a patch for it on Gentoo Bugzilla (bug #217621).
+
+2008-04-14  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* itpp/signal/fastica.cpp: Fix broken initialisation of
+	Fast_ICA::set_init_guess() method
+
+	The set_init_guess() now changes initState, which is checked in
+	separate(), so that the provided guess is passed into the solver,
+	rather than a zero matrix as before.
+
+	This patch fixes bug report [1941219].
+
+	Signed-off-by: Matthew Chaudhuri <mchaudhuri@users.sourceforge.net>
+
+2008-04-08  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* README, doc/local/index.doc.in: Reworded and rearranged the
+	brief description of the IT++ library
+
+	Thanks to Kumar Appaiah for some language suggestions.
+
+-------------------------------------------------------------------------------
+
 2008-03-31  Adam Piatyszek  <ediap@users.sourceforge.net>
 
 	* IT++ 4.0.4 release (SVN tag: release-4-0-4)
