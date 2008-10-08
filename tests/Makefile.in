@@ -63,7 +63,7 @@ am__EXEEXT_1 = array_test$(EXEEXT) bessel_test$(EXEEXT) \
 	gf2mat_test$(EXEEXT) integration_test$(EXEEXT) \
 	itfile_test$(EXEEXT) mat_test$(EXEEXT) parser_test$(EXEEXT) \
 	rand_test$(EXEEXT) sort_test$(EXEEXT) sparse_test$(EXEEXT) \
-	timer_test$(EXEEXT) vec_test$(EXEEXT)
+	specmat_test$(EXEEXT) timer_test$(EXEEXT) vec_test$(EXEEXT)
 am__EXEEXT_2 = histogram_test$(EXEEXT)
 am__EXEEXT_3 = cholesky_test$(EXEEXT) det_test$(EXEEXT) \
 	eigen_test$(EXEEXT) inv_test$(EXEEXT) ls_solve_test$(EXEEXT) \
@@ -295,6 +295,10 @@ am_sparse_test_OBJECTS = sparse_test.$(OBJEXT)
 sparse_test_OBJECTS = $(am_sparse_test_OBJECTS)
 sparse_test_LDADD = $(LDADD)
 sparse_test_DEPENDENCIES = $(top_builddir)/itpp/libitpp.la
+am_specmat_test_OBJECTS = specmat_test.$(OBJEXT)
+specmat_test_OBJECTS = $(am_specmat_test_OBJECTS)
+specmat_test_LDADD = $(LDADD)
+specmat_test_DEPENDENCIES = $(top_builddir)/itpp/libitpp.la
 am_stat_test_OBJECTS = stat_test.$(OBJEXT)
 stat_test_OBJECTS = $(am_stat_test_OBJECTS)
 stat_test_LDADD = $(LDADD)
@@ -358,8 +362,8 @@ SOURCES = $(array_test_SOURCES) $(bch_test_SOURCES) \
 	$(rec_syst_conv_code_test_SOURCES) $(reedsolomon_test_SOURCES) \
 	$(schur_test_SOURCES) $(sigfun_test_SOURCES) \
 	$(sort_test_SOURCES) $(source_test_SOURCES) \
-	$(sparse_test_SOURCES) $(stat_test_SOURCES) \
-	$(svd_test_SOURCES) $(timer_test_SOURCES) \
+	$(sparse_test_SOURCES) $(specmat_test_SOURCES) \
+	$(stat_test_SOURCES) $(svd_test_SOURCES) $(timer_test_SOURCES) \
 	$(transforms_test_SOURCES) $(turbo_test_SOURCES) \
 	$(vec_test_SOURCES) $(window_test_SOURCES)
 DIST_SOURCES = $(array_test_SOURCES) $(bch_test_SOURCES) \
@@ -385,8 +389,8 @@ DIST_SOURCES = $(array_test_SOURCES) $(bch_test_SOURCES) \
 	$(rec_syst_conv_code_test_SOURCES) $(reedsolomon_test_SOURCES) \
 	$(schur_test_SOURCES) $(sigfun_test_SOURCES) \
 	$(sort_test_SOURCES) $(source_test_SOURCES) \
-	$(sparse_test_SOURCES) $(stat_test_SOURCES) \
-	$(svd_test_SOURCES) $(timer_test_SOURCES) \
+	$(sparse_test_SOURCES) $(specmat_test_SOURCES) \
+	$(stat_test_SOURCES) $(svd_test_SOURCES) $(timer_test_SOURCES) \
 	$(transforms_test_SOURCES) $(turbo_test_SOURCES) \
 	$(vec_test_SOURCES) $(window_test_SOURCES)
 ETAGS = etags
@@ -449,6 +453,7 @@ MKDIR_P = @MKDIR_P@
 NM = @NM@
 NMEDIT = @NMEDIT@
 NO_UNDEFINED = @NO_UNDEFINED@
+OBJDUMP = @OBJDUMP@
 OBJEXT = @OBJEXT@
 OTOOL = @OTOOL@
 OTOOL64 = @OTOOL64@
@@ -528,15 +533,16 @@ top_srcdir = @top_srcdir@
 AM_CPPFLAGS = -I$(top_builddir) -I$(top_srcdir)
 LDADD = $(top_builddir)/itpp/libitpp.la
 AM_CXXFLAGS = $(CXXFLAGS_OPT)
-BASE_TESTS = array_test bessel_test blas_test circular_buffer_test	   \
-  converters_test fastmath_test gf2mat_test integration_test itfile_test   \
-  mat_test parser_test rand_test sort_test sparse_test timer_test vec_test
+BASE_TESTS = array_test bessel_test blas_test circular_buffer_test \
+  converters_test fastmath_test gf2mat_test integration_test itfile_test \
+  mat_test parser_test rand_test sort_test sparse_test specmat_test \
+  timer_test vec_test
 
 BASE_LAP_TESTS = cholesky_test det_test eigen_test inv_test ls_solve_test \
   lu_test matfunc_test qr_test schur_test svd_test
 
-COMM_TESTS = bch_test commfunc_test convcode_test error_count_test	\
-  galois_test interleaver_test ldpc_test llr_test modulator_test	\
+COMM_TESTS = bch_test commfunc_test convcode_test error_count_test \
+  galois_test interleaver_test ldpc_test llr_test modulator_test \
   pulse_shape_test rec_syst_conv_code_test reedsolomon_test turbo_test
 
 COMM_LAP_TESTS = modulator_nd_test
@@ -608,6 +614,7 @@ sigfun_test_SOURCES = sigfun_test.cpp
 sort_test_SOURCES = sort_test.cpp
 source_test_SOURCES = source_test.cpp
 sparse_test_SOURCES = sparse_test.cpp
+specmat_test_SOURCES = specmat_test.cpp
 stat_test_SOURCES = stat_test.cpp
 svd_test_SOURCES = svd_test.cpp
 timer_test_SOURCES = timer_test.cpp
@@ -801,6 +808,9 @@ source_test$(EXEEXT): $(source_test_OBJECTS) $(source_test_DEPENDENCIES)
 sparse_test$(EXEEXT): $(sparse_test_OBJECTS) $(sparse_test_DEPENDENCIES) 
 	@rm -f sparse_test$(EXEEXT)
 	$(CXXLINK) $(sparse_test_OBJECTS) $(sparse_test_LDADD) $(LIBS)
+specmat_test$(EXEEXT): $(specmat_test_OBJECTS) $(specmat_test_DEPENDENCIES) 
+	@rm -f specmat_test$(EXEEXT)
+	$(CXXLINK) $(specmat_test_OBJECTS) $(specmat_test_LDADD) $(LIBS)
 stat_test$(EXEEXT): $(stat_test_OBJECTS) $(stat_test_DEPENDENCIES) 
 	@rm -f stat_test$(EXEEXT)
 	$(CXXLINK) $(stat_test_OBJECTS) $(stat_test_LDADD) $(LIBS)
@@ -876,6 +886,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sort_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/source_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/sparse_test.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/specmat_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/stat_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/svd_test.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/timer_test.Po@am__quote@

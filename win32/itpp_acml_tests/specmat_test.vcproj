@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="windows-1250"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8,00"
-	Name="integration_test"
-	ProjectGUID="{D617AA55-2E8B-4975-A00B-C8597751BB72}"
-	RootNamespace="integration_test"
+	Version="8.00"
+	Name="specmat_test"
+	ProjectGUID="{062A36E3-705D-400F-93B7-3C9951379F9D}"
+	RootNamespace="specmat_test"
 	Keyword="Win32Proj"
 	>
 	<Platforms>
@@ -98,7 +98,7 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\tests\integration_test.cpp"
+			RelativePath="..\..\tests\specmat_test.cpp"
 			>
 		</File>
 	</Files>
