@@ -116,6 +116,7 @@ MKDIR_P = @MKDIR_P@
 NM = @NM@
 NMEDIT = @NMEDIT@
 NO_UNDEFINED = @NO_UNDEFINED@
+OBJDUMP = @OBJDUMP@
 OBJEXT = @OBJEXT@
 OTOOL = @OTOOL@
 OTOOL64 = @OTOOL64@
@@ -194,6 +195,7 @@ top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
 AM_CPPFLAGS = -I$(top_builddir) -I$(top_srcdir)
 dist_pkgdata_DATA = itload.m itsave.m
+EXTRA_DIST = gdb_macros_for_itpp
 all: all-am
 
 .SUFFIXES:

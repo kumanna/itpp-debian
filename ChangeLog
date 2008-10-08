@@ -1,3 +1,145 @@
+2008-10-08  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* IT++ 4.0.6 release (SVN tag: release-4-0-6)
+
+	* NEWS, VERSION: Add release notes and update version number for
+	IT++ 4.0.6.
+
+	* itpp/itpp_acml_tests/Makefile.am, itpp/itpp_mkl_tests/Makefile.am:
+	Add specmat_test.vcproj files to the list of distributed files.
+
+2008-10-05  Erik G. Larsson  <erik_g_larsson@users.sourceforge.net>
+
+	* doc/local/verification.doc: Added Ubuntu 8.04 to list of tested
+	systems
+
+	* doc/local/installation.doc: Minor fix
+
+2008-09-17  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* win32/itpp_acml.sln, win32/itpp_mkl.sln: Use CRLF line endings
+	in MSVC++ solution files.
+
+	* win32/itpp_acml_tests/itpp_acml_tests.sln,
+	win32/itpp_acml_tests/specmat_test.vcproj,
+	win32/itpp_mkl_tests/itpp_mkl_tests.sln,
+	win32/itpp_mkl_tests/specmat_test.vcproj: Add MSVC++ project files
+	for specmat_test.
+
+2008-09-12  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* tests/Makefile.am, tests/specmat_test.cpp,
+	tests/specmat_test.ref: Add specmat_test program for testing
+	special vectors and matrices.
+
+	Initially only toeplitz() function is tested.
+
+	* itpp/base/specmat.cpp, itpp/base/specmat.h: Fix broken
+	implementation of toeplitz() function.
+
+	The previous implementation generated incorrect matrices for two
+	complex-valued input vectors. This patch fixes this problem. BTW,
+	the implementation is now based on a template function, so bmat,
+	smat and imat matrices can now be generated.
+
+	Thanks to Niklas Johansson for reporting this issue. This closes
+	bug report [2110119].
+
+2008-08-30  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* itpp/base/itassert.h: Get rid of config.h dependency from
+	itassert.h header file.
+
+	* itpp/comm/galois.cpp: Fix bug in GF::set_size() method, which
+	was reported by Stephan Ludwig.
+
+	Because "alphapow" and "logalpha" are static variables, every
+	instantiation of the GF class uses the very same of them. If
+	different instantiations of different Galois fields access this
+	(e.g. 2^8 and 2^6, while 2^6 has been created first), the latter
+	might overwrite/delete the log table of the previous while calling
+	GF::set_size() method (2^8 widens the array to m+1=9, while not
+	copying the 2^6 entries). The solution is to copy the contents of
+	"alphapow" and "logalpha" when resizing them.
+
+	Thanks to Stephan Ludwig for noticing this problem and also to
+	EndZone for confirming it.
+
+	* itpp/base/math/trig_hyp.h: Reduce number of divisions in a
+	sinc() function.
+
+	* itpp/base/sort.h: Make sort() and sort_index() work for vectors
+	with less than two elements.
+
+	Without this patch, the above two functions resulted in an
+	assertion error. Thanks to Yngve Seln for reporting this problem.
+
+2008-08-18  Erik G. Larsson  <erik_g_larsson@users.sourceforge.net>
+
+	* extras/gdb_macros_for_itpp, extras/Makefile.am: Added GDB
+	debugger display macros for IT++ data types.
+
+	This closes feature request [1913404]. Thanks to Vasek Smidl for
+	providing an initial version of the macros.
+
+2008-08-11  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* win32/itpp_acml.vcproj, win32/itpp_acml_tests/*.vcproj,
+	win32/itpp_mkl.vcproj, win32/itpp_mkl_tests/*.vcproj: Suppress
+	warnings about deprecated "/Wp64" options in MSVC++ project files
+
+2008-08-10  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* doc/tutorial/src/ldpc_bersim_awgn.cpp: Add missing "LL" suffix
+	to 64-bit inteager initialisation
+
+	This eventually fixes integer overflow error in LDPC BER
+	simulation tutorial example.
+
+2008-08-09  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* itpp/stat/mog_diag.h: Suppress a minor warning reported by
+	Doxygen
+
+	* doc/tutorial/src/ldpc_bersim_awgn.cpp: Fix minor problem with
+	integer overflow in expression
+
+	The initialisation of int64_t variable with a multiplied inteager
+	constants caused an integer overflow of the temporary calculation
+	result. This patch fixes this issue by using one big constant
+	in the initialisation.
+
+2008-08-07  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* itpp/base/vec.h, tests/vec_test.cpp, tests/vec_test.ref: Fix
+	regression [2041474] in Vec<>::split() method
+
+	In IT++ 3.10.x releases it was possible to split a vector at its
+	end, e.g.:
+	  vec v1 = "1 2 3 4 5";
+	  vec v2 = v1.split(5);
+	In the current stable branch (4.0.x) the above code results in an
+	assertion. This patch fixes this regression and also improves the
+	documentation, so it is clearly explained which elements are
+	returned and which are stored in the original vector.
+
+	Besides, the vec_test program now includes a new test for
+	splitting a vector at pos = 0 and pos = datasize.
+
+	Thanks to Yngve Selén for reporting this bug.
+
+2008-08-02  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* m4/acx_blas.m4: MKL requires zdotusub Fortran wrapper function
+	on x86_64 architecture
+
+	This fixes broken blas_test and vector_test on 64-bit linux
+	architectures when IT++ is linked to Intel MKL BLAS library. This
+	fix is equivalent to passing "--with-zdotu=zdotusub" option to
+	configure.
+
+-------------------------------------------------------------------------------
+
 2008-07-18  Adam Piatyszek  <ediap@users.sourceforge.net>
 
 	* IT++ 4.0.5 release (SVN tag: release-4-0-5)
