@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="windows-1250"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8,00"
-	Name="integration_test"
-	ProjectGUID="{D617AA55-2E8B-4975-A00B-C8597751BB72}"
-	RootNamespace="integration_test"
+	Version="8.00"
+	Name="specmat_test"
+	ProjectGUID="{363A6A3B-3D91-43C8-A6EA-A274E4BC0A29}"
+	RootNamespace="specmat_test"
 	Keyword="Win32Proj"
 	>
 	<Platforms>
@@ -41,7 +41,7 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalIncludeDirectories="..\.."
-				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;HAVE_ACML"
+				PreprocessorDefinitions="WIN32;NDEBUG;_CONSOLE;HAVE_MKL"
 				RuntimeLibrary="2"
 				UsePrecompiledHeader="0"
 				WarningLevel="3"
@@ -58,7 +58,7 @@
 			/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="itpp.lib libacml_dll.lib"
+				AdditionalDependencies="itpp.lib mkl_c_dll.lib"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="..\lib;$(LIB)"
 				IgnoreDefaultLibraryNames="uuid.lib"
@@ -98,7 +98,7 @@
 	</References>
 	<Files>
 		<File
-			RelativePath="..\..\tests\integration_test.cpp"
+			RelativePath="..\..\tests\specmat_test.cpp"
 			>
 		</File>
 	</Files>
