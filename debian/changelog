@@ -1,3 +1,12 @@
+libitpp (4.0.6-3) unstable; urgency=low
+
+  * Fix for building with gcc 4.4.
+    + Patch from Martin Michlmayr in debian/patches.
+      (Closes: #505350).
+    + Depend on quilt.
+
+ -- Kumar Appaiah <akumar@debian.org>  Sun, 26 Apr 2009 17:38:37 -0500
+
 libitpp (4.0.6-2) unstable; urgency=low
 
   * Upload to unstable.

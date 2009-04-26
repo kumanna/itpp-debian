@@ -22,19 +22,21 @@ else
 CROSS= --build $(DEB_BUILD_GNU_TYPE)
 endif
 
+include /usr/share/quilt/quilt.make
+
 config.status: configure
 	dh_testdir
 	./configure $(CROSS) --prefix=/usr --mandir=\$${prefix}/share/man --infodir=\$${prefix}/share/info CXXFLAGS="$(CXXFLAGS)" LDFLAGS="-Wl,-z,defs"
 
 build: build-stamp
 
-build-stamp: config.status
+build-stamp: config.status patch
 	dh_testdir
 	$(MAKE)
 	$(MAKE) check
 	touch $@
 
-clean:
+clean: unpatch
 	dh_testdir
 	dh_testroot
 	rm -f build-stamp config.log

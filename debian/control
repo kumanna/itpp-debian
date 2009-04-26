@@ -1,8 +1,8 @@
 Source: libitpp
 Priority: optional
 Maintainer: Kumar Appaiah <akumar@debian.org>
-Standards-Version: 3.8.0
-Build-Depends: debhelper (>= 5), doxygen (>= 1.5.1), libblas-dev, libfftw3-dev, texlive-latex-base, ghostscript, liblapack-dev, gfortran
+Standards-Version: 3.8.1
+Build-Depends: debhelper (>= 5), doxygen (>= 1.5.1), libblas-dev, libfftw3-dev, texlive-latex-base, ghostscript, liblapack-dev, gfortran, quilt
 Section: libs
 Homepage: http://itpp.sourceforge.net
 Vcs-Git: git://git.debian.org/git/collab-maint/libitpp.git
