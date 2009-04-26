@@ -37,7 +37,7 @@ Description: C++ library of signal processing and communication routines
  makes IT++ similar to MATLAB or GNU Octave .
 
 Package: libitpp6-dbg
-Section: libs
+Section: debug
 Priority: extra
 Architecture: any
 Depends: libitpp6gf (= ${binary:Version})
