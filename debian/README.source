@@ -1,0 +1,8 @@
+libitpp for Debian
+==================
+
+The source package uses the quilt patching system, as described in
+/usr/share/doc/quilt/README.Debian on Debian systems with quilt
+installed.
+
+ -- Kumar Appaiah <akumar@debian.org>, Wed,  4 Nov 2009 21:52:39 -0600

@@ -2,6 +2,8 @@ libitpp (4.0.6-4) unstable; urgency=low
 
   * Use Nobuhiro Iwamatsu's patch 02_sh4_support.diff to support building
     on Renesas SH(sh4) CPUs. (Closes: #554380)
+  * Standards Version is now 3.8.3 (No changes needed).
+  * Patch system documentation (README.source) added.
 
  -- Kumar Appaiah <akumar@debian.org>  Wed, 04 Nov 2009 21:46:41 -0600
 
