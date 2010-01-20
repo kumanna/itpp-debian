@@ -43,9 +43,9 @@ Contributors:
   - Tobias Tynderfeldt
 
 
-Copyright: (C) 1995-2008  (above authors and contributors)
+Copyright: © 1995-2008  (above authors and contributors)
 
-fastica code Copyright (C) 2004 by:
+fastica code Copyright © 2004 by:
 Francois CAYRE and Teddy FURON
 TEMICS Project
 INRIA/Rennes (IRISA)
@@ -53,7 +53,7 @@ Campus Universitaire de Beaulieu
 35042 RENNES cedex FRANCE
 Email : firstname.lastname@irisa.fr
 
-tcp.h and tcp.c: Copyright (c) 2000-2004 IKR (formerly IND),
+tcp.h and tcp.c: Copyright © 2000-2004 IKR (formerly IND),
 University of Stuttgart
 
 License:
@@ -75,5 +75,5 @@ License:
 On Debian systems, the complete text of the GNU General
 Public License can be found in `/usr/share/common-licenses/GPL'.
 
-The Debian packaging is (C) 2007, Kumar Appaiah <akumar@ee.iitm.ac.in> and
+The Debian packaging is © 2007, Kumar Appaiah <akumar@ee.iitm.ac.in> and
 is licensed under the GPL, see above.

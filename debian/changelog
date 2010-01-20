@@ -1,8 +1,12 @@
-libitpp (4.0.6-5) unstable; urgency=low
+libitpp (4.0.7-1) unstable; urgency=low
 
   * debian/watch: Update for new home page.
+  * debian/patches: Removed, since patches included upstream.
+  * debian/control:
+    + Add ${misc:Depends} to binary packages.
+    + Remove quilt dependency.
 
- -- Kumar Appaiah <akumar@debian.org>  Wed, 20 Jan 2010 15:45:50 -0600
+ -- Kumar Appaiah <akumar@debian.org>  Wed, 20 Jan 2010 16:06:19 -0600
 
 libitpp (4.0.6-4) unstable; urgency=low
 
