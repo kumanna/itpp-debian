@@ -8,7 +8,7 @@
  * IT++ - C++ library of mathematical, signal processing, speech processing,
  *        and communications classes and functions
  *
- * Copyright (C) 1995-2008  (see AUTHORS file for a list of contributors)
+ * Copyright (C) 1995-2009  (see AUTHORS file for a list of contributors)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -186,10 +186,10 @@ double norm(const Vec<T> &v, int p)
   return std::pow(E, 1.0 / p);
 }
 
-//! Calculate the frobeniuos norm for s = "fro" (equal to 2-norm)
+//! Calculate the Frobenius norm for s = "fro" (equal to 2-norm)
 double norm(const cvec &v, const std::string &s);
 
-//! Calculate the frobeniuos norm for s = "fro" (equal to 2-norm)
+//! Calculate the Frobenius norm for s = "fro" (equal to 2-norm)
 template<class T>
 double norm(const Vec<T> &v, const std::string &s)
 {
@@ -222,10 +222,10 @@ double norm(const mat &m, int p = 2);
  */
 double norm(const cmat &m, int p = 2);
 
-//! Calculate the frobeniuos norm of a matrix for s = "fro"
+//! Calculate the Frobenius norm of a matrix for s = "fro"
 double norm(const mat &m, const std::string &s);
 
-//! Calculate the frobeniuos norm of a matrix for s = "fro"
+//! Calculate the Frobenius norm of a matrix for s = "fro"
 double norm(const cmat &m, const std::string &s);
 
 
