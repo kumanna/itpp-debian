@@ -8,7 +8,7 @@
  * IT++ - C++ library of mathematical, signal processing, speech processing,
  *        and communications classes and functions
  *
- * Copyright (C) 1995-2008  (see AUTHORS file for a list of contributors)
+ * Copyright (C) 1995-2009  (see AUTHORS file for a list of contributors)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -357,7 +357,7 @@ public:
   //! Write a double complex Array at the current file pointer position
   void low_level_write(const Array<std::complex<double> >& v);
 
-  //!ACTTION: ADD DOCUMENTATION FOR THIS MEMBER !!!!!!!!
+  //!ACTION: ADD DOCUMENTATION FOR THIS MEMBER !!!!!!!!
   it_file& operator<<(it_manip func) { return (*func)(*this); }
 
   //! Removes the variable \c name from the file

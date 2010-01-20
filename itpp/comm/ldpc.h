@@ -8,7 +8,7 @@
  * IT++ - C++ library of mathematical, signal processing, speech processing,
  *        and communications classes and functions
  *
- * Copyright (C) 1995-2008  (see AUTHORS file for a list of contributors)
+ * Copyright (C) 1995-2009  (see AUTHORS file for a list of contributors)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -717,7 +717,10 @@ protected:
 
   \note Please refer to the tutorials \ref ldpc_gen_codes and \ref
   ldpc_bersim_awgn for extensive examples of how to use LDPC codes.
-
+ 
+  \note For issues relating to the accuracy of LLR computations,
+  please see the documentation of \c LLR_calc_unit
+  
   \author Erik G. Larsson and Adam Piatyszek
 */
 class LDPC_Code : public Channel_Code

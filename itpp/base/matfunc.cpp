@@ -9,7 +9,7 @@
  * IT++ - C++ library of mathematical, signal processing, speech processing,
  *        and communications classes and functions
  *
- * Copyright (C) 1995-2008  (see AUTHORS file for a list of contributors)
+ * Copyright (C) 1995-2009  (see AUTHORS file for a list of contributors)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -242,6 +242,12 @@ template cmat hermitian_transpose(const cmat &m);
 template smat hermitian_transpose(const smat &m);
 template imat hermitian_transpose(const imat &m);
 template bmat hermitian_transpose(const bmat &m);
+
+template bool is_hermitian(const mat &X);
+template bool is_hermitian(const cmat &X);
+
+template bool is_unitary(const mat &X);
+template bool is_unitary(const cmat &X);
 
 template vec rvectorize(const mat &m);
 template cvec rvectorize(const cmat &m);

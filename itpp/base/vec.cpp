@@ -8,7 +8,7 @@
  * IT++ - C++ library of mathematical, signal processing, speech processing,
  *        and communications classes and functions
  *
- * Copyright (C) 1995-2008  (see AUTHORS file for a list of contributors)
+ * Copyright (C) 1995-2009  (see AUTHORS file for a list of contributors)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -29,6 +29,7 @@
 
 #include <itpp/base/vec.h>
 #include <itpp/base/converters.h>
+#include <cstdio>
 #include <limits>
 
 //! \cond
@@ -746,22 +747,6 @@ void Vec<short int>::set(const std::string &str)
   this->operator=(to_svec(iv));
 }
 
-
-template<>
-bvec Vec<std::complex<double> >::operator==(std::complex<double>) const
-{
-  it_error("operator==: not implemented for complex");
-  bvec temp;
-  return temp;
-}
-
-template<>
-bvec Vec<std::complex<double> >::operator!=(std::complex<double>) const
-{
-  it_error("operator!=: not implemented for complex");
-  bvec temp;
-  return temp;
-}
 
 template<>
 bvec Vec<std::complex<double> >::operator<=(std::complex<double>) const

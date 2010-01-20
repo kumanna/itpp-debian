@@ -8,7 +8,7 @@
  * IT++ - C++ library of mathematical, signal processing, speech processing,
  *        and communications classes and functions
  *
- * Copyright (C) 1995-2008  (see AUTHORS file for a list of contributors)
+ * Copyright (C) 1995-2009  (see AUTHORS file for a list of contributors)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -130,18 +130,30 @@ double norm(const cmat &m, int p)
     return max(svd(m));
 }
 
-// Calculate the frobeniuos norm of a matrix for s = "fro"
+// Calculate the Frobenius norm of matrix m for s = "fro"
 double norm(const mat &m, const std::string &s)
 {
   it_assert(s == "fro", "norm(): Unrecognised norm");
-  return std::sqrt(sum(diag(transpose(m) * m)));
+  double E = 0.0;
+  for (int r = 0; r < m.rows(); ++r) {
+    for (int c = 0; c < m.cols(); ++c) {
+      E += m(r, c) * m(r, c);
+    }
+  }
+  return std::sqrt(E);
 }
 
-// Calculate the frobeniuos norm of a matrix for s = "fro"
+// Calculate the Frobenius norm of matrix m for s = "fro"
 double norm(const cmat &m, const std::string &s)
 {
   it_assert(s == "fro", "norm(): Unrecognised norm");
-  return std::sqrt(sum(real(diag(hermitian_transpose(m) * m))));
+  double E = 0.0;
+  for (int r = 0; r < m.rows(); ++r) {
+    for (int c = 0; c < m.cols(); ++c) {
+      E += std::norm(m(r, c));
+    }
+  }
+  return std::sqrt(E);
 }
 
 

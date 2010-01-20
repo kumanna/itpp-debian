@@ -8,7 +8,7 @@
  * IT++ - C++ library of mathematical, signal processing, speech processing,
  *        and communications classes and functions
  *
- * Copyright (C) 1995-2008  (see AUTHORS file for a list of contributors)
+ * Copyright (C) 1995-2009  (see AUTHORS file for a list of contributors)
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -248,6 +248,8 @@ int main()
   cvec cv2 = randn_c(10);
   complex<double> cx = randn_c();
   common_operators(cv1, cv2, cx);
+  cout << "(a == c) = " << (cv1 == cx) << endl;
+  cout << "(a != c) = " << (cv1 != cx) << endl << endl;
 
 
   // Test vectror initialisation with string

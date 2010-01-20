@@ -1,8 +1,8 @@
 # Process this file with autoconf to produce a configure script
 #-------------------------------------------------------------------
 AC_PREREQ([2.60])
-AC_COPYRIGHT([Copyright (C) 2006-2008  Adam Piatyszek <ediap@users.sourceforge.net>])
-AC_INIT([IT++],[4.0.6],[ediap@users.sourceforge.net],[itpp])
+AC_COPYRIGHT([Copyright (C) 2006-2009  Adam Piatyszek <ediap@users.sourceforge.net>])
+AC_INIT([IT++],[4.0.7],[ediap@users.sourceforge.net],[itpp])
 AC_CONFIG_HEADER([itpp/config.h])
 AC_CONFIG_SRCDIR([itpp/base/vec.cpp])
 AC_CONFIG_MACRO_DIR([m4])
@@ -10,7 +10,7 @@ AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([-Wall -Werror])
 
 # Shared library versioning
-GENERIC_LIBRARY_VERSION="6:6:0"
+GENERIC_LIBRARY_VERSION="6:7:0"
 #                        | | |
 #                 +------+ | +---+
 #                 |        |     |
@@ -172,9 +172,9 @@ AC_SUBST(CXXFLAGS_OPT)
 if test "x$CXXFLAGS_DEBUG" = x; then
   # Only for GCC compiler
   if test "x$GXX" = xyes; then
-    CXXFLAGS_DEBUG="-Wall -ggdb -O1 -pipe"
+    CXXFLAGS_DEBUG="-Wall -ggdb -pipe"
   else
-    CXXFLAGS_DEBUG="-g -O1"
+    CXXFLAGS_DEBUG="-g"
   fi
 fi
 # Remove redundant whitespace
