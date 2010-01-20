@@ -1,3 +1,3 @@
 version=3
 opts="uversionmangle=s/-rc[0-9]+$//" \
-http://itpp.sourceforge.net/ .*/itpp-([\d\.]+)\.tar\.gz
+http://sourceforge.net/apps/wordpress/itpp/ .*/itpp-([\d\.]+)\.tar\.gz
