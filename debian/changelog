@@ -1,3 +1,9 @@
+libitpp (4.0.7-2) UNRELEASED; urgency=low
+
+  * Move dwww to suggests. (Closes: #570598).
+
+ -- Kumar Appaiah <akumar@debian.org>  Fri, 19 Feb 2010 20:27:09 -0600
+
 libitpp (4.0.7-1) unstable; urgency=low
 
   * debian/watch: Update for new home page.

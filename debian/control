@@ -55,7 +55,7 @@ Description: C++ library of signal processing and communication routines: Debug 
 Package: libitpp-doc
 Section: doc
 Architecture: all
-Recommends: dwww, www-browser
+Suggests: dwww, www-browser
 Depends: ${misc:Depends}
 Description: C++ library of signal processing and communication routines: Documentation
  IT++ is a C++ library of mathematical, signal processing and
