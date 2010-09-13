@@ -1,7 +1,7 @@
 Source: libitpp
 Priority: optional
 Maintainer: Kumar Appaiah <akumar@debian.org>
-Standards-Version: 3.8.3
+Standards-Version: 3.9.1
 Build-Depends: debhelper (>= 5), doxygen (>= 1.5.1), libblas-dev, libfftw3-dev, texlive-latex-base, ghostscript, liblapack-dev, gfortran
 Section: libs
 Homepage: http://itpp.sourceforge.net
