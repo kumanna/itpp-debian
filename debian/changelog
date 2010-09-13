@@ -1,4 +1,4 @@
-libitpp (4.0.7-2) UNRELEASED; urgency=low
+libitpp (4.0.7-2) unstable; urgency=low
 
   * Move dwww to suggests. (Closes: #570598).
   * Install Octave/Matlab file loading programs into /usr/share/itpp.
