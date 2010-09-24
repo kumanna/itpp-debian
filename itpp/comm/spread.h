@@ -5,24 +5,23 @@
  *
  * -------------------------------------------------------------------------
  *
- * IT++ - C++ library of mathematical, signal processing, speech processing,
- *        and communications classes and functions
+ * Copyright (C) 1995-2010  (see AUTHORS file for a list of contributors)
  *
- * Copyright (C) 1995-2009  (see AUTHORS file for a list of contributors)
+ * This file is part of IT++ - a C++ library of mathematical, signal
+ * processing, speech processing, and communications classes and functions.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * IT++ is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any
+ * later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * IT++ is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ * You should have received a copy of the GNU General Public License along
+ * with IT++.  If not, see <http://www.gnu.org/licenses/>.
  *
  * -------------------------------------------------------------------------
  */
@@ -122,12 +121,12 @@ public:
   //! Returns the spreading code used
   vec get_code();
   //! Get the period of the code (length of code vector).
-  short get_period() { return N; }
+  int get_period() { return N; }
 protected:
   //! The spreading code
   vec code;
   //! The spreading factor
-  short N;
+  int N;
 };
 
 /*!
@@ -177,7 +176,7 @@ public:
   //! Returns the quadrature-phase spreading code
   vec get_codeQ();
   //! Get the period of the code (length of code vector).
-  short get_period() { return spreadI.get_period(); }
+  int get_period() { return spreadI.get_period(); }
 protected:
   /*! The spreaders for the I and Q channels respectively
    * @{ */
@@ -213,16 +212,16 @@ public:
   //! Returns the matrix containing the spreading codes used as rows in the matrix
   mat get_codes();
   //! Returns the spreading factor
-  short get_period() { return N; }
+  int get_period() { return N; }
   //! Returns the number of multi-codes used
-  short get_nocodes() { return L; }
+  int get_nocodes() { return L; }
 protected:
   //! The spreading codes used size (\f$L \times N\f$)
   mat codes;
   //! The number of multi-codes
-  short L;
+  int L;
   //! The spreading factor
-  short N;
+  int N;
 };
 
 /*!
@@ -268,7 +267,7 @@ public:
   //! Return the matrix containing the quadrature-phase codes (as rows)
   mat get_codesQ();
   //! Returns the spreading factor
-  short get_period() { return mcspreadI.get_period(); }
+  int get_period() { return mcspreadI.get_period(); }
 protected:
   /*! The multicode spreaders for the I and Q channels respectively
    * @{ */

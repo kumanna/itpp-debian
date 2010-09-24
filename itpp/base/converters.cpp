@@ -5,57 +5,33 @@
  *
  * -------------------------------------------------------------------------
  *
- * IT++ - C++ library of mathematical, signal processing, speech processing,
- *        and communications classes and functions
+ * Copyright (C) 1995-2010  (see AUTHORS file for a list of contributors)
  *
- * Copyright (C) 1995-2009  (see AUTHORS file for a list of contributors)
+ * This file is part of IT++ - a C++ library of mathematical, signal
+ * processing, speech processing, and communications classes and functions.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * IT++ is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any
+ * later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * IT++ is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ * You should have received a copy of the GNU General Public License along
+ * with IT++.  If not, see <http://www.gnu.org/licenses/>.
  *
  * -------------------------------------------------------------------------
  */
 
 #include <itpp/base/converters.h>
+#include <itpp/base/itcompat.h>
 #include <itpp/base/matfunc.h>
 #include <itpp/base/math/log_exp.h>
 
 //! \cond
-
-#ifndef HAVE_RINT
-double rint(double x)
-{
-  // zero or NaN case
-  if ((x == 0.0) || (x != x))
-    return x;
-
-  // negative case
-  bool neg = false;
-  if (x < 0.0) {
-    x = -x;
-    neg = true;
-  }
-
-  double y = std::floor(x + 0.5);
-  int i = static_cast<int>(y);
-  if ((y - x >= 0.5) && (i & 1))
-    --y;
-
-  return neg ? -y : y;
-}
-#endif // HAVE_RINT
-
 
 namespace itpp
 {
@@ -182,6 +158,15 @@ bvec pol2bin(const ivec &inpol)
 }
 
 
+// Round to nearest integer, return result in double
+double round(double x) { return ::rint(x); }
+// Round to nearest integer
+vec round(const vec &x) { return apply_function<double>(::rint, x); }
+// Round to nearest integer
+mat round(const mat &x) { return apply_function<double>(::rint, x); }
+// Round to nearest integer
+int round_i(double x) { return static_cast<int>(::rint(x)); }
+
 // Round to nearest integer and return ivec
 ivec round_i(const vec &x) { return to_ivec(round(x)); }
 // Round to nearest integer and return imat
@@ -221,6 +206,28 @@ cmat round_to_zero(const cmat &x, double threshold)
   return temp;
 }
 
+cvec round_to_infty(const cvec &in, const double threshold)
+{
+  cvec temp(in.length());
+
+  for (int i = 0; i < in.length(); i++)
+    temp(i) = round_to_infty(in(i), threshold);
+
+  return temp;
+}
+
+cmat round_to_infty(const cmat &in, const double threshold)
+{
+  cmat temp(in.rows(), in.cols());
+
+  for (int i = 0; i < in.rows(); i++) {
+    for (int j = 0; j < in.cols(); j++) {
+      temp(i, j) = round_to_infty(in(i, j), threshold);
+    }
+  }
+
+  return temp;
+}
 
 std::string to_str(const double &i, const int precision)
 {
@@ -242,9 +249,7 @@ template svec to_svec(const bvec &v);
 template svec to_svec(const ivec &v);
 template svec to_svec(const vec &v);
 
-#if (GCC_VERSION >= 30400)
 template ivec to_ivec(const bvec &v);
-#endif
 template ivec to_ivec(const svec &v);
 template ivec to_ivec(const vec &v);
 
@@ -274,10 +279,8 @@ template imat to_imat(const smat &m);
 template imat to_imat(const mat &m);
 
 template mat to_mat(const bmat &m);
-#if (GCC_VERSION >= 30400)
 template mat to_mat(const smat &m);
 template mat to_mat(const imat &m);
-#endif
 
 template cmat to_cmat(const bmat &m);
 template cmat to_cmat(const smat &m);

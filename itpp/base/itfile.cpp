@@ -5,24 +5,23 @@
  *
  * -------------------------------------------------------------------------
  *
- * IT++ - C++ library of mathematical, signal processing, speech processing,
- *        and communications classes and functions
+ * Copyright (C) 1995-2010  (see AUTHORS file for a list of contributors)
  *
- * Copyright (C) 1995-2009  (see AUTHORS file for a list of contributors)
+ * This file is part of IT++ - a C++ library of mathematical, signal
+ * processing, speech processing, and communications classes and functions.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * IT++ is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any
+ * later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * IT++ is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ * You should have received a copy of the GNU General Public License along
+ * with IT++.  If not, see <http://www.gnu.org/licenses/>.
  *
  * -------------------------------------------------------------------------
  */
@@ -660,7 +659,7 @@ void it_file::pack()
   s.clear();
 
   // allocate buffer of size equal to file size
-  char* buffer = new char[p];
+  char* buffer = new char[int(p)];
   char* b_ptr = buffer;
 
   // copy file header and start counting the size of compacted file
@@ -2413,7 +2412,7 @@ void it_file_old::write_data_header(const std::string &type,
     if (availpos == 0) {
       if (h2.type == "" && h2.block_bytes >= h1.block_bytes) {
         h1.block_bytes = h2.block_bytes;
-        availpos = p;
+        availpos = int(p);
       }
       else if (h2.block_bytes - h2.hdr_bytes - h2.data_bytes >= h1.block_bytes) {
         h1.block_bytes = h2.block_bytes - h2.hdr_bytes - h2.data_bytes;

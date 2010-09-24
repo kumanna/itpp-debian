@@ -5,24 +5,23 @@
  *
  * -------------------------------------------------------------------------
  *
- * IT++ - C++ library of mathematical, signal processing, speech processing,
- *        and communications classes and functions
+ * Copyright (C) 1995-2010  (see AUTHORS file for a list of contributors)
  *
- * Copyright (C) 1995-2009  (see AUTHORS file for a list of contributors)
+ * This file is part of IT++ - a C++ library of mathematical, signal
+ * processing, speech processing, and communications classes and functions.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * IT++ is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any
+ * later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * IT++ is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ * You should have received a copy of the GNU General Public License along
+ * with IT++.  If not, see <http://www.gnu.org/licenses/>.
  *
  * -------------------------------------------------------------------------
  */
@@ -30,29 +29,7 @@
 #ifndef ERROR_H
 #define ERROR_H
 
-#ifndef _MSC_VER
-#  include <itpp/config.h>
-#else
-#  include <itpp/config_msvc.h>
-#endif
-
 #include <itpp/base/help_functions.h>
-
-
-//!\addtogroup errorfunc
-//!@{
-
-#ifndef HAVE_ERF
-//! \brief Error function
-double erf(double x);
-#endif
-
-#ifndef HAVE_ERFC
-//! Complementary error function
-double erfc(double x);
-#endif
-
-//!@}
 
 
 namespace itpp
@@ -94,59 +71,28 @@ double Qfunc(double x);
 // ----------------------------------------------------------------------
 
 //! Error function
-inline vec erf(const vec &x)
-{
-  return apply_function<double>(::erf, x);
-}
+vec erf(const vec &x);
 //! Error function
-inline mat erf(const mat &x)
-{
-  return apply_function<double>(::erf, x);
-}
+mat erf(const mat &x);
 //! Error function
-inline cvec erf(const cvec &x)
-{
-  return apply_function<std::complex<double> >(erf, x);
-}
+cvec erf(const cvec &x);
 //! Error function
-inline cmat erf(const cmat &x)
-{
-  return apply_function<std::complex<double> >(erf, x);
-}
+cmat erf(const cmat &x);
 
 //! Inverse of error function
-inline vec erfinv(const vec &x)
-{
-  return apply_function<double>(erfinv, x);
-}
+vec erfinv(const vec &x);
 //! Inverse of error function
-inline mat erfinv(const mat &x)
-{
-  return apply_function<double>(erfinv, x);
-}
+mat erfinv(const mat &x);
 
 //! Complementary error function
-inline vec erfc(const vec &x)
-{
-  return apply_function<double>(::erfc, x);
-}
+vec erfc(const vec &x);
 //! Complementary error function
-inline mat erfc(const mat &x)
-{
-  return apply_function<double>(::erfc, x);
-}
+mat erfc(const mat &x);
 
 //! Q-function
-inline vec Qfunc(const vec &x)
-{
-  return apply_function<double>(Qfunc, x);
-}
-
+vec Qfunc(const vec &x);
 //! Q-function
-inline mat Qfunc(const mat &x)
-{
-  return apply_function<double>(Qfunc, x);
-}
+mat Qfunc(const mat &x);
 //!@}
 
 } // namespace itpp

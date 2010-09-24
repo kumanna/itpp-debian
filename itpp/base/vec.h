@@ -5,24 +5,23 @@
  *
  * -------------------------------------------------------------------------
  *
- * IT++ - C++ library of mathematical, signal processing, speech processing,
- *        and communications classes and functions
+ * Copyright (C) 1995-2010  (see AUTHORS file for a list of contributors)
  *
- * Copyright (C) 1995-2009  (see AUTHORS file for a list of contributors)
+ * This file is part of IT++ - a C++ library of mathematical, signal
+ * processing, speech processing, and communications classes and functions.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * IT++ is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any
+ * later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * IT++ is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ * You should have received a copy of the GNU General Public License along
+ * with IT++.  If not, see <http://www.gnu.org/licenses/>.
  *
  * -------------------------------------------------------------------------
  */
@@ -30,16 +29,11 @@
 #ifndef VEC_H
 #define VEC_H
 
-#ifndef _MSC_VER
-#  include <itpp/config.h>
-#else
-#  include <itpp/config_msvc.h>
-#endif
-
 #include <itpp/base/itassert.h>
 #include <itpp/base/math/misc.h>
 #include <itpp/base/copy_vector.h>
 #include <itpp/base/factory.h>
+#include <vector>
 
 
 namespace itpp
@@ -146,7 +140,7 @@ Vec<Num_T> operator/(Num_T t, const Vec<Num_T> &v);
 //! Elementwise division of two vectors
 template<class Num_T>
 Vec<Num_T> elem_div(const Vec<Num_T> &a, const Vec<Num_T> &b);
-//! Elementwise division of scalar \c t and vector \c v
+//! This function is deprecated. Please use operator/(Num_T, const Vec<Num_T &) instead.
 template<class Num_T>
 Vec<Num_T> elem_div(Num_T t, const Vec<Num_T> &v);
 //! Elementwise division of two vectors, storing the result in vector \c out
@@ -230,7 +224,7 @@ Vec<Num_T> concat(const Vec<Num_T> &v1, const Vec<Num_T> &v2,
   \code
   a.del(5);    // deletes element number 5
   a.ins(3.4, 9); // inserts the element 3.4 at position 9
-  a.replace_mid(12, b); // replaces elements from 12 with the vector b
+  a.set_subvector(12, b); // replaces elements from 12 with the vector b
   \endcode
 
   It is, of course, also possible to perform common linear algebra
@@ -262,9 +256,9 @@ public:
   //! Copy constructor, which takes an element factory \c f as an additional argument.
   Vec(const Vec<Num_T> &v, const Factory &f);
   //! Constructor taking a char string as input. An element factory \c f can be specified.
-  Vec(const char *values, const Factory &f = DEFAULT_FACTORY);
+  Vec(const char *str, const Factory &f = DEFAULT_FACTORY);
   //! Constructor taking a string as input. An element factory \c f can be specified.
-  Vec(const std::string &values, const Factory &f = DEFAULT_FACTORY);
+  Vec(const std::string &str, const Factory &f = DEFAULT_FACTORY);
   //! Constructor taking a C-array as input. Copies all data. An element factory \c f can be specified.
   Vec(const Num_T *c_array, int size, const Factory &f = DEFAULT_FACTORY);
 
@@ -291,24 +285,28 @@ public:
   //! Set the vector equal to the values in the \c str string
   void set(const std::string &str);
 
-  //! C-style index operator. First element is 0
+  //! C-style index operator. First element is 0.
   const Num_T &operator[](int i) const;
-  //! Index operator. First element is 0
+  //! Index operator. First element is 0.
   const Num_T &operator()(int i) const;
-  //! C-style index operator. First element is 0
+  //! C-style index operator. First element is 0.
   Num_T &operator[](int i);
-  //! Index operator. First element is 0
+  //! Index operator. First element is 0.
   Num_T &operator()(int i);
   //! Sub-vector with elements from \c i1 to \c i2. Index -1 indicates the last element.
-  const Vec<Num_T> operator()(int i1, int i2) const;
-  //! Sub-vector where the elements are given by the list \c indexlist
-  const Vec<Num_T> operator()(const Vec<int> &indexlist) const;
+  Vec<Num_T> operator()(int i1, int i2) const;
+  //! Sub-vector with elements given by the list of indices \c indexlist
+  Vec<Num_T> operator()(const Vec<int> &indexlist) const;
+  //! Sub-vector with elements with indexes where \c binlist is \c 1
+  Vec<Num_T> operator()(const Vec<bin> &binlist) const;
 
-  //! Accessor-style method. First element is 0
+  //! Accessor-style method. First element is 0.
   const Num_T &get(int i) const;
   //! Get the elements from \c i1 to \c i2. Index -1 indicates the last element.
   Vec<Num_T> get(int i1, int i2) const;
-  //! Get the elements in the vector where \c binlist is \c 1
+  //! Get the elements given by the list of indices \c indexlist
+  Vec<Num_T> get(const Vec<int> &indexlist) const;
+  //! Get the elements with indexes where \c binlist is \c 1
   Vec<Num_T> get(const Vec<bin> &binlist) const;
 
   //! Modifier-style method. First element is 0.
@@ -398,7 +396,7 @@ public:
 
   //! Elementwise division
   friend Vec<Num_T> elem_div<>(const Vec<Num_T> &v1, const Vec<Num_T> &v2);
-  //! Elementwise division
+  //! This function is deprecated. Please use operator/(Num_T, const Vec<Num_T> &) instead.
   friend Vec<Num_T> elem_div<>(Num_T t, const Vec<Num_T> &v);
   //! Elementwise division
   friend void elem_div_out<>(const Vec<Num_T> &v1, const Vec<Num_T> &v2,
@@ -446,7 +444,7 @@ public:
                              const Vec<Num_T> &v3, const Vec<Num_T> &v4,
                              const Vec<Num_T> &v5);
 
-  //! Set subvector defined by indicies \c i1 to \c i2 to vector \c v
+  //! This function is deprecated. Please use set_subvector(i, v) instead.
   void set_subvector(int i1, int i2, const Vec<Num_T> &v);
   //! Set subvector to elements of vector \c v starting from element \c i
   void set_subvector(int i, const Vec<Num_T> &v);
@@ -469,8 +467,10 @@ public:
   Vec<Num_T>& operator=(const Vec<Num_T> &v);
   //! Assign vector equal to the 1-dimensional matrix \c m
   Vec<Num_T>& operator=(const Mat<Num_T> &m);
-  //! Assign vector the values in the string \c values
-  Vec<Num_T>& operator=(const char *values);
+  //! Assign vector the values in the string \c str
+  Vec<Num_T>& operator=(const char *str);
+  //! Assign vector the values in the string \c str
+  Vec<Num_T>& operator=(const std::string &str);
 
   //! Elementwise equal to the scalar \c t
   Vec<bin> operator==(Num_T t) const;
@@ -513,8 +513,14 @@ protected:
   //! Element factory (set to DEFAULT_FACTORY to use Num_T default constructors only)
   const Factory &factory;
 private:
-  // This function is used in set() methods to replace commas with spaces
-  std::string replace_commas(const std::string &str);
+  // Clean up and tokenize input initialisation string
+  std::vector<std::string> tokenize(const std::string &str,
+                                    bool &abc_format) const;
+  // Parse double and integer values from string tokens
+  Num_T parse_token(const std::string &s) const;
+  // Parse \c a, \c b and \c c values from "a:b:c" format
+  void parse_abc_token(const std::string &s, Num_T &a, Num_T &b,
+                       Num_T &c) const;
   //! Check whether index \c i is in the allowed range
   bool in_range(int i) const { return ((i < datasize) && (i >= 0)); }
 };
@@ -636,15 +642,15 @@ Vec<Num_T>::Vec(const Vec<Num_T> &v, const Factory &f) : datasize(0), data(0), f
 }
 
 template<class Num_T> inline
-Vec<Num_T>::Vec(const char *values, const Factory &f) : datasize(0), data(0), factory(f)
+Vec<Num_T>::Vec(const char *str, const Factory &f) : datasize(0), data(0), factory(f)
 {
-  set(values);
+  set(std::string(str));
 }
 
 template<class Num_T> inline
-Vec<Num_T>::Vec(const std::string &values, const Factory &f) : datasize(0), data(0), factory(f)
+Vec<Num_T>::Vec(const std::string &str, const Factory &f) : datasize(0), data(0), factory(f)
 {
-  set(values);
+  set(str);
 }
 
 template<class Num_T> inline
@@ -699,8 +705,7 @@ const Num_T& Vec<Num_T>::operator[](int i) const
 template<class Num_T> inline
 const Num_T& Vec<Num_T>::operator()(int i) const
 {
-  it_assert_debug(in_range(i), "Vec<>::operator(): Index out of range");
-  return data[i];
+  return (*this)[i];
 }
 
 template<class Num_T> inline
@@ -713,12 +718,11 @@ Num_T& Vec<Num_T>::operator[](int i)
 template<class Num_T> inline
 Num_T& Vec<Num_T>::operator()(int i)
 {
-  it_assert_debug(in_range(i), "Vec<>::operator(): Index out of range");
-  return data[i];
+  return (*this)[i];
 }
 
 template<class Num_T> inline
-const Vec<Num_T> Vec<Num_T>::operator()(int i1, int i2) const
+Vec<Num_T> Vec<Num_T>::operator()(int i1, int i2) const
 {
   if (i1 == -1) i1 = datasize - 1;
   if (i2 == -1) i2 = datasize - 1;
@@ -733,10 +737,11 @@ const Vec<Num_T> Vec<Num_T>::operator()(int i1, int i2) const
 }
 
 template<class Num_T>
-const Vec<Num_T> Vec<Num_T>::operator()(const Vec<int> &indexlist) const
+Vec<Num_T> Vec<Num_T>::operator()(const Vec<int> &indexlist) const
 {
-  Vec<Num_T> temp(indexlist.length());
-  for (int i = 0;i < indexlist.length();i++) {
+  int size = indexlist.size();
+  Vec<Num_T> temp(size);
+  for (int i = 0; i < size; ++i) {
     it_assert_debug(in_range(indexlist(i)), "Vec<>::operator()(ivec &): "
                     "Index i=" << i << " out of range");
     temp(i) = data[indexlist(i)];
@@ -744,12 +749,26 @@ const Vec<Num_T> Vec<Num_T>::operator()(const Vec<int> &indexlist) const
   return temp;
 }
 
+template<class Num_T>
+Vec<Num_T> Vec<Num_T>::operator()(const Vec<bin> &binlist) const
+{
+  int size = binlist.size();
+  it_assert_debug(datasize == size, "Vec<>::operator()(bvec &): "
+                  "Wrong size of binlist vector");
+  Vec<Num_T> temp(size);
+  int j = 0;
+  for (int i = 0; i < size; ++i)
+    if (binlist(i) == bin(1))
+      temp(j++) = data[i];
+  temp.set_size(j, true);
+  return temp;
+}
+
 
 template<class Num_T> inline
 const Num_T& Vec<Num_T>::get(int i) const
 {
-  it_assert_debug(in_range(i), "Vec<>::get(): Index out of range");
-  return data[i];
+  return (*this)[i];
 }
 
 template<class Num_T> inline
@@ -758,6 +777,17 @@ Vec<Num_T> Vec<Num_T>::get(int i1, int i2) const
   return (*this)(i1, i2);
 }
 
+template<class Num_T> inline
+Vec<Num_T> Vec<Num_T>::get(const Vec<int> &indexlist) const
+{
+  return (*this)(indexlist);
+}
+
+template<class Num_T> inline
+Vec<Num_T> Vec<Num_T>::get(const Vec<bin> &binlist) const
+{
+  return (*this)(binlist);
+}
 
 template<class Num_T> inline
 void Vec<Num_T>::zeros()
@@ -972,38 +1002,19 @@ Vec<Num_T>& Vec<Num_T>::operator*=(Num_T t)
   return *this;
 }
 
-#if defined(HAVE_BLAS)
-template<> inline
-double dot(const vec &v1, const vec &v2)
-{
-  it_assert_debug(v1.datasize == v2.datasize, "vec::dot: wrong sizes");
-  int incr = 1;
-  return blas::ddot_(&v1.datasize, v1.data, &incr, v2.data, &incr);
-}
 
-#if defined(HAVE_ZDOTUSUB) || defined(HAVE_ZDOTU_VOID)
-template<> inline
-std::complex<double> dot(const cvec &v1, const cvec &v2)
-{
-  it_assert_debug(v1.datasize == v2.datasize, "cvec::dot: wrong sizes");
-  int incr = 1;
-  std::complex<double> output;
-  blas::zdotusub_(&output, &v1.datasize, v1.data, &incr, v2.data, &incr);
-  return output;
-}
-#endif // HAVE_ZDOTUSUB || HAVE_ZDOTU_VOID
-#endif // HAVE_BLAS
+//! \cond
+template<>
+double dot(const vec &v1, const vec &v2);
+//! \endcond
 
 template<class Num_T>
 Num_T dot(const Vec<Num_T> &v1, const Vec<Num_T> &v2)
 {
-  int i;
+  it_assert_debug(v1.datasize == v2.datasize, "Vec::dot(): Wrong sizes");
   Num_T r = Num_T(0);
-
-  it_assert_debug(v1.datasize == v2.datasize, "Vec::dot: wrong sizes");
-  for (i = 0; i < v1.datasize; i++)
+  for (int i = 0; i < v1.datasize; ++i)
     r += v1.data[i] * v2.data[i];
-
   return r;
 }
 
@@ -1014,84 +1025,26 @@ Num_T operator*(const Vec<Num_T> &v1, const Vec<Num_T> &v2)
 }
 
 
-#if defined(HAVE_BLAS)
-template<> inline
-mat outer_product(const vec &v1, const vec &v2, bool)
-{
-  it_assert_debug((v1.datasize > 0) && (v2.datasize > 0),
-                  "Vec::outer_product():: Input vector of zero size");
+//! \cond
+template<>
+mat outer_product(const vec &v1, const vec &v2, bool);
 
-  mat out(v1.datasize, v2.datasize);
-  out.zeros();
-  double alpha = 1.0;
-  int incr = 1;
-  blas::dger_(&v1.datasize, &v2.datasize, &alpha, v1.data, &incr,
-              v2.data, &incr, out._data(), &v1.datasize);
-  return out;
-}
-
-template<> inline
-cmat outer_product(const cvec &v1, const cvec &v2, bool hermitian)
-{
-  it_assert_debug((v1.datasize > 0) && (v2.datasize > 0),
-                  "Vec::outer_product():: Input vector of zero size");
-
-  cmat out(v1.datasize, v2.datasize);
-  out.zeros();
-  std::complex<double> alpha(1.0);
-  int incr = 1;
-  if (hermitian) {
-    blas::zgerc_(&v1.datasize, &v2.datasize, &alpha, v1.data, &incr,
-                 v2.data, &incr, out._data(), &v1.datasize);
-  }
-  else {
-    blas::zgeru_(&v1.datasize, &v2.datasize, &alpha, v1.data, &incr,
-                 v2.data, &incr, out._data(), &v1.datasize);
-  }
-  return out;
-}
-#else
-//! Outer product of two vectors v1 and v2
-template<> inline
-cmat outer_product(const cvec &v1, const cvec &v2, bool hermitian)
-{
-  it_assert_debug((v1.datasize > 0) && (v2.datasize > 0),
-                  "Vec::outer_product():: Input vector of zero size");
-
-  cmat out(v1.datasize, v2.datasize);
-  if (hermitian) {
-    for (int i = 0; i < v1.datasize; ++i) {
-      for (int j = 0; j < v2.datasize; ++j) {
-        out(i, j) = v1.data[i] * conj(v2.data[j]);
-      }
-    }
-  }
-  else {
-    for (int i = 0; i < v1.datasize; ++i) {
-      for (int j = 0; j < v2.datasize; ++j) {
-        out(i, j) = v1.data[i] * v2.data[j];
-      }
-    }
-  }
-  return out;
-}
-#endif // HAVE_BLAS
+template<>
+cmat outer_product(const cvec &v1, const cvec &v2, bool hermitian);
+//! \endcond
 
 template<class Num_T>
 Mat<Num_T> outer_product(const Vec<Num_T> &v1, const Vec<Num_T> &v2, bool)
 {
-  int i, j;
-
   it_assert_debug((v1.datasize > 0) && (v2.datasize > 0),
                   "Vec::outer_product:: Input vector of zero size");
 
   Mat<Num_T> r(v1.datasize, v2.datasize);
-  for (i = 0; i < v1.datasize; i++) {
-    for (j = 0; j < v2.datasize; j++) {
+  for (int i = 0; i < v1.datasize; ++i) {
+    for (int j = 0; j < v2.datasize; ++j) {
       r(i, j) = v1.data[i] * v2.data[j];
     }
   }
-
   return r;
 }
 
@@ -1218,6 +1171,16 @@ Vec<Num_T> operator/(Num_T t, const Vec<Num_T> &v)
   return r;
 }
 
+template<class Num_T>
+Vec<Num_T> elem_div(Num_T t, const Vec<Num_T> &v)
+{
+  it_warning("Vec<>::elem_div(Num_T, const Vec<Num_T> &): This function is "
+             "deprecated and might be removed from future IT++ releases. "
+             "Please use Vec<>::operator/(Num_T, const Vec<Num_T> &) "
+             "instead.");
+  return operator/(t, v);
+}
+
 template<class Num_T> inline
 Vec<Num_T>& Vec<Num_T>::operator/=(Num_T t)
 {
@@ -1246,23 +1209,12 @@ Vec<Num_T> elem_div(const Vec<Num_T> &a, const Vec<Num_T> &b)
 }
 
 template<class Num_T>
-Vec<Num_T> elem_div(Num_T t, const Vec<Num_T> &v)
-{
-  int i;
-  Vec<Num_T> r(v.datasize);
-
-  for (i = 0; i < v.datasize; i++)
-    r.data[i] = t / v.data[i];
-
-  return r;
-}
-
-template<class Num_T>
 void elem_div_out(const Vec<Num_T> &a, const Vec<Num_T> &b, Vec<Num_T> &out)
 {
-  it_assert_debug(a.datasize == b.datasize,
-                  "Vec<>::elem_div_out(): Wrong sizes");
-  out.set_size(a.datasize);
+  it_assert_debug(a.datasize == b.datasize, "Vecelem_div_out: wrong sizes");
+
+  out.set_size(a.size());
+
   for (int i = 0; i < a.datasize; i++)
     out.data[i] = a.data[i] / b.data[i];
 }
@@ -1278,23 +1230,6 @@ Num_T elem_div_sum(const Vec<Num_T> &a, const Vec<Num_T> &b)
     acc += a.data[i] / b.data[i];
 
   return acc;
-}
-
-template<class Num_T>
-Vec<Num_T> Vec<Num_T>::get(const Vec<bin> &binlist) const
-{
-  int size = binlist.size();
-  it_assert_debug(datasize == size, "Vec::get(bvec &): wrong sizes");
-  Vec<Num_T> temp(size);
-  int j = 0;
-  for (int i = 0; i < size; ++i) {
-    if (binlist(i) == bin(1)) {
-      temp(j) = data[i];
-      j++;
-    }
-  }
-  temp.set_size(j, true);
-  return temp;
 }
 
 template<class Num_T>
@@ -1474,16 +1409,12 @@ Vec<Num_T> concat(const Vec<Num_T> &v1, const Vec<Num_T> &v2,
 }
 
 template<class Num_T>
-void Vec<Num_T>::set_subvector(int i1, int i2, const Vec<Num_T> &v)
+void Vec<Num_T>::set_subvector(int i1, int, const Vec<Num_T> &v)
 {
-  if (i1 == -1) i1 = datasize - 1;
-  if (i2 == -1) i2 = datasize - 1;
-
-  it_assert_debug(i1 >= 0 && i2 >= 0 && i1 < datasize && i2 < datasize, "Vec::set_subvector(): indicies out of range");
-  it_assert_debug(i2 >= i1, "Vec::set_subvector(): i2 >= i1 necessary");
-  it_assert_debug(i2 - i1 + 1 == v.datasize, "Vec::set_subvector(): wrong sizes");
-
-  copy_vector(v.datasize, v.data, data + i1);
+  it_warning("Vec<>::set_subvector(int, int, const Vec<> &): This function "
+             "is deprecated and might be removed from future IT++ releases. "
+             "Please use Vec<>::set_subvector(int, const Vec<> &) instead.");
+  set_subvector(i1, v);
 }
 
 template<class Num_T> inline
@@ -1510,9 +1441,7 @@ void Vec<Num_T>::set_subvector(int i1, int i2, Num_T t)
 template<class Num_T> inline
 void Vec<Num_T>::replace_mid(int i, const Vec<Num_T> &v)
 {
-  it_assert_debug((i >= 0) && ((i + v.length()) <= datasize),
-                  "Vec<>::replace_mid(): Indexing out of range");
-  copy_vector(v.datasize, v.data, &data[i]);
+  set_subvector(i, v);
 }
 
 template<class Num_T>
@@ -1600,9 +1529,16 @@ Vec<Num_T>& Vec<Num_T>::operator=(const Mat<Num_T> &m)
 }
 
 template<class Num_T> inline
-Vec<Num_T>& Vec<Num_T>::operator=(const char *values)
+Vec<Num_T>& Vec<Num_T>::operator=(const char *str)
 {
-  set(values);
+  set(std::string(str));
+  return *this;
+}
+
+template<class Num_T> inline
+Vec<Num_T>& Vec<Num_T>::operator=(const std::string &str)
+{
+  set(str);
   return *this;
 }
 
@@ -1804,10 +1740,46 @@ std::istream &operator>>(std::istream &is, Vec<Num_T> &v)
 //! \cond
 
 // ----------------------------------------------------------------------
+// Private functions
+// ----------------------------------------------------------------------
+
+template<class Num_T>
+void Vec<Num_T>::parse_abc_token(const std::string &s, Num_T &a, Num_T &b,
+                                 Num_T &c) const
+{
+  std::string::size_type beg = 0;
+  std::string::size_type end = s.find(':', 0);
+  a = parse_token(s.substr(beg, end-beg));
+  beg = end + 1;
+  end = s.find(':', beg);
+  if (end != std::string::npos) {
+    b = parse_token(s.substr(beg, end-beg));
+    c = parse_token(s.substr(end+1, s.size()-end));
+  }
+  else {
+    b = Num_T(1);
+    c = parse_token(s.substr(beg, end-beg-1));
+  }
+}
+
+template<class Num_T>
+Num_T Vec<Num_T>::parse_token(const std::string &s) const
+{
+  it_error("Vec::parse_token(): Only `double' and `int' types are supported");
+  return 0;
+}
+
+template<>
+double Vec<double>::parse_token(const std::string &s) const;
+template<>
+int Vec<int>::parse_token(const std::string &s) const;
+
+
+// ----------------------------------------------------------------------
 // Instantiations
 // ----------------------------------------------------------------------
 
-#ifdef HAVE_EXTERN_TEMPLATE
+#ifndef _MSC_VER
 
 extern template class Vec<double>;
 extern template class Vec<int>;
@@ -1865,29 +1837,17 @@ extern template bvec operator-(const bvec &v);
 
 // multiplication operator
 
-#if !defined(HAVE_BLAS)
-extern template double dot(const vec &v1, const vec &v2);
-#if !(defined(HAVE_ZDOTUSUB) || defined(HAVE_ZDOTU_VOID))
 extern template std::complex<double> dot(const cvec &v1, const cvec &v2);
-#endif // !(HAVE_ZDOTUSUB || HAVE_ZDOTU_VOID)
-#endif // HAVE_BLAS
 extern template int dot(const ivec &v1, const ivec &v2);
 extern template short dot(const svec &v1, const svec &v2);
 extern template bin dot(const bvec &v1, const bvec &v2);
 
-#if !defined(HAVE_BLAS)
 extern template double operator*(const vec &v1, const vec &v2);
-extern template std::complex<double> operator*(const cvec &v1,
-    const cvec &v2);
-#endif
+extern template std::complex<double> operator*(const cvec &v1, const cvec &v2);
 extern template int operator*(const ivec &v1, const ivec &v2);
 extern template short operator*(const svec &v1, const svec &v2);
 extern template bin operator*(const bvec &v1, const bvec &v2);
 
-#if !defined(HAVE_BLAS)
-extern template mat outer_product(const vec &v1, const vec &v2,
-                                    bool hermitian);
-#endif
 extern template imat outer_product(const ivec &v1, const ivec &v2,
                                      bool hermitian);
 extern template smat outer_product(const svec &v1, const svec &v2,
@@ -2081,7 +2041,7 @@ extern template std::istream &operator>>(std::istream& is, svec &vect);
 extern template std::istream &operator>>(std::istream& is, ivec &vect);
 extern template std::istream &operator>>(std::istream& is, bvec &vect);
 
-#endif // HAVE_EXTERN_TEMPLATE
+#endif // _MSC_VER
 
 //! \endcond
 

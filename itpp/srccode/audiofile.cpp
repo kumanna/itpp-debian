@@ -5,24 +5,23 @@
  *
  * -------------------------------------------------------------------------
  *
- * IT++ - C++ library of mathematical, signal processing, speech processing,
- *        and communications classes and functions
+ * Copyright (C) 1995-2010  (see AUTHORS file for a list of contributors)
  *
- * Copyright (C) 1995-2009  (see AUTHORS file for a list of contributors)
+ * This file is part of IT++ - a C++ library of mathematical, signal
+ * processing, speech processing, and communications classes and functions.
  *
- * This program is free software; you can redistribute it and/or modfy
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * IT++ is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any
+ * later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * IT++ is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ * You should have received a copy of the GNU General Public License along
+ * with IT++.  If not, see <http://www.gnu.org/licenses/>.
  *
  * -------------------------------------------------------------------------
  */
@@ -72,10 +71,10 @@ bool raw16le_read(const char *fname, vec &v)
 
   // Check size of a file
   file.seekg(0, ios::end);
-  int size = file.tellg();
+  int size = int(file.tellg());
   file.seekg(0, ios::beg);
 
-  bool switch_endian = check_big_endianness(); // if BIG_ENDIAN than switch
+  bool switch_endian = is_bigendian(); // if BIG_ENDIAN than switch
   int n = size / 2; // short vs. byte
   v.set_size(n, false);
   for (int i = 0; i < n; i++)
@@ -91,7 +90,7 @@ bool raw16le_read(const char *fname, vec &v, int beg, int len)
   if (!file)
     return false;
 
-  bool switch_endian = check_big_endianness(); // if BIG_ENDIAN than switch
+  bool switch_endian = is_bigendian(); // if BIG_ENDIAN than switch
   v.set_size(len, false);
   file.seekg(2 * beg);
   for (int i = 0; i < len; i++)
@@ -106,7 +105,7 @@ bool raw16le_write(const char *fname, const vec &v, bool append)
   if (!file)
     return false;
 
-  bool switch_endian = check_big_endianness(); // if BIG_ENDIAN than switch
+  bool switch_endian = is_bigendian(); // if BIG_ENDIAN than switch
   for (int i = 0; i < v.size(); i++)
     write_endian<short>(file, double_to_short(v(i) * 32768.0), switch_endian);
 
@@ -121,10 +120,10 @@ bool raw16be_read(const char *fname, vec &v)
 
   // Check size of a file
   file.seekg(0, ios::end);
-  int size = file.tellg();
+  int size = int(file.tellg());
   file.seekg(0, ios::beg);
 
-  bool switch_endian = !check_big_endianness(); // if LITTLE_ENDIAN than switch
+  bool switch_endian = !is_bigendian(); // if LITTLE_ENDIAN than switch
   int n = size / 2; // short vs. byte
   v.set_size(n, false);
   for (int i = 0; i < n; i++)
@@ -140,7 +139,7 @@ bool raw16be_read(const char *fname, vec &v, int beg, int len)
   if (!file)
     return false;
 
-  bool switch_endian = !check_big_endianness(); // if LITTLE_ENDIAN than switch
+  bool switch_endian = !is_bigendian(); // if LITTLE_ENDIAN than switch
   v.set_size(len, false);
   file.seekg(2 * beg);
   for (int i = 0; i < len; i++)
@@ -155,7 +154,7 @@ bool raw16be_write(const char *fname, const vec &v, bool append)
   if (!file)
     return false;
 
-  bool switch_endian = !check_big_endianness(); // if LITTLE_ENDIAN than switch
+  bool switch_endian = !is_bigendian(); // if LITTLE_ENDIAN than switch
   for (int i = 0; i < v.size(); i++)
     write_endian<short>(file, double_to_short(v(i) * 32768.0), switch_endian);
 
@@ -202,7 +201,7 @@ int SND_Format::sample_size() const
 
 bool SND_Format::read_header(std::istream &f)
 {
-  bool switch_endian = !check_big_endianness(); // if LITTLE_ENDIAN than switch
+  bool switch_endian = !is_bigendian(); // if LITTLE_ENDIAN than switch
   f.seekg(0);
   header.magic = read_endian<unsigned int>(f, switch_endian);
   header.hdr_size = read_endian<unsigned int>(f, switch_endian);
@@ -228,7 +227,7 @@ bool SND_Format::write_header(std::ostream &f)
   header.hdr_size = sizeof(header);
   memset(header.info, 0, SND_INFO_LEN);
 
-  bool switch_endian = !check_big_endianness(); // if LITTLE_ENDIAN than switch
+  bool switch_endian = !is_bigendian(); // if LITTLE_ENDIAN than switch
   write_endian<unsigned int>(f, header.magic, switch_endian);
   write_endian<unsigned int>(f, header.hdr_size, switch_endian);
   write_endian<unsigned int>(f, header.data_size, switch_endian);
@@ -308,7 +307,7 @@ bool SND_In_File::read(vec &v)
   v.set_size(n, false);
   seek_read(0);
 
-  bool switch_endian = !check_big_endianness(); // if LITTLE_ENDIAN than switch
+  bool switch_endian = !is_bigendian(); // if LITTLE_ENDIAN than switch
   switch (header.encoding) {
   case enc_linear8 :
     for (i = 0; i < n; i++)
@@ -340,7 +339,7 @@ bool SND_In_File::read(vec &v, int n)
 
   int i;
 
-  bool switch_endian = !check_big_endianness(); // if LITTLE_ENDIAN than switch
+  bool switch_endian = !is_bigendian(); // if LITTLE_ENDIAN than switch
   v.set_size(n, false);
   switch (header.encoding) {
   case enc_linear8 :
@@ -439,7 +438,7 @@ bool SND_Out_File::write(const vec &v)
 
   int i;
 
-  bool switch_endian = !check_big_endianness(); // if LITTLE_ENDIAN than switch
+  bool switch_endian = !is_bigendian(); // if LITTLE_ENDIAN than switch
   switch (header.encoding) {
   case enc_linear8 :
     for (i = 0; i < v.size(); i++)

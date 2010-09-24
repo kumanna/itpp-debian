@@ -67,8 +67,8 @@
 /* Define to 1 if you have the `erfc' function. */
 #undef HAVE_ERFC
 
-/* Define if the compiler supports extern template */
-#undef HAVE_EXTERN_TEMPLATE
+/* Define to 1 if you have the `expm1' function. */
+#undef HAVE_EXPM1
 
 /* Define if you have FFT library. */
 #undef HAVE_FFT
@@ -154,12 +154,6 @@
 /* Define to 1 if you have the <unistd.h> header file. */
 #undef HAVE_UNISTD_H
 
-/* Define to use zdotusub_ Fortran wrapper. */
-#undef HAVE_ZDOTUSUB
-
-/* Define to use "void zdotu_()". */
-#undef HAVE_ZDOTU_VOID
-
 /* Define if you want exceptions handling */
 #undef ITPP_EXCEPTIONS
 
@@ -182,32 +176,11 @@
 /* Define to the one symbol short name of this package. */
 #undef PACKAGE_TARNAME
 
+/* Define to the home page for this package. */
+#undef PACKAGE_URL
+
 /* Define to the version of this package. */
 #undef PACKAGE_VERSION
-
-/* The size of `int', as computed by sizeof. */
-#undef SIZEOF_INT
-
-/* The size of `long', as computed by sizeof. */
-#undef SIZEOF_LONG
-
-/* The size of `long long', as computed by sizeof. */
-#undef SIZEOF_LONG_LONG
-
-/* The size of `short', as computed by sizeof. */
-#undef SIZEOF_SHORT
-
-/* The size of `unsigned int', as computed by sizeof. */
-#undef SIZEOF_UNSIGNED_INT
-
-/* The size of `unsigned long', as computed by sizeof. */
-#undef SIZEOF_UNSIGNED_LONG
-
-/* The size of `unsigned long long', as computed by sizeof. */
-#undef SIZEOF_UNSIGNED_LONG_LONG
-
-/* The size of `unsigned short', as computed by sizeof. */
-#undef SIZEOF_UNSIGNED_SHORT
 
 /* Define to 1 if you have the ANSI C header files. */
 #undef STDC_HEADERS
@@ -222,47 +195,6 @@
 #if defined(HAVE_CMATH)
 #  include <cmath>
 #endif
-
-/* Solaris uses <ieeefp.h> for declaring isnan() and finite() functions */
-#if defined(HAVE_IEEEFP_H)
-#  include <ieeefp.h>
-#endif
-
-/* Microsoft Visual C++ .NET underscore prefixed functions */
-#if defined(_MSC_VER)
-#  include <cfloat>
-#  define HAVE_FINITE 1
-#  define finite(x) _finite(x)
-#  define HAVE_ISFINITE 1
-#  define isfinite(x) _finite(x)
-#  define HAVE_ISNAN 1
-#  define isnan(x) _isnan(x)
-#  define HAVE_FPCLASS 1
-#  define fpclass(x) _fpclass(x)
-#  define FP_NINF _FPCLASS_NINF
-#  define FP_PINF _FPCLASS_PINF
-#  define HAVE_JN 1
-#  define jn(a, b) _jn(a, b)
-#  define HAVE_YN 1
-#  define yn(a, b) _yn(a, b)
-#  define HAVE_J0 1
-#  define j0(a) _j0(a)
-#  define HAVE_J1 1
-#  define j1(a) _j1(a)
-#endif /* defined(_MSC_VER) */
-
-/* IT++ uses only std::min() and std::max() functions, not macros */
-#ifdef min
-#  undef min
-#endif
-#ifdef max
-#  undef max
-#endif
-
-/* Represent GCC version in a concise form */
-#define GCC_VERSION (__GNUC__ * 10000           \
-                     + __GNUC_MINOR__ * 100     \
-                     + __GNUC_PATCHLEVEL__)
 
 #endif /* #ifndef CONFIG_H */
 

@@ -5,24 +5,23 @@
  *
  * -------------------------------------------------------------------------
  *
- * IT++ - C++ library of mathematical, signal processing, speech processing,
- *        and communications classes and functions
+ * Copyright (C) 1995-2010  (see AUTHORS file for a list of contributors)
  *
- * Copyright (C) 1995-2009  (see AUTHORS file for a list of contributors)
+ * This file is part of IT++ - a C++ library of mathematical, signal
+ * processing, speech processing, and communications classes and functions.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * IT++ is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any
+ * later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * IT++ is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ * You should have received a copy of the GNU General Public License along
+ * with IT++.  If not, see <http://www.gnu.org/licenses/>.
  *
  * -------------------------------------------------------------------------
  */
@@ -30,38 +29,10 @@
 #ifndef ELEM_MATH_H
 #define ELEM_MATH_H
 
-#ifndef _MSC_VER
-#  include <itpp/config.h>
-#else
-#  include <itpp/config_msvc.h>
-#endif
-
 #include <itpp/base/help_functions.h>
 #include <itpp/base/converters.h>
-#include <cstdlib>
+#include <cstdlib> // required by std::abs()
 
-
-//!\addtogroup miscfunc
-//!@{
-
-#ifndef HAVE_TGAMMA
-//! True gamma function
-double tgamma(double x);
-#endif
-
-#if !defined(HAVE_LGAMMA) || (HAVE_DECL_SIGNGAM != 1)
-//! Lograrithm of an absolute gamma function
-double lgamma(double x);
-//! Global variable needed by \c lgamma function
-extern int signgam;
-#endif
-
-#ifndef HAVE_CBRT
-//! Cubic root
-double cbrt(double x);
-#endif
-
-//!@}
 
 namespace itpp
 {
@@ -157,11 +128,11 @@ inline mat sqrt(const mat &x) { return apply_function<double>(std::sqrt, x); }
 // -------------------- gamma function --------------------
 
 //! Deprecated gamma function - please use tgamma() instead
-inline double gamma(double x) { return tgamma(x); }
+double gamma(double x);
 //! Deprecated gamma function for vectors. Will be changed to tgamma().
-inline vec gamma(const vec &x) { return apply_function<double>(tgamma, x); }
+vec gamma(const vec &x);
 //! Deprecated gamma function for matrices. Will be changed to tgamma().
-inline mat gamma(const mat &x) { return apply_function<double>(tgamma, x); }
+mat gamma(const mat &x);
 
 
 // -------------------- rem function --------------------

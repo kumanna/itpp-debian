@@ -5,24 +5,23 @@
  *
  * -------------------------------------------------------------------------
  *
- * IT++ - C++ library of mathematical, signal processing, speech processing,
- *        and communications classes and functions
+ * Copyright (C) 1995-2010  (see AUTHORS file for a list of contributors)
  *
- * Copyright (C) 1995-2009  (see AUTHORS file for a list of contributors)
+ * This file is part of IT++ - a C++ library of mathematical, signal
+ * processing, speech processing, and communications classes and functions.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * IT++ is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any
+ * later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * IT++ is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ * You should have received a copy of the GNU General Public License along
+ * with IT++.  If not, see <http://www.gnu.org/licenses/>.
  *
  * -------------------------------------------------------------------------
  */
@@ -181,9 +180,9 @@ public:
   //! Return degree of GF(q)[x]
   int get_degree() const;
   /*!
-    \brief Resize the polynomial to the given indegree. If the new polynomial is bigger, then the new coefficients are set to zero.
+    \brief Resize the polynomial to the given \c indegree. If \c copy is set to true, the old polynomial's coefficients are kept in the new polynomial, otherwise they are set to zero.
   */
-  void set_degree(int indegree);
+  void set_degree(int indegree, bool copy = false);
   //! Return true degree of GF(q)[x]
   int get_true_degree() const;
   //! Set the GF(q)[x] polynomial
@@ -444,10 +443,10 @@ inline int GFX::get_degree() const
   return degree;
 }
 
-inline void GFX::set_degree(int indegree)
+inline void GFX::set_degree(int indegree, bool copy)
 {
   it_assert_debug(indegree >= -1, "GFX::set_degree, out of range");
-  coeffs.set_size(indegree + 1);
+  coeffs.set_size(indegree + 1, copy);
   degree = indegree;
 }
 

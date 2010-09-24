@@ -5,24 +5,23 @@
  *
  * -------------------------------------------------------------------------
  *
- * IT++ - C++ library of mathematical, signal processing, speech processing,
- *        and communications classes and functions
+ * Copyright (C) 1995-2010  (see AUTHORS file for a list of contributors)
  *
- * Copyright (C) 1995-2009  (see AUTHORS file for a list of contributors)
+ * This file is part of IT++ - a C++ library of mathematical, signal
+ * processing, speech processing, and communications classes and functions.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * IT++ is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any
+ * later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * IT++ is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ * You should have received a copy of the GNU General Public License along
+ * with IT++.  If not, see <http://www.gnu.org/licenses/>.
  *
  * -------------------------------------------------------------------------
  */
@@ -30,39 +29,7 @@
 #ifndef LOG_EXP_H
 #define LOG_EXP_H
 
-#ifndef _MSC_VER
-#  include <itpp/config.h>
-#else
-#  include <itpp/config_msvc.h>
-#endif
-
 #include <itpp/base/help_functions.h>
-#include <itpp/base/math/misc.h>
-#include <limits>
-
-
-/*!
- * \addtogroup logexpfunc
- * @{
- */
-
-#ifndef HAVE_LOG1P
-//! Lograrithm of an argument \c x plus one
-inline double log1p(double x) { return std::log(1.0 + x); }
-#endif
-
-#ifndef HAVE_LOG2
-#undef log2                     // This is required at least for Cygwin
-//! Base-2 logarithm
-inline double log2(double x)
-{
-  return (std::log(x) * 1.442695040888963387004650940070860087871551513671875);
-}
-#endif
-
-/*!
- * @}
- */
 
 
 namespace itpp
@@ -117,13 +84,6 @@ inline int levels2bits(int n)
   return int2bits(--n);
 }
 
-//! Deprecated function. Please use int2bits() or levels2bits() instead.
-inline int needed_bits(int n)
-{
-  it_warning("needed_bits(): This function is depreceted. Depending on your needs, please use int2bits() or levels2bits() instead.");
-  return int2bits(n);
-}
-
 //! Constant definition to speed up trunc_log() and trunc_exp()
 const double log_double_max = std::log(std::numeric_limits<double>::max());
 //! Constant definition to speed up trunc_log(), trunc_exp() and log_add()
@@ -173,19 +133,7 @@ inline double trunc_exp(double x)
 
 
 //! Safe substitute for <tt>log(exp(log_a) + exp(log_b))</tt>
-inline double log_add(double log_a, double log_b)
-{
-  if (log_a < log_b) {
-    double tmp = log_a;
-    log_a = log_b;
-    log_b = tmp;
-  }
-  double negdelta = log_b - log_a;
-  if ((negdelta < log_double_min) || std::isnan(negdelta))
-    return log_a;
-  else
-    return (log_a + log1p(std::exp(negdelta)));
-}
+double log_add(double log_a, double log_b);
 
 
 // ----------------------------------------------------------------------
@@ -277,16 +225,14 @@ inline cmat log(const cmat &x)
   return apply_function<std::complex<double> >(std::log, x);
 }
 
+// Cygwin defines log2 macro conflicting with IT++ functions
+#if defined(log2)
+#  undef log2
+#endif
 //! log-2 of the elements
-inline vec log2(const vec &x)
-{
-  return apply_function<double>(::log2, x);
-}
+vec log2(const vec &x);
 //! log-2 of the elements
-inline mat log2(const mat &x)
-{
-  return apply_function<double>(::log2, x);
-}
+mat log2(const mat &x);
 
 //! log-10 of the elements
 inline vec log10(const vec &x)
@@ -330,13 +276,6 @@ inline vec inv_dB(const vec &x)
 inline mat inv_dB(const mat &x)
 {
   return apply_function<double>(inv_dB, x);
-}
-
-//! Deprecated function. Please use int2bits() or levels2bits() instead.
-inline ivec needed_bits(const ivec& v)
-{
-  it_warning("needed_bits(): This function is depreceted. Depending on your needs, please use int2bits() or levels2bits() instead.");
-  return apply_function<int>(int2bits, v);
 }
 
 //! Calculate the number of bits needed to represent each inteager in a vector

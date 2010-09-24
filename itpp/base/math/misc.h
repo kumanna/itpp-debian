@@ -5,36 +5,29 @@
  *
  * -------------------------------------------------------------------------
  *
- * IT++ - C++ library of mathematical, signal processing, speech processing,
- *        and communications classes and functions
+ * Copyright (C) 1995-2010  (see AUTHORS file for a list of contributors)
  *
- * Copyright (C) 1995-2009  (see AUTHORS file for a list of contributors)
+ * This file is part of IT++ - a C++ library of mathematical, signal
+ * processing, speech processing, and communications classes and functions.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * IT++ is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any
+ * later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * IT++ is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ * You should have received a copy of the GNU General Public License along
+ * with IT++.  If not, see <http://www.gnu.org/licenses/>.
  *
  * -------------------------------------------------------------------------
  */
 
 #ifndef MISC_H
 #define MISC_H
-
-#ifndef _MSC_VER
-#  include <itpp/config.h>
-#else
-#  include <itpp/config_msvc.h>
-#endif
 
 #include <complex>
 #include <string>
@@ -43,53 +36,6 @@
 
 namespace std
 {
-
-//! \cond
-
-#ifndef HAVE_STD_ISINF
-#if (HAVE_DECL_ISINF == 1) || defined(HAVE_ISINF)
-inline int isinf(double x) { return ::isinf(x); }
-#elif defined(FPCLASS)
-inline int isinf(double x)
-{
-  if (::fpclass(a) == FP_NINF) return -1;
-  else if (::fpclass(a) == FP_PINF) return 1;
-  else return 0;
-}
-#else
-inline int isinf(double x)
-{
-  if ((x == x) && ((x - x) != 0.0)) return (x < 0.0 ? -1 : 1);
-  else return 0;
-}
-#endif // #if (HAVE_DECL_ISINF == 1) || defined(HAVE_ISINF)
-#  define HAVE_STD_ISINF 1
-#endif // #ifndef HAVE_STD_ISINF
-
-#ifndef HAVE_STD_ISNAN
-#if (HAVE_DECL_ISNAN == 1) || defined(HAVE_ISNAN)
-inline int isnan(double x) { return ::isnan(x); }
-#else
-inline int isnan(double x) { return ((x != x) ? 1 : 0); }
-#endif // #if (HAVE_DECL_ISNAN == 1) || defined(HAVE_ISNAN)
-#  define HAVE_STD_ISNAN 1
-#endif // #ifndef HAVE_STD_ISNAN
-
-#ifndef HAVE_STD_ISFINITE
-#if (HAVE_DECL_ISFINITE == 1) || defined(HAVE_ISFINITE)
-inline int isfinite(double x) { return ::isfinite(x); }
-#elif defined(HAVE_FINITE)
-inline int isfinite(double x) { return ::finite(x); }
-#else
-inline int isfinite(double x)
-{
-  return ((!std::isnan(x) && !std::isinf(x)) ? 1 : 0);
-}
-#endif // #if (HAVE_DECL_ISFINITE == 1) || defined(HAVE_ISFINITE)
-#  define HAVE_STD_ISFINITE 1
-#endif // #ifndef HAVE_STD_ISFINITE
-
-//! \endcond
 
 //! Output stream operator for complex numbers
 template <class T>
@@ -175,13 +121,14 @@ inline bool is_int(double x)
 //! Return true if x is an even integer
 inline bool is_even(int x) { return ((x&1) == 0); }
 
-
 //! Returns IT++ library version number, e.g. "3.7.1".
 std::string itpp_version();
 
+//! Returns true if machine endianness is BIG_ENDIAN
+bool is_bigendian();
 
-//! Returns machine endianness: big-endian = true; little-endian = false
-bool check_big_endianness();
+//! This function is deprecated. Please use is_bigendian() instead.
+inline bool check_big_endianness() { return is_bigendian(); }
 
 //!@}
 

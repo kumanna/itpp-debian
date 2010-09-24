@@ -1,32 +1,32 @@
 /*!
  * \file
  * \brief Polynomial functions
- * \author Tony Ottosson
+ * \author Tony Ottosson, Kumar Appaiah and Adam Piatyszek
  *
  * -------------------------------------------------------------------------
  *
- * IT++ - C++ library of mathematical, signal processing, speech processing,
- *        and communications classes and functions
+ * Copyright (C) 1995-2010  (see AUTHORS file for a list of contributors)
  *
- * Copyright (C) 1995-2009  (see AUTHORS file for a list of contributors)
+ * This file is part of IT++ - a C++ library of mathematical, signal
+ * processing, speech processing, and communications classes and functions.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * IT++ is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any
+ * later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * IT++ is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ * You should have received a copy of the GNU General Public License along
+ * with IT++.  If not, see <http://www.gnu.org/licenses/>.
  *
  * -------------------------------------------------------------------------
  */
 
+#include <itpp/base/itcompat.h>
 #include <itpp/signal/poly.h>
 #include <itpp/base/converters.h>
 #include <itpp/base/algebra/eigen.h>
@@ -46,7 +46,7 @@ void poly(const vec &r, vec &p)
   p(0) = 1.0;
 
   for (int i = 0; i < n; i++)
-    p.set_subvector(1, i + 1, p(1, i + 1) - r(i)*p(0, i));
+    p.set_subvector(1, p(1, i + 1) - r(i)*p(0, i));
 }
 
 void poly(const cvec &r, cvec &p)
@@ -58,7 +58,7 @@ void poly(const cvec &r, cvec &p)
   p(0) = 1.0;
 
   for (int i = 0; i < n; i++)
-    p.set_subvector(1, i + 1, p(1, i + 1) - r(i)*p(0, i));
+    p.set_subvector(1, p(1, i + 1) - r(i)*p(0, i));
 }
 
 
@@ -192,6 +192,42 @@ cvec polyval(const cvec &p, const cvec &x)
   return out;
 }
 
+double cheb(int n, double x)
+{
+  it_assert((n >= 0), "cheb(): need a non-negative order n!");
 
+  if (x < 1.0 && x > -1.0) {
+    return std::cos(n * std::acos(x));
+  }
+  else if (x <= -1) {
+    return (is_even(n) ? std::cosh(n * ::acosh(-x))
+            : -std::cosh(n * ::acosh(-x)));
+  }
+  return std::cosh(n * ::acosh(x));
+}
+
+vec cheb(int n, const vec &x)
+{
+  it_assert_debug(x.size() > 0, "cheb(): empty vector");
+
+  vec out(x.size());
+  for (int i = 0; i < x.size(); ++i) {
+    out(i) = cheb(n, x(i));
+  }
+  return out;
+}
+
+mat cheb(int n, const mat &x)
+{
+  it_assert_debug((x.rows() > 0) && (x.cols() > 0), "cheb(): empty matrix");
+
+  mat out(x.rows(), x.cols());
+  for (int i = 0; i < x.rows(); ++i) {
+    for (int j = 0; j < x.cols(); ++j) {
+      out(i, j) = cheb(n, x(i, j));
+    }
+  }
+  return out;
+}
 
 } // namespace itpp

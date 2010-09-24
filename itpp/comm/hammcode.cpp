@@ -5,24 +5,23 @@
  *
  * -------------------------------------------------------------------------
  *
- * IT++ - C++ library of mathematical, signal processing, speech processing,
- *        and communications classes and functions
+ * Copyright (C) 1995-2010  (see AUTHORS file for a list of contributors)
  *
- * Copyright (C) 1995-2009  (see AUTHORS file for a list of contributors)
+ * This file is part of IT++ - a C++ library of mathematical, signal
+ * processing, speech processing, and communications classes and functions.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * IT++ is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any
+ * later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * IT++ is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ * You should have received a copy of the GNU General Public License along
+ * with IT++.  If not, see <http://www.gnu.org/licenses/>.
  *
  * -------------------------------------------------------------------------
  */
@@ -35,7 +34,7 @@
 namespace itpp
 {
 
-Hamming_Code::Hamming_Code(short m)
+Hamming_Code::Hamming_Code(int m)
 {
   n = pow2i(m) - 1;
   k = pow2i(m) - m - 1;
@@ -47,10 +46,10 @@ Hamming_Code::Hamming_Code(short m)
 
 void Hamming_Code::generate_H(void)
 {
-  short i, j, NextPos;
+  int i, j, NextPos;
   char NotUsed;
   bvec temp;
-  svec indexes(n);
+  ivec indexes(n);
   indexes.zeros();
 
   for (i = 1; i <= n - k; i++) { indexes(i - 1) = pow2i(n - k - i); }
@@ -72,7 +71,7 @@ void Hamming_Code::generate_H(void)
 
 void Hamming_Code::generate_G(void)
 {
-  short i, j;
+  int i, j;
   for (i = 0; i < k; i++) {
     for (j = 0; j < n - k; j++)
       G(i, j) = H(j, i + n - k);
@@ -111,10 +110,10 @@ void Hamming_Code::decode(const bvec &coded_bits, bvec &decoded_bits)
 {
   int length = coded_bits.length();
   int Itterations = floor_i(static_cast<double>(length) / n);
-  svec Hindexes(n);
+  ivec Hindexes(n);
   bvec temp(n - k);
   bvec coded(n), syndrome(n - k);
-  short  isynd, errorpos = 0;
+  int isynd, errorpos = 0;
   int i, j;
 
   decoded_bits.set_size(Itterations*k, false);

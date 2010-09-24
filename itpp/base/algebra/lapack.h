@@ -5,24 +5,23 @@
  *
  * -------------------------------------------------------------------------
  *
- * IT++ - C++ library of mathematical, signal processing, speech processing,
- *        and communications classes and functions
+ * Copyright (C) 1995-2010  (see AUTHORS file for a list of contributors)
  *
- * Copyright (C) 1995-2009  (see AUTHORS file for a list of contributors)
+ * This file is part of IT++ - a C++ library of mathematical, signal
+ * processing, speech processing, and communications classes and functions.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * IT++ is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any
+ * later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * IT++ is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ * You should have received a copy of the GNU General Public License along
+ * with IT++.  If not, see <http://www.gnu.org/licenses/>.
  *
  * -------------------------------------------------------------------------
  */
@@ -38,60 +37,44 @@
 
 #include <complex>
 
+// Note: HAVE_MKL and HAVE_ACML are hard-defined in <itpp/config_msvc.h>
+#if defined(_MSC_VER) && (defined(HAVE_ACML) || defined(HAVE_MKL))
+#  define dgetrf_ DGETRF
+#  define zgetrf_ ZGETRF
+#  define dgetri_ DGETRI
+#  define zgetri_ ZGETRI
+#  define dgesvd_ DGESVD
+#  define zgesvd_ ZGESVD
+#  define dsyev_  DSYEV
+#  define zheev_  ZHEEV
+#  define dgeev_  DGEEV
+#  define zgeev_  ZGEEV
+#  define dpotrf_ DPOTRF
+#  define zpotrf_ ZPOTRF
+#  define dgeqrf_ DGEQRF
+#  define zgeqrf_ ZGEQRF
+#  define dgeqp3_ DGEQP3
+#  define zgeqp3_ ZGEQP3
+#  define dorgqr_ DORGQR
+#  define zungqr_ ZUNGQR
+#  define dormqr_ DORMQR
+#  define zunmqr_ ZUNMQR
+#  define dgesv_  DGESV
+#  define zgesv_  ZGESV
+#  define dposv_  DPOSV
+#  define zposv_  ZPOSV
+#  define dtrtrs_ DTRTRS
+#  define ztrtrs_ ZTRTRS
+#  define dgels_  DGELS
+#  define zgels_  ZGELS
+#  define dgees_  DGEES
+#  define zgees_  ZGEES
+#endif // #if defined(_MSC_VER) && (defined(HAVE_ACML) || defined(HAVE_MKL))
+
+#ifdef __cplusplus
 extern "C"
 {
-
-// Fix for MKL Windows version so that naming is consistent with the 5.x and
-// 7.x MKL LAPACK libraries
-#ifdef HAVE_MKL // Note: HAVE_MKL is hard-defined in <itpp/config_msvc.h>
-
-#define dgetrf_ dgetrf
-#define zgetrf_ zgetrf
-
-#define dgetri_ dgetri
-#define zgetri_ zgetri
-
-#define dgesvd_ dgesvd
-#define zgesvd_ zgesvd
-
-#define dsyev_ dsyev
-#define zheev_ zheev
-
-#define dgeev_ dgeev
-#define zgeev_ zgeev
-
-#define dpotrf_ dpotrf
-#define zpotrf_ zpotrf
-
-#define dgeqrf_ dgeqrf
-#define zgeqrf_ zgeqrf
-
-#define dgeqp3_ dgeqp3
-#define zgeqp3_ zgeqp3
-
-#define dorgqr_ dorgqr
-#define zungqr_ zungqr
-
-#define dormqr_ dormqr
-#define zunmqr_ zunmqr
-
-#define dgesv_ dgesv
-#define zgesv_ zgesv
-
-#define dposv_ dposv
-#define zposv_ zposv
-
-#define dtrtrs_ dtrtrs
-#define ztrtrs_ ztrtrs
-
-#define dgels_ dgels
-#define zgels_ zgels
-
-#define dgees_ dgees
-#define zgees_ zgees
-
-#endif // #ifdef HAVE_MKL
-
+#endif /* __cplusplus */
   // Exists in ATLAS
   /* LU factorization
    * a is of size m*n and with lda rows.
@@ -263,6 +246,8 @@ extern "C"
               std::complex<double> *work, int *lwork, double *rwork,
               int *bwork, int *info);
 
+#ifdef __cplusplus
 } // extern C
+#endif /* __cplusplus */
 
 #endif // #ifndef LAPACK_H
