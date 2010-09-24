@@ -5,24 +5,23 @@
  *
  * -------------------------------------------------------------------------
  *
- * IT++ - C++ library of mathematical, signal processing, speech processing,
- *        and communications classes and functions
+ * Copyright (C) 1995-2010  (see AUTHORS file for a list of contributors)
  *
- * Copyright (C) 1995-2009  (see AUTHORS file for a list of contributors)
+ * This file is part of IT++ - a C++ library of mathematical, signal
+ * processing, speech processing, and communications classes and functions.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * IT++ is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any
+ * later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * IT++ is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ * You should have received a copy of the GNU General Public License along
+ * with IT++.  If not, see <http://www.gnu.org/licenses/>.
  *
  * -------------------------------------------------------------------------
  */
@@ -92,7 +91,21 @@ int main()
   cmat B_sqrtm = sqrtm(B);
   cout << "B = " << B << endl;
   cout << "norm(sqrtm(B) * sqrtm(B) - B) = "
-       << round_to_zero(norm(B_sqrtm * B_sqrtm - B), 1e-13) << endl;
+       << round_to_zero(norm(B_sqrtm * B_sqrtm - B), 1e-13) << endl << endl;
+
+  cout << "Rank test" << endl;
+  A = randn(3, 3);
+  cout << "A = " << A << endl;
+  cout << "rank(A) = " << itpp::rank(A) << endl;
+  A.set_row(1, 3.0 * A.get_row(0));
+  cout << "A2 = " << A << endl;
+  cout << "rank(A2) = " << itpp::rank(A) << endl;
+  B = randn_c(3, 3);
+  cout << "B = " << B << endl;
+  cout << "rank(B) = " << itpp::rank(B) << endl;
+  B.set_col(1, B.get_col(0));
+  cout << "B2 = " << B << endl;
+  cout << "rank(B2) = " << itpp::rank(B) << endl;
 
   return 0;
 }

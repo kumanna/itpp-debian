@@ -5,24 +5,23 @@
  *
  * -------------------------------------------------------------------------
  *
- * IT++ - C++ library of mathematical, signal processing, speech processing,
- *        and communications classes and functions
+ * Copyright (C) 1995-2010  (see AUTHORS file for a list of contributors)
  *
- * Copyright (C) 1995-2009  (see AUTHORS file for a list of contributors)
+ * This file is part of IT++ - a C++ library of mathematical, signal
+ * processing, speech processing, and communications classes and functions.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * IT++ is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any
+ * later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * IT++ is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ * You should have received a copy of the GNU General Public License along
+ * with IT++.  If not, see <http://www.gnu.org/licenses/>.
  *
  * -------------------------------------------------------------------------
  */
@@ -175,19 +174,6 @@ public:
                                    Soft_Method method = LOGMAP) const;
 
   /*!
-    \brief Deprecated soft demodulator for AWGN channels. Please use
-    demodulate_soft_bits() with method = APPROX instead.
-  */
-  virtual void demodulate_soft_bits_approx(const Vec<T>& rx_symbols,
-      double N0, vec& soft_bits) const;
-  /*!
-    \brief Deprecated soft demodulator for AWGN channels. Please use
-    demodulate_soft_bits() with method = APPROX instead.
-  */
-  virtual vec demodulate_soft_bits_approx(const Vec<T>& rx_symbols,
-                                          double N0) const;
-
-  /*!
     \brief Soft demodulator for fading channels
 
     This function calculates the log-likelihood ratio (LLR) of the
@@ -234,21 +220,6 @@ public:
                                    const Vec<T>& channel,
                                    double N0,
                                    Soft_Method method = LOGMAP) const;
-
-  /*!
-    \brief Deprecated soft demodulator for AWGN channels. Please use
-    demodulate_soft_bits() with method = APPROX instead.
-  */
-  virtual void demodulate_soft_bits_approx(const Vec<T>& rx_symbols,
-      const Vec<T>& channel,
-      double N0, vec& soft_bits) const;
-  /*!
-    \brief Deprecated soft demodulator for AWGN channels. Please use
-    demodulate_soft_bits() with method = APPROX instead.
-  */
-  virtual vec demodulate_soft_bits_approx(const Vec<T>& rx_symbols,
-                                          const Vec<T>& channel,
-                                          double N0) const;
 
 protected:
   //! Setup indicator
@@ -489,26 +460,6 @@ vec Modulator<T>::demodulate_soft_bits(const Vec<T> &rx_symbols,
 }
 
 template<typename T>
-void Modulator<T>::demodulate_soft_bits_approx(const Vec<T> &rx_symbols,
-    double N0,
-    vec &soft_bits) const
-{
-  it_warning("Modulator<T>::demodulate_soft_bits_approx(): This function is deprecated. Please use demodulate_soft_bits() with method=APPROX instead.");
-  demodulate_soft_bits(rx_symbols, N0, soft_bits, APPROX);
-}
-
-template<typename T>
-vec Modulator<T>::demodulate_soft_bits_approx(const Vec<T> &rx_symbols,
-    double N0) const
-{
-  it_warning("Modulator<T>::demodulate_soft_bits_approx(): This function is deprecated. Please use demodulate_soft_bits() with method=APPROX instead.");
-  vec output;
-  demodulate_soft_bits(rx_symbols, N0, output, APPROX);
-  return output;
-}
-
-
-template<typename T>
 void Modulator<T>::demodulate_soft_bits(const Vec<T> &rx_symbols,
                                         const Vec<T> &channel, double N0,
                                         vec &soft_bits,
@@ -565,28 +516,6 @@ vec Modulator<T>::demodulate_soft_bits(const Vec<T> &rx_symbols,
   demodulate_soft_bits(rx_symbols, channel, N0, output, method);
   return output;
 }
-
-template<typename T>
-void Modulator<T>::demodulate_soft_bits_approx(const Vec<T> &rx_symbols,
-    const Vec<T> &channel,
-    double N0,
-    vec &soft_bits) const
-{
-  it_warning("Modulator<T>::demodulate_soft_bits_approx(): This function is deprecated. Please use demodulate_soft_bits() with method=APPROX instead.");
-  demodulate_soft_bits(rx_symbols, channel, N0, soft_bits, APPROX);
-}
-
-template<typename T>
-vec Modulator<T>::demodulate_soft_bits_approx(const Vec<T> &rx_symbols,
-    const Vec<T> &channel,
-    double N0) const
-{
-  it_warning("Modulator<T>::demodulate_soft_bits_approx(): This function is deprecated. Please use demodulate_soft_bits() with method=APPROX instead.");
-  vec output;
-  demodulate_soft_bits(rx_symbols, channel, N0, output, APPROX);
-  return output;
-}
-
 
 template<typename T>
 void Modulator<T>::calculate_softbit_matrices()

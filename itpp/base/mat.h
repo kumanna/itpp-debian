@@ -5,36 +5,29 @@
  *
  * -------------------------------------------------------------------------
  *
- * IT++ - C++ library of mathematical, signal processing, speech processing,
- *        and communications classes and functions
+ * Copyright (C) 1995-2010  (see AUTHORS file for a list of contributors)
  *
- * Copyright (C) 1995-2009  (see AUTHORS file for a list of contributors)
+ * This file is part of IT++ - a C++ library of mathematical, signal
+ * processing, speech processing, and communications classes and functions.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * IT++ is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any
+ * later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * IT++ is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ * You should have received a copy of the GNU General Public License along
+ * with IT++.  If not, see <http://www.gnu.org/licenses/>.
  *
  * -------------------------------------------------------------------------
  */
 
 #ifndef MAT_H
 #define MAT_H
-
-#ifndef _MSC_VER
-#  include <itpp/config.h>
-#else
-#  include <itpp/config_msvc.h>
-#endif
 
 #include <itpp/base/itassert.h>
 #include <itpp/base/math/misc.h>
@@ -87,9 +80,6 @@ Mat<Num_T> operator*(const Mat<Num_T> &m1, const Mat<Num_T> &m2);
 //! Multiplication of matrix and vector
 template<class Num_T>
 Vec<Num_T> operator*(const Mat<Num_T> &m, const Vec<Num_T> &v);
-//! Multiplication of vector and matrix (matrix must be a row vector)
-template<class Num_T>
-Mat<Num_T> operator*(const Vec<Num_T> &v, const Mat<Num_T> &m);
 //! Multiplication of matrix and scalar
 template<class Num_T>
 Mat<Num_T> operator*(const Mat<Num_T> &m, Num_T t);
@@ -120,9 +110,12 @@ void elem_mult_inplace(const Mat<Num_T> &m1, Mat<Num_T> &m2);
 template<class Num_T>
 Num_T elem_mult_sum(const Mat<Num_T> &m1, const Mat<Num_T> &m2);
 
-//! Division of matrix and scalar
+//! Element-wise division by a scalar
 template<class Num_T>
 Mat<Num_T> operator/(const Mat<Num_T> &m, Num_T t);
+//! Element-wise division (\c t is the dividend, elements of \c m are divisors)
+template<class Num_T>
+Mat<Num_T> operator/(Num_T t, const Mat<Num_T> &m);
 
 //! Element wise division of two matrices
 template<class Num_T>
@@ -252,10 +245,10 @@ public:
   void clear() { zeros(); }
   //! Set matrix equal to the all one matrix
   void ones();
-  //! Set matrix equal to values in \c values
-  void set(const char *str);
   //! Set matrix equal to values in the string \c str
   void set(const std::string &str);
+  //! Set matrix equal to values in the string \c str
+  void set(const char *str);
 
   //! Get element (r,c) from matrix
   const Num_T &operator()(int r, int c) const;
@@ -267,6 +260,8 @@ public:
   Num_T &operator()(int i);
   //! Get element (r,c) from matrix
   const Num_T &get(int r, int c) const;
+  //! Get element \c i using linear addressing (by rows)
+  const Num_T &get(int i) const;
   //! Set element (r,c) of matrix
   void set(int r, int c, Num_T t);
 
@@ -312,7 +307,7 @@ public:
   //! Swap the columns \c c1 and \c c2
   void swap_cols(int c1, int c2);
 
-  //! Set submatrix defined by rows r1,r2 and columns c1,c2 to matrix m
+  //! This function is deprecated. Please use set_submatrix(int r, int c, const Mat<> &m) instead.
   void set_submatrix(int r1, int r2, int c1, int c2, const Mat<Num_T> &m);
   //! Set submatrix defined by upper-left element (r,c) and the size of matrix m to m
   void set_submatrix(int r, int c, const Mat<Num_T> &m);
@@ -358,7 +353,9 @@ public:
   Mat<Num_T>& operator=(const Mat<Num_T> &m);
   //! Set matrix equal to the vector \c v, assuming column vector
   Mat<Num_T>& operator=(const Vec<Num_T> &v);
-  //! Set matrix equal to values in the string
+  //! Set matrix equal to values in the string \c str
+  Mat<Num_T>& operator=(const std::string &str);
+  //! Set matrix equal to values in the string \c str
   Mat<Num_T>& operator=(const char *str);
 
   //! Addition of matrices
@@ -393,18 +390,6 @@ public:
   friend Mat<Num_T> operator*<>(const Mat<Num_T> &m1, const Mat<Num_T> &m2);
   //! Multiplication of matrix \c m and vector \c v (column vector)
   friend Vec<Num_T> operator*<>(const Mat<Num_T> &m, const Vec<Num_T> &v);
-  /*!
-   * \brief Multiplication of vector \c v and matrix \c m with only one row
-   *
-   * This operator multiplies a column vector \c v times matrix \c m that
-   * consists of only one row. Thus, the result of this operator is
-   * exactly the same as the result of the outer product of two vectors,
-   * i.e.: <tt>outer_product(v, m.get_col(0))</tt>.
-   *
-   * \note This operator is deprecated and might be removed or changed in
-   * future releases of IT++.
-   */
-  friend Mat<Num_T> operator*<>(const Vec<Num_T> &v, const Mat<Num_T> &m);
   //! Multiplication of matrix and scalar
   friend Mat<Num_T> operator*<>(const Mat<Num_T> &m, Num_T t);
   //! Multiplication of scalar and matrix
@@ -429,10 +414,13 @@ public:
 
   //! Division by a scalar
   Mat<Num_T>& operator/=(Num_T t);
-  //! Division of matrix with scalar
-  friend Mat<Num_T> operator/<>(const Mat<Num_T> &m, Num_T t);
   //! Element-wise division with the current matrix
   Mat<Num_T>& operator/=(const Mat<Num_T> &m);
+
+  //! Element-wise division by a scalar
+  friend Mat<Num_T> operator/<>(const Mat<Num_T> &m, Num_T t);
+  //! Element-wise division (\c t is the dividend, elements of \c m are divisors)
+  friend Mat<Num_T> operator/<>(Num_T t, const Mat<Num_T> &m);
 
   //! Element wise division of two matrices
   friend Mat<Num_T> elem_div<>(const Mat<Num_T> &m1, const Mat<Num_T> &m2);
@@ -639,7 +627,7 @@ template<class Num_T> inline
 Mat<Num_T>::Mat(const char *str, const Factory &f) :
     datasize(0), no_rows(0), no_cols(0), data(0), factory(f)
 {
-  set(str);
+  set(std::string(str));
 }
 
 template<class Num_T>
@@ -761,8 +749,13 @@ const Num_T& Mat<Num_T>::operator()(int i) const
 template<class Num_T> inline
 const Num_T& Mat<Num_T>::get(int r, int c) const
 {
-  it_assert_debug(in_range(r, c), "Mat<>::get(): Indexing out of range");
-  return data[r+c*no_rows];
+  return (*this)(r, c);
+}
+
+template<class Num_T> inline
+const Num_T& Mat<Num_T>::get(int i) const
+{
+  return (*this)(i);
 }
 
 template<class Num_T> inline
@@ -831,7 +824,7 @@ void Mat<Num_T>::set(const std::string &str)
   set_size(rows, no_cols, true);
 }
 
-template<class Num_T>
+template<class Num_T> inline
 void Mat<Num_T>::set(const char *str)
 {
   set(std::string(str));
@@ -1031,26 +1024,13 @@ void Mat<Num_T>::swap_cols(int c1, int c2)
 }
 
 template<class Num_T>
-void Mat<Num_T>::set_submatrix(int r1, int r2, int c1, int c2,
-                               const Mat<Num_T> &m)
+void Mat<Num_T>::set_submatrix(int r1, int, int c1, int, const Mat<Num_T> &m)
 {
-
-  if (r1 == -1) r1 = no_rows - 1;
-  if (r2 == -1) r2 = no_rows - 1;
-  if (c1 == -1) c1 = no_cols - 1;
-  if (c2 == -1) c2 = no_cols - 1;
-
-  it_assert_debug(r1 >= 0 && r2 >= 0 && r1 < no_rows && r2 < no_rows &&
-                  c1 >= 0 && c2 >= 0 && c1 < no_cols && c2 < no_cols, "Mat<Num_T>::set_submatrix(): index out of range");
-
-  it_assert_debug(r2 >= r1 && c2 >= c1, "Mat<Num_T>::set_submatrix: r2<r1 or c2<c1");
-  it_assert_debug(m.no_rows == r2 - r1 + 1 && m.no_cols == c2 - c1 + 1, "Mat<Num_T>::set_submatrix(): sizes don't match");
-
-  for (int i = 0; i < m.no_cols; i++)
-    copy_vector(m.no_rows, m.data + i*m.no_rows, data + (c1 + i)*no_rows + r1);
+  it_warning("Mat<>::set_submatrix(r1, r2, r3, r4, m): This function is "
+             "deprecated and might be removed from future IT++ releases. "
+             "Please use Mat<>::set_submatrix(r, c, m) function instead.");
+  set_submatrix(r1, c1, m);
 }
-
-
 
 template<class Num_T> inline
 void Mat<Num_T>::set_submatrix(int r, int c, const Mat<Num_T> &m)
@@ -1068,7 +1048,6 @@ void Mat<Num_T>::set_submatrix(int r, int c, const Mat<Num_T> &m)
 template<class Num_T> inline
 void Mat<Num_T>::set_submatrix(int r1, int r2, int c1, int c2, Num_T t)
 {
-
   if (r1 == -1) r1 = no_rows - 1;
   if (r2 == -1) r2 = no_rows - 1;
   if (c1 == -1) c1 = no_cols - 1;
@@ -1076,14 +1055,10 @@ void Mat<Num_T>::set_submatrix(int r1, int r2, int c1, int c2, Num_T t)
   it_assert_debug((r1 >= 0) && (r1 <= r2) && (r2 < no_rows) &&
                   (c1 >= 0) && (c1 <= c2) && (c2 < no_cols),
                   "Mat<>::set_submatrix(): Wrong indexing");
-
-  int i, j, pos, rows = r2 - r1 + 1;
-
-  for (i = c1; i <= c2; i++) {
-    pos = i * no_rows + r1;
-    for (j = 0; j < rows; j++) {
+  for (int i = c1; i <= c2; i++) {
+    int pos = i * no_rows + r1;
+    for (int j = r1; j <= r2; j++)
       data[pos++] = t;
-    }
   }
 }
 
@@ -1297,9 +1272,16 @@ Mat<Num_T>& Mat<Num_T>::operator=(const Vec<Num_T> &v)
 }
 
 template<class Num_T> inline
-Mat<Num_T>& Mat<Num_T>::operator=(const char *str)
+Mat<Num_T>& Mat<Num_T>::operator=(const std::string &str)
 {
   set(str);
+  return *this;
+}
+
+template<class Num_T> inline
+Mat<Num_T>& Mat<Num_T>::operator=(const char *str)
+{
+  set(std::string(str));
   return *this;
 }
 
@@ -1483,10 +1465,9 @@ Mat<Num_T> operator-(const Mat<Num_T> &m)
   return r;
 }
 
-#if defined(HAVE_BLAS)
+
 template<> mat& mat::operator*=(const mat &m);
 template<> cmat& cmat::operator*=(const cmat &m);
-#endif
 
 template<class Num_T>
 Mat<Num_T>& Mat<Num_T>::operator*=(const Mat<Num_T> &m)
@@ -1522,11 +1503,9 @@ Mat<Num_T>& Mat<Num_T>::operator*=(Num_T t)
   return *this;
 }
 
-#if defined(HAVE_BLAS)
+
 template<> mat operator*(const mat &m1, const mat &m2);
 template<> cmat operator*(const cmat &m1, const cmat &m2);
-#endif
-
 
 template<class Num_T>
 Mat<Num_T> operator*(const Mat<Num_T> &m1, const Mat<Num_T> &m2)
@@ -1556,10 +1535,9 @@ Mat<Num_T> operator*(const Mat<Num_T> &m1, const Mat<Num_T> &m2)
   return r;
 }
 
-#if defined(HAVE_BLAS)
+
 template<> vec operator*(const mat &m, const vec &v);
 template<> cvec operator*(const cmat &m, const cvec &v);
-#endif
 
 template<class Num_T>
 Vec<Num_T> operator*(const Mat<Num_T> &m, const Vec<Num_T> &v)
@@ -1579,15 +1557,6 @@ Vec<Num_T> operator*(const Mat<Num_T> &m, const Vec<Num_T> &v)
   }
 
   return r;
-}
-
-template<class Num_T>
-Mat<Num_T> operator*(const Vec<Num_T> &v, const Mat<Num_T> &m)
-{
-  it_assert((m.no_rows == 1), "Mat<Num_T>::operator*(): wrong sizes");
-  it_warning("Mat<Num_T>::operator*(v, m): This operator is deprecated. "
-             "Please use outer_product(v, m.get_row(0)) instead.");
-  return outer_product(v, m.get_row(0));
 }
 
 template<class Num_T>
@@ -1685,17 +1654,6 @@ Mat<Num_T>& Mat<Num_T>::operator/=(Num_T t)
   return *this;
 }
 
-template<class Num_T>
-Mat<Num_T> operator/(const Mat<Num_T> &m, Num_T t)
-{
-  Mat<Num_T> r(m.no_rows, m.no_cols);
-
-  for (int i = 0; i < r.datasize; i++)
-    r.data[i] = m.data[i] / t;
-
-  return r;
-}
-
 template<class Num_T> inline
 Mat<Num_T>& Mat<Num_T>::operator/=(const Mat<Num_T> &m)
 {
@@ -1704,6 +1662,24 @@ Mat<Num_T>& Mat<Num_T>::operator/=(const Mat<Num_T> &m)
   for (int i = 0; i < datasize; i++)
     data[i] /= m.data[i];
   return *this;
+}
+
+template<class Num_T>
+Mat<Num_T> operator/(const Mat<Num_T> &m, Num_T t)
+{
+  Mat<Num_T> r(m.no_rows, m.no_cols);
+  for (int i = 0; i < r.datasize; ++i)
+    r.data[i] = m.data[i] / t;
+  return r;
+}
+
+template<class Num_T>
+Mat<Num_T> operator/(Num_T t, const Mat<Num_T> &m)
+{
+  Mat<Num_T> r(m.no_rows, m.no_cols);
+  for (int i = 0; i < r.datasize; ++i)
+    r.data[i] = t / m.data[i];
+  return r;
 }
 
 template<class Num_T> inline
@@ -1873,7 +1849,7 @@ std::istream &operator>>(std::istream &is, Mat<Num_T> &m)
 // Instantiations
 // ---------------------------------------------------------------------
 
-#ifdef HAVE_EXTERN_TEMPLATE
+#ifndef _MSC_VER
 
 // class instantiations
 
@@ -1933,27 +1909,13 @@ extern template bmat operator-(const bmat &m);
 
 // multiplication operators
 
-#if !defined(HAVE_BLAS)
-extern template mat operator*(const mat &m1, const mat &m2);
-extern template cmat operator*(const cmat &m1, const cmat &m2);
-#endif
 extern template imat operator*(const imat &m1, const imat &m2);
 extern template smat operator*(const smat &m1, const smat &m2);
 extern template bmat operator*(const bmat &m1, const bmat &m2);
 
-#if !defined(HAVE_BLAS)
-extern template vec operator*(const mat &m, const vec &v);
-extern template cvec operator*(const cmat &m, const cvec &v);
-#endif
 extern template ivec operator*(const imat &m, const ivec &v);
 extern template svec operator*(const smat &m, const svec &v);
 extern template bvec operator*(const bmat &m, const bvec &v);
-
-extern template mat operator*(const vec &v, const mat &m);
-extern template cmat operator*(const cvec &v, const cmat &m);
-extern template imat operator*(const ivec &v, const imat &m);
-extern template smat operator*(const svec &v, const smat &m);
-extern template bmat operator*(const bvec &v, const bmat &m);
 
 extern template mat operator*(const mat &m, double t);
 extern template cmat operator*(const cmat &m, std::complex<double> t);
@@ -2026,6 +1988,12 @@ extern template bin elem_mult_sum(const bmat &m1, const bmat &m2);
 
 // division operator
 
+extern template mat operator/(double t, const mat &m);
+extern template cmat operator/(std::complex<double> t, const cmat &m);
+extern template imat operator/(int t, const imat &m);
+extern template smat operator/(short t, const smat &m);
+extern template bmat operator/(bin t, const bmat &m);
+
 extern template mat operator/(const mat &m, double t);
 extern template cmat operator/(const cmat &m, std::complex<double> t);
 extern template imat operator/(const imat &m, int t);
@@ -2081,7 +2049,7 @@ extern template std::istream &operator>>(std::istream &is, imat  &m);
 extern template std::istream &operator>>(std::istream &is, smat  &m);
 extern template std::istream &operator>>(std::istream &is, bmat  &m);
 
-#endif // HAVE_EXTERN_TEMPLATE
+#endif // _MSC_VER
 
 //! \endcond
 

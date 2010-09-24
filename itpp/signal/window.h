@@ -1,28 +1,28 @@
 /*!
  * \file
  * \brief Definitions of window functions
- * \author Tony Ottosson, Tobias Ringstrom, Pal Frenger and Adam Piatyszek
+ * \author Tony Ottosson, Tobias Ringstrom, Pal Frenger, Adam Piatyszek
+ *         and Kumar Appaiah
  *
  * -------------------------------------------------------------------------
  *
- * IT++ - C++ library of mathematical, signal processing, speech processing,
- *        and communications classes and functions
+ * Copyright (C) 1995-2010  (see AUTHORS file for a list of contributors)
  *
- * Copyright (C) 1995-2009  (see AUTHORS file for a list of contributors)
+ * This file is part of IT++ - a C++ library of mathematical, signal
+ * processing, speech processing, and communications classes and functions.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * IT++ is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any
+ * later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * IT++ is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ * You should have received a copy of the GNU General Public License along
+ * with IT++.  If not, see <http://www.gnu.org/licenses/>.
  *
  * -------------------------------------------------------------------------
  */
@@ -107,6 +107,26 @@ The square-root of the Triangle window.
 sqrt_win(n) = sqrt(triang(n))
 */
 vec sqrt_win(int n);
+
+
+/*!
+  \brief Dolph-Chebyshev window
+
+  The length \c n Dolph-Chebyshev window is a vector \f$w\f$ whose \f$i\f$th
+  transform component is given by
+  \f[
+  W[k] = \frac{T_M\left(\beta \cos\left(\frac{\pi k}{M}\right)
+  \right)}{T_M(\beta)},k = 0, 1, 2, \ldots, M - 1
+  \f]
+  where \c T_n(x) is the order \c n Chebyshev polynomial of the first kind.
+
+  \param n length of the Doplh-Chebyshev window
+  \param at attenutation of side lobe (in dB)
+  \return symmetric length \c n Doplh-Chebyshev window
+
+  \author Kumar Appaiah and Adam Piatyszek (code review)
+*/
+vec chebwin(int n, double at);
 //!@}
 
 

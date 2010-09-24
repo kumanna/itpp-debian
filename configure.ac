@@ -1,8 +1,26 @@
 # Process this file with autoconf to produce a configure script
 #-------------------------------------------------------------------
 AC_PREREQ([2.60])
-AC_COPYRIGHT([Copyright (C) 2006-2009  Adam Piatyszek <ediap@users.sourceforge.net>])
-AC_INIT([IT++],[4.0.7],[ediap@users.sourceforge.net],[itpp])
+AC_INIT([IT++],[4.2],[http://sourceforge.net/projects/itpp/forums/forum/115656],[itpp])
+AC_COPYRIGHT([
+Copyright (C) 2006-2010  Adam Piatyszek <ediap@users.sourceforge.net>
+
+This file is part of IT++ - a C++ library of mathematical, signal
+processing, speech processing, and communications classes and functions.
+
+IT++ is free software: you can redistribute it and/or modify it under the
+terms of the GNU General Public License as published by the Free Software
+Foundation, either version 3 of the License, or (at your option) any
+later version.
+
+IT++ is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+details.
+
+You should have received a copy of the GNU General Public License along
+with IT++.  If not, see <http://www.gnu.org/licenses/>.
+])
 AC_CONFIG_HEADER([itpp/config.h])
 AC_CONFIG_SRCDIR([itpp/base/vec.cpp])
 AC_CONFIG_MACRO_DIR([m4])
@@ -10,7 +28,7 @@ AC_CONFIG_AUX_DIR([build-aux])
 AM_INIT_AUTOMAKE([-Wall -Werror])
 
 # Shared library versioning
-GENERIC_LIBRARY_VERSION="6:7:0"
+GENERIC_LIBRARY_VERSION="7:0:0"
 #                        | | |
 #                 +------+ | +---+
 #                 |        |     |
@@ -261,6 +279,7 @@ AC_CHECK_FUNCS([asinh \
   cbrt \
   erf \
   erfc \
+  expm1 \
   finite \
   fpclass \
   isfinite \
@@ -271,21 +290,6 @@ AC_CHECK_FUNCS([asinh \
   log2 \
   rint \
   tgamma])
-
-
-# Check for types
-AC_CHECK_SIZEOF(short)
-AC_CHECK_SIZEOF(unsigned short)
-AC_CHECK_SIZEOF(int)
-AC_CHECK_SIZEOF(unsigned int)
-AC_CHECK_SIZEOF(long)
-AC_CHECK_SIZEOF(unsigned long)
-AC_CHECK_SIZEOF(long long)
-AC_CHECK_SIZEOF(unsigned long long)
-
-
-# Check if C++ compiler supports "extern template"
-AC_CXX_EXTERN_TEMPLATE
 
 
 # If we have a Fortran compiler
@@ -331,9 +335,6 @@ AC_SUBST(EXPLICIT_LIBS)
 AC_SUBST(PRIVATE_LIBS)
 
 
-# Set conditional BUILD_ZDOTUSUB flag for ZDOTU Fortran wrapper
-AM_CONDITIONAL([BUILD_ZDOTUSUB], [test "x$acx_zdotu" = xzdotusub])
-
 # Set conditionals for runing test programs
 AM_CONDITIONAL([RUN_LAPACK_TESTS], [test "x$acx_lapack_ok" = xyes])
 AM_CONDITIONAL([RUN_FFT_TESTS], [test "x$acx_fft_ok" = xyes])
@@ -349,47 +350,6 @@ AH_BOTTOM([
 #if defined(HAVE_CMATH)
 #  include <cmath>
 #endif
-
-/* Solaris uses <ieeefp.h> for declaring isnan() and finite() functions */
-#if defined(HAVE_IEEEFP_H)
-#  include <ieeefp.h>
-#endif
-
-/* Microsoft Visual C++ .NET underscore prefixed functions */
-#if defined(_MSC_VER)
-#  include <cfloat>
-#  define HAVE_FINITE 1
-#  define finite(x) _finite(x)
-#  define HAVE_ISFINITE 1
-#  define isfinite(x) _finite(x)
-#  define HAVE_ISNAN 1
-#  define isnan(x) _isnan(x)
-#  define HAVE_FPCLASS 1
-#  define fpclass(x) _fpclass(x)
-#  define FP_NINF _FPCLASS_NINF
-#  define FP_PINF _FPCLASS_PINF
-#  define HAVE_JN 1
-#  define jn(a, b) _jn(a, b)
-#  define HAVE_YN 1
-#  define yn(a, b) _yn(a, b)
-#  define HAVE_J0 1
-#  define j0(a) _j0(a)
-#  define HAVE_J1 1
-#  define j1(a) _j1(a)
-#endif /* defined(_MSC_VER) */
-
-/* IT++ uses only std::min() and std::max() functions, not macros */
-#ifdef min
-#  undef min
-#endif
-#ifdef max
-#  undef max
-#endif
-
-/* Represent GCC version in a concise form */
-#define GCC_VERSION (__GNUC__ * 10000           \
-                     + __GNUC_MINOR__ * 100     \
-                     + __GNUC_PATCHLEVEL__)
 
 #endif /* #ifndef CONFIG_H */
 ])
@@ -449,7 +409,6 @@ Switches:
   - shared ......... : ${enable_shared}
   - static ......... : ${enable_static}
   - explicit deps .. : ${enable_explicit_deps}
-  - zdotu .......... : ${acx_zdotu}
 
 Documentation tools:
   - doxygen ........ : ${doxygen_ok}

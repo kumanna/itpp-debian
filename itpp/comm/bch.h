@@ -1,28 +1,27 @@
 /*!
  * \file
  * \brief Definition of a BCH encoder/decoder class
- * \author Pal Frenger, Steve Peters and Adam Piatyszek
+ * \author Pal Frenger, Steve Peters, Adam Piatyszek and Stephan Ludwig
  *
  * -------------------------------------------------------------------------
  *
- * IT++ - C++ library of mathematical, signal processing, speech processing,
- *        and communications classes and functions
+ * Copyright (C) 1995-2010  (see AUTHORS file for a list of contributors)
  *
- * Copyright (C) 1995-2009  (see AUTHORS file for a list of contributors)
+ * This file is part of IT++ - a C++ library of mathematical, signal
+ * processing, speech processing, and communications classes and functions.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * IT++ is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any
+ * later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * IT++ is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ * You should have received a copy of the GNU General Public License along
+ * with IT++.  If not, see <http://www.gnu.org/licenses/>.
  *
  * -------------------------------------------------------------------------
  */
@@ -51,7 +50,7 @@ namespace itpp
   digital communication and storage", Appendix E, Prentice-Hall, 1995.
 
   Example:
-  \code BCH bch(31,21,2,"3 5 5 1")
+  \code BCH bch(31,21,2,ivec("3 5 5 1"))
   \endcode
   uses the generator polynomial
   \f$g(x) = x^{10} + x^9 + x^8 + x^6 + x^5 + x^3 + 1\f$, and is capable of
@@ -60,8 +59,27 @@ namespace itpp
 class BCH : public Channel_Code
 {
 public:
-  //! Initialize a (n,k)-code that can correct t errors
-  BCH(int in_n, int in_k, int in_t, ivec genpolynom, bool sys = false);
+  /*!
+   * \brief Initialize a (n,k)-code that can correct t errors
+   *
+   * \note Do not call this constructor with e.g. BCH bch(31, 21, 2, "3 5 5 1")
+   * but with BCH bch(31, 21, 2, ivec("3 5 5 1")) instead. Otherwise the
+   * complier will complain.
+   */
+  BCH(int in_n, int in_k, int in_t, const ivec &genpolynom, bool sys = false);
+
+  /*!
+   * \brief Initialize a (n,k)-code that can correct t errors
+   * \author Stephan Ludwig
+   *
+   * The generator polynomial is automatically generated from the (n, t)
+   * parameters of the BCH code. The constructor generates the generator
+   * polynomial (and determines k) according to the method described in:
+   *
+   * [Wic95] S. B. Wicker, "Error control systems for digital communication
+   * and storage", Prentice-Hall, 1995
+   */
+  BCH(int in_n, int in_t, bool sys = false);
 
   //! Destructor
   virtual ~BCH() { }
@@ -83,8 +101,12 @@ public:
   //! Get the code rate
   virtual double get_rate() const {return static_cast<double>(k) / n; }
 
+  //! Get cardinality of code k
+  virtual int get_k() const {return k; }
+
   //! Dummy assignment operator - MSVC++ warning C4512
   BCH & operator=(const BCH &) { return *this; }
+
 private:
   int n, k, t;
   GFX g;

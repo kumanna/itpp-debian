@@ -5,24 +5,23 @@
  *
  * -------------------------------------------------------------------------
  *
- * IT++ - C++ library of mathematical, signal processing, speech processing,
- *        and communications classes and functions
+ * Copyright (C) 1995-2010  (see AUTHORS file for a list of contributors)
  *
- * Copyright (C) 1995-2009  (see AUTHORS file for a list of contributors)
+ * This file is part of IT++ - a C++ library of mathematical, signal
+ * processing, speech processing, and communications classes and functions.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * IT++ is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any
+ * later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * IT++ is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ * You should have received a copy of the GNU General Public License along
+ * with IT++.  If not, see <http://www.gnu.org/licenses/>.
  *
  * -------------------------------------------------------------------------
  */
@@ -114,8 +113,18 @@ void common_operators(const Vec<T> &a, const Vec<T> &b, T c)
   cout << "a.set_size(a.size()-6, true); a = " << a2 << endl;
 
   cout << "a(5) = " << a(5) << endl;
+  cout << "a.get(5) = " << a.get(5) << endl;
   cout << "a(0,5) = " << a(0, 5) << endl;
+  cout << "a.get(0,5) = " << a.get(0, 5) << endl;
   cout << "a(6,-1) = " << a(6, -1) << endl;
+  ivec idx_list = "0 5 6 7";
+  cout << "idx_list = " << idx_list << endl;
+  cout << "a(idx_list) = " << a(idx_list) << endl;
+  cout << "a.get(idx_list) = " << a.get(idx_list) << endl;
+  bvec bin_list = "1 0 0 0 0 1 1 1 0 0";
+  cout << "bin_list = " << bin_list << endl;
+  cout << "a(bin_list) = " << a(bin_list) << endl;
+  cout << "a.get(bin_list) = " << a.get(bin_list) << endl;
   cout << "a.right(3) = " << a.right(3) << endl;
   cout << "a.left(4) = " << a.left(4) << endl;
   cout << "a.mid(3,2) = " << a.mid(3, 2) << endl;
@@ -126,7 +135,6 @@ void common_operators(const Vec<T> &a, const Vec<T> &b, T c)
        << endl;
   a2 = a;
   cout << "a.split(4) = " << a2.split(4) << ";   a = " << a2 << endl;
-  cout << "a(\"0 5 6 7\") = " << a("0 5 6 7") << endl;
   a2(5) = a(6);
   cout << "a(5) = a(6); a = " << a2 << endl;
 
@@ -144,14 +152,11 @@ void common_operators(const Vec<T> &a, const Vec<T> &b, T c)
   cout << "a.shift_right(b.right(5)) = " << a2 << endl;
 
   a2 = a;
-  a2.set_subvector(4, -1, c);
-  cout << "a.set_subvector(4,-1, c) = " << a2 << endl;
-  a2 = a;
-  a2.set_subvector(4, 6, b(3, 5));
-  cout << "a.set_subvector(4,6, b(3,5)) = " << a2 << endl;
-  a2 = a;
   a2.set_subvector(0, b);
   cout << "a.set_subvector(0, b) = " << a2 << endl;
+  a2 = a;
+  a2.set_subvector(4, b(3, 5));
+  cout << "a.set_subvector(4, b(3,5)) = " << a2 << endl;
   a2 = a;
   a2.replace_mid(4, b(3, 5));
   cout << "a.replace_mid(4, b(3,5)) = " << a2 << endl;
@@ -254,27 +259,20 @@ int main()
 
   // Test vectror initialisation with string
   vec v = "23.3 1232.7 0.111 1.525 0.333";
-  cout << "Testing double vector initialisation with: \"23.3 1232.7 0.111 1.525 0.333\":"
-       << endl << "v = " << v << endl;
+  cout << "Testing double vector initialisation with: "
+    "\"23.3 1232.7 0.111 1.525 0.333\":" << endl << "v = " << v << endl;
 
-  v = "-10.000 :.5:-4.5";
-  cout << "Testing double vector initialisation with: \"-10.000 :.5:-4.5\":"
-       << endl << "v = " << v << endl;
+  v = "-10.000 :.5:-4.5  1.33e+1, -.9, 1e0:1.5:1E+1";
+  cout << "Testing double vector initialisation with: "
+    "\"-10.000 :.5:-4.5  1.33e+1, -.9, 1e0:1.5:1E+1\":" << endl << "v = "
+       << v << endl;
 
-  v = "0:.2: 3";
-  cout << "Testing double vector initialisation with: \"0:.2: 3\":"
-       << endl << "v = " << v << endl;
-
-  v = "1e0:1.5:1E+1";
-  cout << "Testing double vector initialisation with: \"1e0:1.5:1E+1\":"
-       << endl << "v = " << v << endl;
-
-  ivec iv = "0xA : -010";
-  cout << "Testing int vector initialisation with: \"0xA : -010\":"
+  ivec iv = "0xA :-0x1: -010";
+  cout << "Testing int vector initialisation with: \"0xA :-0x1: -010\":"
        << endl << "iv = " << iv << endl;
 
-  iv = "-5:3:9";
-  cout << "Testing int vector initialisation with: \"-5:3:9\":"
+  iv = "-5:3:9, 7, 1:10";
+  cout << "Testing int vector initialisation with: \"-5:3:9, 7, 1:10\":"
        << endl << "iv = " << iv << endl;
 
   svec sv = "3 0xF -10, 0133 0177, 0x0 ";

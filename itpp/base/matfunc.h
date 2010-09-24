@@ -6,24 +6,23 @@
  *
  * -------------------------------------------------------------------------
  *
- * IT++ - C++ library of mathematical, signal processing, speech processing,
- *        and communications classes and functions
+ * Copyright (C) 1995-2010  (see AUTHORS file for a list of contributors)
  *
- * Copyright (C) 1995-2009  (see AUTHORS file for a list of contributors)
+ * This file is part of IT++ - a C++ library of mathematical, signal
+ * processing, speech processing, and communications classes and functions.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * IT++ is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any
+ * later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * IT++ is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ * You should have received a copy of the GNU General Public License along
+ * with IT++.  If not, see <http://www.gnu.org/licenses/>.
  *
  * -------------------------------------------------------------------------
  */
@@ -35,6 +34,7 @@
 #include <itpp/base/math/log_exp.h>
 #include <itpp/base/math/elem_math.h>
 #include <itpp/base/algebra/inv.h>
+#include <itpp/base/algebra/svd.h>
 
 
 namespace itpp
@@ -258,7 +258,7 @@ Vec<T> zero_pad(const Vec<T> &v, int n)
 {
   it_assert(n >= v.size(), "zero_pad() cannot shrink the vector!");
   Vec<T> v2(n);
-  v2.set_subvector(0, v.size() - 1, v);
+  v2.set_subvector(0, v);
   if (n > v.size())
     v2.set_subvector(v.size(), n - 1, T(0));
 
@@ -281,7 +281,7 @@ Mat<T> zero_pad(const Mat<T> &m, int rows, int cols)
   it_assert((rows >= m.rows()) && (cols >= m.cols()),
             "zero_pad() cannot shrink the matrix!");
   Mat<T> m2(rows, cols);
-  m2.set_submatrix(0, m.rows() - 1, 0, m.cols() - 1, m);
+  m2.set_submatrix(0, 0, m);
   if (cols > m.cols()) // Zero
     m2.set_submatrix(0, m.rows() - 1, m.cols(), cols - 1, T(0));
   if (rows > m.rows()) // Zero
@@ -479,6 +479,60 @@ cmat sqrtm(const cmat& A);
  * \author Adam Piatyszek
  */
 cmat sqrtm(const mat& A);
+
+
+/*!
+ * \brief Calculate the rank of matrix \c m
+ * \author Martin Senst
+ *
+ * \param m Input matrix
+ * \param tol Tolerance used for comparing the singular values with zero.
+ *            If negative, it is automatically determined.
+ */
+template<class T>
+int rank(const Mat<T> &m, double tol = -1.0)
+{
+  int rows = m.rows();
+  int cols = m.cols();
+  if ((rows == 0) || (cols == 0))
+    return 0;
+
+  vec sing_val = svd(m);
+
+  if (tol < 0.0) { // Calculate default tolerance
+    tol = eps * sing_val(0) * (rows > cols ? rows : cols);
+  }
+
+  // Count number of nonzero singular values
+  int r = 0;
+  while ((r < sing_val.length()) && (sing_val(r) > tol)) {
+    r++;
+  }
+
+  return r;
+}
+
+//! Specialisation of rank() function
+template<> inline
+int rank(const imat &m, double tol)
+{
+  return rank(to_mat(m), tol);
+}
+
+//! Specialisation of rank() function
+template<> inline
+int rank(const smat &m, double tol)
+{
+  return rank(to_mat(m), tol);
+}
+
+//! Specialisation of rank() function
+template<> inline
+int rank(const bmat &, double)
+{
+  it_error("rank(bmat): Function not implemented for GF(2) algebra");
+  return 0;
+}
 
 //!@}
 
@@ -816,7 +870,7 @@ bool any(const bvec &testvec);
 // Instantiations
 // ----------------------------------------------------------------------
 
-#ifdef HAVE_EXTERN_TEMPLATE
+#ifndef _MSC_VER
 
 extern template int length(const vec &v);
 extern template int length(const cvec &v);
@@ -1013,7 +1067,7 @@ extern template imat repmat(const imat &data, int m, int n);
 extern template smat repmat(const smat &data, int m, int n);
 extern template bmat repmat(const bmat &data, int m, int n);
 
-#endif // HAVE_EXTERN_TEMPLATE
+#endif // _MSC_VER
 
 //! \endcond
 

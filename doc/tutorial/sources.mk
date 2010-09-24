@@ -14,4 +14,8 @@ doc_tutorial_sources = \
 	$(top_srcdir)/doc/tutorial/matlab_itpp.doc \
 	$(top_srcdir)/doc/tutorial/mog.doc \
 	$(top_srcdir)/doc/tutorial/ldpc_gen_codes.doc \
-	$(top_srcdir)/doc/tutorial/ldpc_bersim_awgn.doc
+	$(top_srcdir)/doc/tutorial/ldpc_bersim_awgn.doc \
+	$(top_srcdir)/doc/tutorial/pccc_bersim_awgn.doc \
+	$(top_srcdir)/doc/tutorial/exit_pccc.doc \
+	$(top_srcdir)/doc/tutorial/sccc_bersim_awgn.doc \
+	$(top_srcdir)/doc/tutorial/turbo_equalizer_bersim_multipath.doc

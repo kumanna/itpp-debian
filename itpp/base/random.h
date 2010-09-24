@@ -5,24 +5,23 @@
  *
  * -------------------------------------------------------------------------
  *
- * IT++ - C++ library of mathematical, signal processing, speech processing,
- *        and communications classes and functions
+ * Copyright (C) 1995-2010  (see AUTHORS file for a list of contributors)
  *
- * Copyright (C) 1995-2009  (see AUTHORS file for a list of contributors)
+ * This file is part of IT++ - a C++ library of mathematical, signal
+ * processing, speech processing, and communications classes and functions.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * IT++ is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any
+ * later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * IT++ is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ * You should have received a copy of the GNU General Public License along
+ * with IT++.  If not, see <http://www.gnu.org/licenses/>.
  *
  * -------------------------------------------------------------------------
  */
@@ -30,8 +29,8 @@
 #ifndef RANDOM_H
 #define RANDOM_H
 
+#include <itpp/base/random_dsfmt.h>
 #include <itpp/base/operators.h>
-#include <ctime>
 
 
 namespace itpp
@@ -43,211 +42,26 @@ namespace itpp
  * \brief Base class for random (stochastic) sources.
  * \ingroup randgen
  *
- * The Random_Generator class is based on the MersenneTwister MTRand
- * class code in version 1.0 (15 May 2003) by Richard J. Wagner. See
- * http://www-personal.engin.umich.edu/~wagnerr/MersenneTwister.html
- * for details.
+ * Random_Generator is a typedef of DSFMT class specialization using 19937
+ * generation period.
  *
- * Here are the original release notes copied from the
- * \c MersenneTwister.h file:
- *
- * \verbatim
- * Mersenne Twister random number generator -- a C++ class MTRand Based on
- * code by Makoto Matsumoto, Takuji Nishimura, and Shawn Cokus Richard J.
- * Wagner v1.0 15 May 2003 rjwagner@writeme.com
- *
- * The Mersenne Twister is an algorithm for generating random numbers. It
- * was designed with consideration of the flaws in various other generators.
- * The period, 2^19937-1, and the order of equidistribution, 623 dimensions,
- * are far greater. The generator is also fast; it avoids multiplication and
- * division, and it benefits from caches and pipelines. For more information
- * see the inventors' web page at
- * http://www.math.keio.ac.jp/~matumoto/emt.html
-
- * Reference:
- * M. Matsumoto and T. Nishimura, "Mersenne Twister: A 623-Dimensionally
- * Equidistributed Uniform Pseudo-Random Number Generator", ACM Transactions
- * on Modeling and Computer Simulation, Vol. 8, No. 1, January 1998, pp.
- * 3-30.
- *
- * Copyright (C) 1997 - 2002, Makoto Matsumoto and Takuji Nishimura,
- * Copyright (C) 2000 - 2003, Richard J. Wagner
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions
- * are met:
- *
- *   1. Redistributions of source code must retain the above copyright
- *      notice, this list of conditions and the following disclaimer.
- *
- *   2. Redistributions in binary form must reproduce the above copyright
- *      notice, this list of conditions and the following disclaimer in the
- *      documentation and/or other materials provided with the distribution.
- *
- *   3. The names of its contributors may not be used to endorse or promote
- *      products derived from this software without specific prior written
- *      permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
- * IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
- * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
- * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
- * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
- * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
- * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
- * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
- * LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
- * NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- *
- * The original code included the following notice:
- *
- *     When you use this, send an email to: matumoto@math.keio.ac.jp with an
- *     appropriate reference to your work.
- *
- * It would be nice to CC: rjwagner@writeme.com and
- * Cokus@math.washington.edu when you write.
- * \endverbatim
+ * \sa DSFMT
  */
-class Random_Generator
-{
-public:
-  //! Construct a new Random_Generator.
-  Random_Generator() { if (!initialized) reset(4357U); }
-  //! Construct Random_Generator object using \c seed
-  Random_Generator(unsigned int seed) { reset(seed); }
-  //! Set the seed to a semi-random value (based on hashed time and clock).
-  void randomize() { reset(hash(time(0), clock())); }
-  //! Reset the source. The same sequance will be generated as the last time.
-  void reset() { initialize(last_seed); reload(); initialized = true; }
-  //! Reset the source after setting the seed to seed.
-  void reset(unsigned int seed) { last_seed = seed; reset(); }
-
-  //! Return a uniformly distributed [0,2^32-1] integer.
-  unsigned int random_int() {
-    if (left == 0) reload();
-    --left;
-
-    register unsigned int s1;
-    s1 = *pNext++;
-    s1 ^= (s1 >> 11);
-    s1 ^= (s1 <<  7) & 0x9d2c5680U;
-    s1 ^= (s1 << 15) & 0xefc60000U;
-    return (s1 ^(s1 >> 18));
-  }
-
-  //! Return a uniformly distributed (0,1) value.
-  double random_01() { return (random_int() + 0.5) * (1.0 / 4294967296.0); }
-  //! Return a uniformly distributed [0,1) value.
-  double random_01_lclosed() { return random_int() * (1.0 / 4294967296.0); }
-  //! Return a uniformly distributed [0,1] value.
-  double random_01_closed() { return random_int() * (1.0 / 4294967295.0); }
-  //! Return a uniformly distributed [0,1) value in 53-bit resolution.
-  double random53_01_lclosed() {
-    return ((random_int() >> 5) * 67108864.0 + (random_int() >> 6))
-           * (1.0 / 9007199254740992.0); // by Isaku Wada
-  }
-
-  //! Save current full state of generator in memory
-  void get_state(ivec &out_state);
-  //! Resume the state saved in memory. Clears memory.
-  void set_state(ivec &new_state);
-
-private:
-  //! initialization flag
-  static bool initialized;
-  //! seed used for initialisation
-  unsigned int last_seed;
-  //! internal state
-  static unsigned int state[624];
-  //! next value to get from state
-  static unsigned int *pNext;
-  //! number of values left before reload needed
-  static int left;
-
-  /*!
-   * \brief Initialize generator state with seed.
-   * See Knuth TAOCP Vol 2, 3rd Ed, p.106 for multiplier.
-   * \note In previous versions, most significant bits (MSBs) of the seed
-   * affect only MSBs of the state array. Modified 9 Jan 2002 by Makoto
-   * Matsumoto.
-   */
-  void initialize(unsigned int seed) {
-    register unsigned int *s = state;
-    register unsigned int *r = state;
-    register int i = 1;
-    *s++ = seed & 0xffffffffU;
-    for (; i < 624; ++i) {
-      *s++ = (1812433253U * (*r ^(*r >> 30)) + i) & 0xffffffffU;
-      r++;
-    }
-  }
-
-  /*!
-   * \brief Generate N new values in state.
-   * Made clearer and faster by Matthew Bellew (matthew.bellew@home.com)
-   */
-  void reload() {
-    register unsigned int *p = state;
-    register int i;
-    for (i = 624 - 397; i--; ++p)
-      *p = twist(p[397], p[0], p[1]);
-    for (i = 397; --i; ++p)
-      *p = twist(p[397-624], p[0], p[1]);
-    *p = twist(p[397-624], p[0], state[0]);
-
-    left = 624, pNext = state;
-  }
-  //!
-  unsigned int hiBit(const unsigned int& u) const { return u & 0x80000000U; }
-  //!
-  unsigned int loBit(const unsigned int& u) const { return u & 0x00000001U; }
-  //!
-  unsigned int loBits(const unsigned int& u) const { return u & 0x7fffffffU; }
-  //!
-  unsigned int mixBits(const unsigned int& u, const unsigned int& v) const
-  { return hiBit(u) | loBits(v); }
-
-  /*
-   * ----------------------------------------------------------------------
-   * --- ediap - 2007/01/17 ---
-   * ----------------------------------------------------------------------
-   * Wagners's implementation of the twist() function was as follows:
-   *  { return m ^ (mixBits(s0,s1)>>1) ^ (-loBit(s1) & 0x9908b0dfU); }
-   * However, this code caused a warning/error under MSVC++, because
-   * unsigned value loBit(s1) is being negated with `-' (c.f. bug report
-   * [1635988]). I changed this to the same implementation as is used in
-   * original C sources of Mersenne Twister RNG:
-   *  #define MATRIX_A 0x9908b0dfUL
-   *  #define UMASK 0x80000000UL
-   *  #define LMASK 0x7fffffffUL
-   *  #define MIXBITS(u,v) ( ((u) & UMASK) | ((v) & LMASK) )
-   *  #define TWIST(u,v) ((MIXBITS(u,v) >> 1) ^ ((v)&1UL ? MATRIX_A : 0UL))
-   * ----------------------------------------------------------------------
-   */
-  //!
-  unsigned int twist(const unsigned int& m, const unsigned int& s0,
-                     const unsigned int& s1) const
-  { return m ^(mixBits(s0, s1) >> 1) ^(loBit(s1) ? 0x9908b0dfU : 0U); }
-  //!
-  unsigned int hash(time_t t, clock_t c);
-};
-
+typedef DSFMT_19937_RNG Random_Generator;
 
 //! \addtogroup randgen
 //!@{
 
 //! Set the seed of the Global Random Number Generator
 void RNG_reset(unsigned int seed);
-//! Set the seed of the Global Random Number Generator to the same as last reset/init
+//! Set the seed of the Global Random Number Generator to the same as last time
 void RNG_reset();
-//! Set a random seed for the Global Random Number Generator.
+//! Set a random seed for the Global Random Number Generator
 void RNG_randomize();
-//! Save current full state of generator in memory
+//! Save the current state of the generator in a vector
 void RNG_get_state(ivec &state);
-//! Resume the state saved in memory
-void RNG_set_state(ivec &state);
+//! Resume the state of the generator from previously saved vector
+void RNG_set_state(const ivec &state);
 //!@}
 
 /*!
@@ -263,7 +77,8 @@ public:
   Bernoulli_RNG() { p = 0.5; }
   //! set the probability
   void setup(double prob) {
-    it_assert(prob >= 0.0 && prob <= 1.0, "The bernoulli source probability must be between 0 and 1");
+    it_assert(prob >= 0.0 && prob <= 1.0, "The Bernoulli source probability "
+              "must be between 0 and 1");
     p = prob;
   }
   //! return the probability
@@ -275,7 +90,7 @@ public:
   //! Get a sample matrix.
   bmat operator()(int h, int w) { bmat temp(h, w); sample_matrix(h, w, temp); return temp; }
   //! Get a sample
-  bin sample() { return bin(RNG.random_01() < p ? 1 : 0); }
+  bin sample() { return RNG.genrand_close_open() < p ? bin(1) : bin(0); }
   //! Get a sample vector.
   void sample_vector(int size, bvec &out) {
     out.set_size(size, false);
@@ -327,8 +142,9 @@ public:
   //! Get a sample matrix.
   imat operator()(int h, int w);
   //! Return a single value from this random generator
-  int sample() { return (floor_i(RNG.random_01() * (hi - lo + 1)) + lo); }
-protected:
+  int sample() {
+    return floor_i(RNG.genrand_close_open() * (hi - lo + 1)) + lo;
+  }
 private:
   //!
   int lo;
@@ -369,14 +185,14 @@ public:
     temp += lo_bound;
     return temp;
   }
-  //! Get a Uniformly distributed (0,1) sample
-  double sample() {  return RNG.random_01(); }
-  //! Get a Uniformly distributed (0,1) vector
+  //! Get a Uniformly distributed [0,1) sample
+  double sample() {  return RNG.genrand_close_open(); }
+  //! Get a Uniformly distributed [0,1) vector
   void sample_vector(int size, vec &out) {
     out.set_size(size, false);
     for (int i = 0; i < size; i++) out(i) = sample();
   }
-  //! Get a Uniformly distributed (0,1) matrix
+  //! Get a Uniformly distributed [0,1) matrix
   void sample_matrix(int rows, int cols, mat &out) {
     out.set_size(rows, cols, false);
     for (int i = 0; i < rows*cols; i++) out(i) = sample();
@@ -408,13 +224,9 @@ public:
   vec operator()(int n);
   //! Get a sample matrix.
   mat operator()(int h, int w);
-protected:
 private:
-  //!
-  double sample() {  return (-std::log(RNG.random_01()) / l); }
-  //!
+  double sample() { return (-std::log(RNG.genrand_open_close()) / l); }
   double l;
-  //!
   Random_Generator RNG;
 };
 
@@ -487,6 +299,44 @@ private:
 };
 
 /*!
+ * \brief Gamma distribution
+ * \ingroup randgen
+ *
+ * Generate samples from Gamma(alpha,beta) density, according to the
+ * following equation:
+ * \f[ x \sim \Gamma(\alpha,\beta) =
+ * \frac{\beta^\alpha}{\Gamma(\alpha)}x^{\alpha-1} \exp(-\beta x) \f]
+ *
+ * For \f$\alpha=1\f$ the Gamma distribution is equivalent to the
+ * Exponential distribution.
+ *
+ * \note The implementation of the sample() function was adapted from the
+ * R statistical language.
+ * \author Vasek Smidl
+ */
+class Gamma_RNG
+{
+public:
+  //! Constructor, which sets alpha (a) and beta (b)
+  Gamma_RNG(double a = 1.0, double b = 1.0): alpha(a), beta(b) {}
+  //! Set alpha and beta
+  void setup(double a, double b) { alpha = a; beta = b; }
+  //! Get one sample
+  double operator()() { return sample(); }
+  //! Get a sample vector
+  vec operator()(int n);
+  //! Get a sample matrix
+  mat operator()(int r, int c);
+  //! Get a sample
+  double sample();
+private:
+  double alpha;
+  double beta;
+  Random_Generator RNG;
+  Normal_RNG NRNG;
+};
+
+/*!
   \brief Laplacian distribution
   \ingroup randgen
 */
@@ -507,7 +357,7 @@ public:
   mat operator()(int h, int w);
   //! Returns a single sample
   double sample() {
-    double u = RNG.random_01();
+    double u = RNG.genrand_open_open();
     double l = sqrt_12var;
     if (u < 0.5)
       l *= std::log(2.0 * u);
@@ -617,8 +467,8 @@ private:
   double sample() {
     mem *= r;
     if (odd) {
-      r1 = m_2pi * RNG.random_01();
-      r2 = std::sqrt(factr * std::log(RNG.random_01()));
+      r1 = m_2pi * RNG.genrand_open_close();
+      r2 = std::sqrt(factr * std::log(RNG.genrand_open_close()));
       mem += r2 * std::cos(r1);
     }
     else {
@@ -665,7 +515,7 @@ public:
   mat operator()(int h, int w);
 private:
   double sample() {
-    return (std::pow(-std::log(RNG.random_01()), 1.0 / b) / l);
+    return (std::pow(-std::log(RNG.genrand_open_close()), 1.0 / b) / l);
   }
   double l, b;
   double mean, var;

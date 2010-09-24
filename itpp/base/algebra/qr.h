@@ -1,28 +1,27 @@
 /*!
  * \file
  * \brief Definitions of QR factorisation functions
- * \author Tony Ottosson
+ * \author Tony Ottosson, Simon Wood, Adam Piatyszek and Vasek Smidl
  *
  * -------------------------------------------------------------------------
  *
- * IT++ - C++ library of mathematical, signal processing, speech processing,
- *        and communications classes and functions
+ * Copyright (C) 1995-2010  (see AUTHORS file for a list of contributors)
  *
- * Copyright (C) 1995-2009  (see AUTHORS file for a list of contributors)
+ * This file is part of IT++ - a C++ library of mathematical, signal
+ * processing, speech processing, and communications classes and functions.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * IT++ is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any
+ * later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * IT++ is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ * You should have received a copy of the GNU General Public License along
+ * with IT++.  If not, see <http://www.gnu.org/licenses/>.
  *
  * -------------------------------------------------------------------------
  */
@@ -56,6 +55,22 @@ namespace itpp
 bool qr(const mat &A, mat &Q, mat &R);
 
 /*!
+ * \brief QR factorisation of real matrix with suppressed evaluation of Q
+ *
+ * For certain type of applications only the \f$\mathbf{R}\f$ matrix of full
+ * QR factorization of the real matrix \f$\mathbf{A}=\mathbf{Q}\mathbf{R}\f$
+ * is needed. These situations arise typically in designs of square-root
+ * algorithms where it is required that
+ * \f$\mathbf{A}^{T}\mathbf{A}=\mathbf{R}^{T}\mathbf{R}\f$. In such cases,
+ * evaluation of \f$\mathbf{Q}\f$ can be skipped.
+ *
+ * Modification of qr(A,Q,R).
+ *
+ * \author Vasek Smidl
+ */
+bool qr(const mat &A, mat &R);
+
+/*!
   \brief QR factorisation of real matrix with pivoting
 
   The QR factorization of the real matrix \f$\mathbf{A}\f$ of size \f$m \times n\f$ is given
@@ -85,6 +100,22 @@ bool qr(const mat &A, mat &Q, mat &R, bmat &P);
   Uses the LAPACK routines ZGEQRF and ZUNGQR.
 */
 bool qr(const cmat &A, cmat &Q, cmat &R);
+
+/*!
+ * \brief QR factorisation of complex matrix with suppressed evaluation of Q
+ *
+ * For certain type of applications only the \f$\mathbf{R}\f$ matrix of full
+ * QR factorization of the complex matrix
+ * \f$\mathbf{A}=\mathbf{Q}\mathbf{R}\f$ is needed. These situations arise
+ * typically in designs of square-root algorithms where it is required that
+ * \f$\mathbf{A}^{H}\mathbf{A}=\mathbf{R}^{H}\mathbf{R}\f$. In such cases,
+ * evaluation of \f$\mathbf{Q}\f$ can be skipped.
+ *
+ * Modification of qr(A,Q,R).
+ *
+ * \author Vasek Smidl
+ */
+bool qr(const cmat &A, cmat &R);
 
 /*!
   \brief QR factorisation of a complex matrix with pivoting

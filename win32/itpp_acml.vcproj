@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="windows-1250"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="8,00"
+	Version="9.00"
 	Name="itpp_acml"
 	ProjectGUID="{C069ECD3-26E8-437C-8B20-3A5D68B22F2A}"
+	RootNamespace="itpp_acml"
 	Keyword="Win32Proj"
+	TargetFrameworkVersion="131072"
 	>
 	<Platforms>
 		<Platform
@@ -172,6 +174,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\itpp\base\copy_vector.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\itpp\base\fastmath.cpp"
 					>
 				</File>
@@ -185,6 +191,10 @@
 				</File>
 				<File
 					RelativePath="..\itpp\base\itassert.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\itpp\base\itcompat.cpp"
 					>
 				</File>
 				<File
@@ -343,7 +353,15 @@
 						>
 					</File>
 					<File
+						RelativePath="..\itpp\base\math\log_exp.cpp"
+						>
+					</File>
+					<File
 						RelativePath="..\itpp\base\math\misc.cpp"
+						>
+					</File>
+					<File
+						RelativePath="..\itpp\base\math\trig_hyp.cpp"
 						>
 					</File>
 				</Filter>
@@ -377,6 +395,10 @@
 				</File>
 				<File
 					RelativePath="..\itpp\comm\error_counters.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\itpp\comm\exit.cpp"
 					>
 				</File>
 				<File
@@ -432,7 +454,31 @@
 					>
 				</File>
 				<File
+					RelativePath="..\itpp\comm\siso_dem.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\itpp\comm\siso_eq.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\itpp\comm\siso_mud.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\itpp\comm\siso_nsc.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\itpp\comm\siso_rsc.cpp"
+					>
+				</File>
+				<File
 					RelativePath="..\itpp\comm\spread.cpp"
+					>
+				</File>
+				<File
+					RelativePath="..\itpp\comm\stc.cpp"
 					>
 				</File>
 				<File
@@ -710,6 +756,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\itpp\base\itcompat.h"
+					>
+				</File>
+				<File
 					RelativePath="..\itpp\base\itfile.h"
 					>
 				</File>
@@ -886,6 +936,10 @@
 					>
 				</File>
 				<File
+					RelativePath="..\itpp\comm\exit.h"
+					>
+				</File>
+				<File
 					RelativePath="..\itpp\comm\galois.h"
 					>
 				</File>
@@ -938,7 +992,15 @@
 					>
 				</File>
 				<File
+					RelativePath="..\itpp\comm\siso.h"
+					>
+				</File>
+				<File
 					RelativePath="..\itpp\comm\spread.h"
+					>
+				</File>
+				<File
+					RelativePath="..\itpp\comm\stc.h"
 					>
 				</File>
 				<File

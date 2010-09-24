@@ -1,34 +1,40 @@
 /*!
  * \file
  * \brief Implementation of window functions
- * \author Tony Ottosson, Tobias Ringstrom, Pal Frenger and Adam Piatyszek
+ * \author Tony Ottosson, Tobias Ringstrom, Pal Frenger, Adam Piatyszek
+ *         and Kumar Appaiah
  *
  * -------------------------------------------------------------------------
  *
- * IT++ - C++ library of mathematical, signal processing, speech processing,
- *        and communications classes and functions
+ * Copyright (C) 1995-2010  (see AUTHORS file for a list of contributors)
  *
- * Copyright (C) 1995-2009  (see AUTHORS file for a list of contributors)
+ * This file is part of IT++ - a C++ library of mathematical, signal
+ * processing, speech processing, and communications classes and functions.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * IT++ is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any
+ * later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * IT++ is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ * You should have received a copy of the GNU General Public License along
+ * with IT++.  If not, see <http://www.gnu.org/licenses/>.
  *
  * -------------------------------------------------------------------------
  */
 
+#include <itpp/base/itcompat.h>
 #include <itpp/signal/window.h>
-
+#include <itpp/signal/poly.h>
+#include <itpp/base/specmat.h>
+#include <itpp/base/converters.h>
+#include <itpp/base/math/trig_hyp.h>
+#include <itpp/signal/transforms.h>
+#include <itpp/base/operators.h>
 
 namespace itpp
 {
@@ -110,6 +116,38 @@ vec sqrt_win(int n)
   return t;
 }
 
+vec chebwin(int n, double at)
+{
+  it_assert((n > 0), "chebwin(): need a positive order n!");
+
+  if (n == 1) {
+    return vec("1");
+  }
+
+  at = at < 0 ? -at : at;
+  // compute the parameter beta
+  double beta = std::cosh(::acosh(pow10(at / 20)) / (n - 1));
+  vec k = (pi / n) * linspace(0, n - 1, n);
+  vec cos_k = cos(k);
+  // find the window's DFT coefficients
+  vec p = cheb(n - 1, beta * cos_k);
+
+  vec w(n); // the window vector
+  // Appropriate IDFT and filling up depending on even/odd n
+  if (is_even(n)) {
+    w = ifft_real(to_cvec(elem_mult(p, cos_k), elem_mult(p, -sin(k))));
+    int half_length = n / 2 + 1;
+    w = w.left(half_length) / w(1);
+    w = concat(reverse(w), w.right(n - half_length));
+  }
+  else {
+    w = ifft_real(to_cvec(p));
+    int half_length = (n + 1) / 2;
+    w = w.left(half_length) / w(0);
+    w = concat(reverse(w), w.right(n - half_length));
+  }
+  return w;
+}
 
 
 } // namespace itpp

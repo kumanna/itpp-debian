@@ -1,9 +1,12 @@
+noinst_h_base_sources = \
+	$(top_srcdir)/itpp/base/blas.h \
+	$(top_srcdir)/itpp/base/itcompat.h
+
 h_base_sources = \
 	$(top_srcdir)/itpp/base/array.h \
 	$(top_srcdir)/itpp/base/bessel.h \
 	$(top_srcdir)/itpp/base/binary.h \
 	$(top_srcdir)/itpp/base/binfile.h \
-	$(top_srcdir)/itpp/base/blas.h \
 	$(top_srcdir)/itpp/base/circular_buffer.h \
 	$(top_srcdir)/itpp/base/converters.h \
 	$(top_srcdir)/itpp/base/copy_vector.h \
@@ -19,6 +22,7 @@ h_base_sources = \
 	$(top_srcdir)/itpp/base/operators.h \
 	$(top_srcdir)/itpp/base/parser.h \
 	$(top_srcdir)/itpp/base/random.h \
+	$(top_srcdir)/itpp/base/random_dsfmt.h \
 	$(top_srcdir)/itpp/base/smat.h \
 	$(top_srcdir)/itpp/base/sort.h \
 	$(top_srcdir)/itpp/base/specmat.h \
@@ -32,10 +36,12 @@ cpp_base_sources = \
 	$(top_srcdir)/itpp/base/binary.cpp \
 	$(top_srcdir)/itpp/base/binfile.cpp \
 	$(top_srcdir)/itpp/base/converters.cpp \
+	$(top_srcdir)/itpp/base/copy_vector.cpp \
 	$(top_srcdir)/itpp/base/fastmath.cpp \
 	$(top_srcdir)/itpp/base/gf2mat.cpp \
 	$(top_srcdir)/itpp/base/help_functions.cpp \
 	$(top_srcdir)/itpp/base/itassert.cpp \
+	$(top_srcdir)/itpp/base/itcompat.cpp \
 	$(top_srcdir)/itpp/base/itfile.cpp \
 	$(top_srcdir)/itpp/base/mat.cpp \
 	$(top_srcdir)/itpp/base/matfunc.cpp \
@@ -48,5 +54,3 @@ cpp_base_sources = \
 	$(top_srcdir)/itpp/base/timing.cpp \
 	$(top_srcdir)/itpp/base/vec.cpp
 
-f_base_sources = \
-	$(top_srcdir)/itpp/base/zdotusub.f

@@ -52,6 +52,13 @@
 
 2007-12-13  Adam Piatyszek  <ediap@users.sourceforge.net>
 
+	* doc/Makefile.am, doc/tutorial/src/Makefile.am: Build tutorial
+	examples when doing "make check"
+
+	Compile and link time incompatibilities between the library
+	interfaces and tutorial example programs should now be detected
+	during the standard check procedure.
+
 	* doc/local/installation.doc, doc/local/linking.doc: Documentation
 	updated to reflect changes in MSVC++ project files
 
@@ -84,15 +91,30 @@
 
 	* m4/acx_blas.m4: Improve autodetection of ACML libraries
 
+	* itpp/base/algebra/qr.cpp: Fix incorrect precalculation of the
+	workspace size for QR decomp.
+
+	The size of the workspace memory is now checked for each of
+	[dz]gerf_, [dz]orgqr_, [dz]geqp3_ and [dz]ungqr_ funcitions
+	separately, because they operate on different matrices. Besides,
+	R is now correctly initialised with A before quering for the
+	workspace size.
+
+	* itpp/base/algebra/svd.cpp: Improvements in calculation of the
+	SVD workspace size
+
+	Before resizing the current memory allocated for SVD workspace,
+	check if the workspace query was sucessful. If not, use the
+	default, but not optimum workspace size.
+
+2007-12-09  Simon Wood  <sgwoodjr@users.sourceforge.net>
+
 	* itpp/base/algebra/qr.cpp, itpp/base/algebra/svd.cpp: Added a
 	workspace query for each of the SVD and QR routines
 
 	The query returns the optimal value of the memory workspace size
 	used in SVD and QR decompositions. Setting the workspace size to
 	an optimum value greatly improves the speed of calculations.
-
-	Thanks to Simon Wood for initial implementation of these
-	improvements.
 
 2007-12-08  Erik G. Larsson  <erik_g_larsson@users.sourceforge.net>
 
@@ -140,6 +162,8 @@
 	the "./libtool --config" command. This information is already
 	available in a cached variable "lt_cv_deplibs_check_method"
 	provided by the AC_PROG_LIBTOOL macro.
+
+2007-12-05  Adam Piatyszek  <ediap@users.sourceforge.net>
 
 	* configure.ac.in: Use "host_os" instead of "host" to simplify
 	case statements
@@ -210,6 +234,24 @@
 	from the original Cephes Math Library, so all bessel functions
 	in IT++ now use the proper gamma implementations.
 
+2007-12-04  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* itpp/optim/newton_search.cpp: Initialize variables with zeros to
+	suppress compiler warnings
+
+	* itpp/base/math/misc.h: Add missing right parenthesis in isnan()
+	definition
+
+2007-12-03  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* configure.ac.in, itpp/base/math/misc.h, itpp/config_msvc.h: Fix
+	improper use of HAVE_DECL_XXX definitions
+
+	HAVE_DECL_XXX are always defined as 0 or 1, so one can not simply
+	check if these names are defined.
+
+2007-11-30  Adam Piatyszek  <ediap@users.sourceforge.net>
+
 	* configure.ac.in, m4/acx_blas.m4, m4/acx_lapack.m4: Do not
 	require Fortran compiler for BLAS/LAPACK linking
 
@@ -217,6 +259,27 @@
 	compiler is available. For instance, BLAS/LAPACK routines from MKL
 	can be used without additional Fortran libraries. This patch
 	changes IT++ configuration scripts to make this possible.
+
+	* m4/acx_blas.m4: Add support for MKL 10
+
+	MKL 10 requires explicit linking to -lguide and -lpthread
+	libraries. With this patch MKL 8.1.1 or newer versions should be
+	automatically detected on both 32- and 64-bit (em64t) Linux
+	systems.
+
+2007-11-26  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* configure.ac.in, itpp/config_msvc.h: Get rid of "min" and "max"
+	macro definitions
+
+	MSVC++ compiler defines these two macros and they might clash with
+	our proper C++ code using std::min() and std::max() functions
+	only. This patch removes such macros conditionally in the
+	generated config.h and config_msvc.h header files.
+
+	* m4/ax_func_zdotu.m4: Cosmetic changes in printed messages
+
+2007-11-23  Adam Piatyszek  <ediap@users.sourceforge.net>
 
 	* configure.ac.in, itpp/base/blas.h, itpp/base/vec.h,
 	itpp/config_msvc.h, m4/acx_blas.m4, m4/ax_func_zdotu.m4: Detect
@@ -237,41 +300,6 @@
 
 	For more information on this issue, please have a look at this
 	bug report: http://gcc.gnu.org/bugzilla/show_bug.cgi?id=20178
-
-2007-12-04  Adam Piatyszek  <ediap@users.sourceforge.net>
-
-	* itpp/optim/newton_search.cpp: Initialize variables with zeros to
-	suppress compiler warnings
-
-	* itpp/base/math/misc.h: Add missing right parenthesis in isnan()
-	definition
-
-2007-12-03  Adam Piatyszek  <ediap@users.sourceforge.net>
-
-	* configure.ac.in, itpp/base/math/misc.h, itpp/config_msvc.h: Fix
-	improper use of HAVE_DECL_XXX definitions
-
-	HAVE_DECL_XXX are always defined as 0 or 1, so one can not simply
-	check if these names are defined.
-
-2007-11-30  Adam Piatyszek  <ediap@users.sourceforge.net>
-
-	* m4/acx_blas.m4: Add support for MKL 10
-
-	MKL 10 requires explicit linking to -lguide and -lpthread
-	libraries. With this patch MKL 8.1.1 or newer versions should be
-	automatically detected on both 32- and 64-bit (em64t) Linux
-	systems.
-
-	* configure.ac.in, itpp/config_msvc.h: Get rid of "min" and "max"
-	macro definitions
-
-	MSVC++ compiler defines these two macros and they might clash with
-	our proper C++ code using std::min() and std::max() functions
-	only. This patch removes such macros conditionally in the
-	generated config.h and config_msvc.h header files.
-
-2007-11-23  Adam Piatyszek  <ediap@users.sourceforge.net>
 
 	* itpp/base/factory.h: Add explicit constructor definition in a
 	default Factory class
@@ -361,6 +389,17 @@
 
 2007-11-12  Adam Piatyszek  <ediap@users.sourceforge.net>
 
+	* itpp/base/binfile.h: Fixed invalid cast from bool to enum
+
+	The Apple's g++3.3 compiler from Mac Developer Tools v1.2 reports
+	an error on a static cast from bool to enum. This patch changes
+	the problematic code, so it should be accepted by older compilers.
+
+2007-11-02  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* Makefile.am, configure.ac.in: Save configuration summary to
+	config_summary.log file
+
 	* configure.ac.in, itpp-config.in, itpp.pc.in: Improved
 	itpp-config and itpp.pc scripts
 
@@ -371,17 +410,6 @@
 	--libs" without adding an extra --static switch. Besides,
 	"itpp-config --libs" should now return exactly the same libraries
 	as "pkg-config itpp --libs" on Mac OS X.
-
-	* itpp/base/binfile.h: Fixed invalid cast from bool to enum
-
-	The Apple's g++3.3 compiler from Mac Developer Tools v1.2 reports
-	an error on a static cast from bool to enum. This patch changes
-	the problematic code, so it should be accepted by older compilers.
-
-	* Makefile.am, configure.ac.in: Save configuration summary to
-	config_summary.log file
-
-2007-11-02  Adam Piatyszek  <ediap@users.sourceforge.net>
 
 	* doc/tutorial/src/mimoconv.cpp: Updated MIMO with convolutional
 	coding example program
@@ -432,6 +460,12 @@
 	* itpp/base/algebra/svd.h, itpp/base/matfunc.h: Documentation of
 	diag() and svd() updated
 
+	* itpp/base/matfunc.h: Fixed a bug in rank() function
+
+	The order of checks in a while loop was wrong and it caused
+	assertion when accessing a non-existing element in a vector of
+	singular values. This patch fixes this problem.
+
 2007-10-18  Adam Piatyszek  <ediap@users.sourceforge.net>
 
 	* doc/doxygen_html.cfg.in: Reset TAB_SIZE to 8 spaces
@@ -460,8 +494,6 @@
 	* IT++ 4.0.0 released (SVN tag: release-4-0-0)
 
 	* NEWS: Updated for 4.0.0 stable release
-
-	* configure.ac: Version number updated
 
 2007-10-12  Adam Piatyszek  <ediap@users.sourceforge.net>
 
@@ -542,6 +574,13 @@
 	default. Installation manual updated accordingly. Thanks to
 	Guenter Dannoritzer for reporting this problem.
 
+	* itpp/base/matfunc.h: Disabled incorrect specialisation of rank()
+	function
+
+	The rank() function specialisation for binary GF(2) matrices
+	returned incorrect results. Now it is disabled - the
+	specialisation results in an error message.
+
 ------------------------------------------------------------------------------
 
 2007-10-06  Adam Piatyszek  <ediap@users.sourceforge.net>
@@ -551,6 +590,19 @@
 	* NEWS: Updated to reflect recent changes
 
 2007-10-05  Adam Piatyszek  <ediap@users.sourceforge.net>
+
+	* configure.ac: Changed version number of the trunk sources
+
+	The version number of SVN trunk sources is now of the form:
+	"major.minor-dev", e.g. "4.1-dev".
+
+	* itpp/base/matfunc.h, tests/matfunc_test.cpp,
+	tests/matfunc_test.ref: Added templated rank() function
+
+	The rank() function calculates the rank of a matrix by counting
+	the number of non-zero singular values. LAPACK's SVD function is
+	thus required by this function. Thanks to Martin Senst for
+	submitting the patch.
 
 	* INSTALL, doc/local/installation.doc: Installation manual updated
 	to reflect recent changes
@@ -616,7 +668,7 @@
 	the zdotusub_ Fortran wrapper, since it requires an external
 	zdotu_ function to exist.
 
-==============================================================================
+------------------------------------------------------------------------------
 
 2007-09-28  Adam Piatyszek  <ediap@users.sourceforge.net>
 
@@ -738,6 +790,15 @@
 	"--without-{blas,lapack,fft}" configure switch is intentionally
 	used.
 
+	* itpp/base/factory.cpp, itpp/base/factory.h,
+	itpp/fixed/fix_factory.cpp: Cosmetic changes in memory allocation
+
+	Instead of using "new char[size]" for raw memory allocation, use
+	more generic "operator new(size)". Similarly, use "operator
+	delete(p)" instead of "delete [] (p)". This makes the code
+	consistent with 16-byte aligned create_elements() and
+	destroy_elements() specialisations.
+
 	* itpp/base/array.h, itpp/base/factory.cpp, itpp/base/factory.h,
 	itpp/base/mat.h, itpp/base/vec.h, itpp/fixed/fix_factory.cpp:
 	Improved memory allocation routines
@@ -797,7 +858,17 @@
 	These new set functions match existing get_rows() and get_cols()
 	methods. This patch fixes feature request [711263].
 
-2007-08-24  Adam Piatyszek  <ediap@users.sourceforge.net>
+2007-08-24  Andreas Wolfgang  <andreas-w@users.sourceforge.net>
+
+	* extras/itsave.m Fixed script to be compatible with Matlab V7.3
+
+	Since Matlab does not support sizeof(...), it was replaced by a new
+	function itsizeof(...). In addition logical expressions have been
+	made Matlab compatible (only variables with identical dimensions
+	are used in logical expressions). The patch was tested using
+	Matlab V7.3 and Octave V2.9.9.
+
+2007-08-22  Adam Piatyszek  <ediap@users.sourceforge.net>
 
 	* itpp/base/random.h: Fine tuning of random generators
 
@@ -814,16 +885,6 @@
 	Normal_RNG and Complex_Normal_RNG generators are declared as class
 	objects. This reduces the number of generator's constructor
 	executions to minimum.
-
-2007-08-24  Andreas Wolfgang  <andreas-w@users.sourceforge.net>
-
-	* extras/itsave.m: Fixed script to be compatible with Matlab V7.3
-
-	Since Matlab does not support sizeof(), it was replaced by a new
-	function itsizeof(). In addition logical expressions have been
-	made Matlab compatible (only variables with identical dimensions
-	are used in logical expressions). The patch was tested using
-	Matlab V7.3 and Octave V2.9.9.
 
 2007-08-23  Adam Piatyszek  <ediap@users.sourceforge.net>
 
@@ -975,13 +1036,13 @@
 	external LAPACK library. Therefore we have to check for
 	HAVE_LAPACK definition like in other LAPACK-related test programs.
 
+	* configure.ac: Version bump
+
+	* NEWS, NEWS-3.99: Renamed NEWS file to NEWS-3.99
+
 	* NEWS-3.10: Updated to include 3.10.12 release notes
 
-	* NEWS, NEWS-3.99: Created a new NEWS file for 4.0.x releases
-
-	* configure.ac: Version number updated
-
-==============================================================================
+------------------------------------------------------------------------------
 
 2007-08-10  Adam Piatyszek  <ediap@users.sourceforge.net>
 
@@ -1001,7 +1062,7 @@
 	function zdotusub_() has been added to IT++. This wrapper function
 	comes from NetLib's CBLAS package.
 
-==============================================================================
+------------------------------------------------------------------------------
 
 2007-08-10  Adam Piatyszek  <ediap@users.sourceforge.net>
 
@@ -1171,10 +1232,10 @@
 2007-07-16  Adam Piatyszek  <ediap@users.sourceforge.net>
 
 	* doc/local/documentation.doc, extras/itload.m, extras/itsave.m,
-	itpp/**/*.cpp, itpp/**/*.h, tests/*.cpp: Removed $Revision$ and
-	$Date$ keywords
+	itpp/**/*.cpp, itpp/**/*.h, tests/*.cpp: Removed $Revision: 1418 $ and
+	$Date: 2008-02-15 16:03:10 +0200 (Fri, 15 Feb 2008) $ keywords
 
-	The $Revision$ and $Date$ keywords in each file comment sometimes
+	The $Revision: 1418 $ and $Date: 2008-02-15 16:03:10 +0200 (Fri, 15 Feb 2008) $ keywords in each file comment sometimes
 	cause errors when trying to apply patches or merged branches.
 	Therefore, IT++ sources will not use them any more.
 
@@ -1242,7 +1303,7 @@
 	classes. Boolean variables are stored in a binary file using a
 	char datatype.
 
-==============================================================================
+------------------------------------------------------------------------------
 
 2007-06-20  Adam Piatyszek  <ediap@users.sourceforge.net>
 
@@ -1314,7 +1375,7 @@
 	images have to use binary mode when opening files. This fixes bug
 	[1730610]. Thanks to Thomas Andersson for reporting this problem.
 
-==============================================================================
+------------------------------------------------------------------------------
 
 2007-06-02  Adam Piatyszek  <ediap@users.sourceforge.net>
 
@@ -1455,7 +1516,7 @@
 	* itpp/base/itassert.cpp: Fixed a problem with not displayed
 	assert and error messages, which was introduced in rev. 982.
 
-==============================================================================
+------------------------------------------------------------------------------
 
 2007-04-10  Adam Piatyszek  <ediap@users.sourceforge.net>
 
@@ -1561,7 +1622,7 @@
 
 	* configure.ac: Version bump
 
-==============================================================================
+------------------------------------------------------------------------------
 
 2007-03-22  Adam Piatyszek  <ediap@users.sourceforge.net>
 
@@ -1691,7 +1752,7 @@
 	* doc/Makefile.am, Makefile.am: Changed the naming scheme of
 	snapshots to "itpp-VERSION_preYYYYMMDD"
 
-==============================================================================
+------------------------------------------------------------------------------
 
 2007-02-10  Adam Piatyszek  <ediap@users.sourceforge.net>
 
@@ -1972,7 +2033,7 @@
 	* itpp/comm/modulator.cpp: Fixed wrong assertion check in QAM
 	modulator set_M() function
 
-==============================================================================
+------------------------------------------------------------------------------
 
 2007-01-21  Adam Piatyszek  <ediap@users.sourceforge.net>
 
@@ -2045,7 +2106,7 @@
 	to NEWS-3.10. Preliminary information for 3.99.x
 	development releases prepared in NEWS.
 
-==============================================================================
+------------------------------------------------------------------------------
 
 2007-01-14  Adam Piatyszek  <ediap@users.sourceforge.net>
 
@@ -2058,7 +2119,7 @@
 	(merged rev. 828:830 from the itpp-3-10 branch)
 
 	* itpp/comm/ldpc.cpp, itpp/comm/ldpc.h, tests/channel_test.cpp,
-	tests/ldpc_test.cpp: Added missing SVN properities
+	tests/ldpc_test.cpp: Added missing SVN properties
 
 2007-01-13  Erik G. Larsson  <erik_g_larsson@users.sourceforge.net>
 

@@ -5,24 +5,23 @@
  *
  * -------------------------------------------------------------------------
  *
- * IT++ - C++ library of mathematical, signal processing, speech processing,
- *        and communications classes and functions
+ * Copyright (C) 1995-2010  (see AUTHORS file for a list of contributors)
  *
- * Copyright (C) 1995-2009  (see AUTHORS file for a list of contributors)
+ * This file is part of IT++ - a C++ library of mathematical, signal
+ * processing, speech processing, and communications classes and functions.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * IT++ is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any
+ * later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * IT++ is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ * You should have received a copy of the GNU General Public License along
+ * with IT++.  If not, see <http://www.gnu.org/licenses/>.
  *
  * -------------------------------------------------------------------------
  */
@@ -94,8 +93,8 @@ void common_operators(const Mat<T> &A, const Mat<T> &B, const Mat<T> &C,
   cout << "D.swap_rows(0, 2); D =\n" << D << endl;
   D.swap_cols(0, 3);
   cout << "D.swap_cols(0, 3); D =\n" << D << endl;
-  D.set_submatrix(1, 2, 2, 3, A(0, 1, 0, 1));
-  cout << "D.set_submatrix(1,2,2,3, A(0,1,0,1); D =\n" << D << endl;
+  D.set_submatrix(1, 2, A(0, 1, 0, 1));
+  cout << "D.set_submatrix(1,2, A(0,1,0,1); D =\n" << D << endl;
   D.set_submatrix(0, 0, A(0, 1, 0, 1));
   cout << "D.set_submatrix(0,0, A(0,1,0,1); D =\n" << D << endl;
   D.set_submatrix(1, 2, 2, 3, c);
@@ -167,9 +166,6 @@ void common_operators(const Mat<T> &A, const Mat<T> &B, const Mat<T> &C,
   A2 *= c;
   cout << "A*=c; A =\n" << A2 << endl;
   cout << "A*v = " << A*v << endl;
-  A2 = A;
-  A2.set_size(1, A2.cols(), true);
-  cout << "A2 = " << A2 << "; u*A2 =\n" << u*A2 << endl;
   cout << "elem_mult(A,B) =\n" << elem_mult(A, B) << endl;
   elem_mult_out(A, B, A2);
   cout << "elem_mult_out(A,B,out); out =\n" << A2 << endl;

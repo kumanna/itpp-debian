@@ -5,36 +5,29 @@
  *
  * -------------------------------------------------------------------------
  *
- * IT++ - C++ library of mathematical, signal processing, speech processing,
- *        and communications classes and functions
+ * Copyright (C) 1995-2010  (see AUTHORS file for a list of contributors)
  *
- * Copyright (C) 1995-2009  (see AUTHORS file for a list of contributors)
+ * This file is part of IT++ - a C++ library of mathematical, signal
+ * processing, speech processing, and communications classes and functions.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * IT++ is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any
+ * later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * IT++ is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ * You should have received a copy of the GNU General Public License along
+ * with IT++.  If not, see <http://www.gnu.org/licenses/>.
  *
  * -------------------------------------------------------------------------
  */
 
 #ifndef FILTER_H
 #define FILTER_H
-
-#ifndef _MSC_VER
-#  include <itpp/config.h>
-#else
-#  include <itpp/config_msvc.h>
-#endif
 
 #include <itpp/base/vec.h>
 
@@ -577,7 +570,7 @@ T3 ARMA_Filter<T1, T2, T3>::filter(const T1 Sample)
 // Instantiations
 // ----------------------------------------------------------------------
 
-#ifdef HAVE_EXTERN_TEMPLATE
+#ifndef _MSC_VER
 
 extern template class MA_Filter<double, double, double>;
 extern template class MA_Filter < double, std::complex<double>,
@@ -603,7 +596,7 @@ extern template class ARMA_Filter < std::complex<double>,
 extern template class ARMA_Filter < std::complex<double>, std::complex<double>,
   std::complex<double> >;
 
-#endif // HAVE_EXTERN_TEMPLATE
+#endif // _MSC_VER
 
 //! \endcond
 

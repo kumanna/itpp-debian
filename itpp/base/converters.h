@@ -5,24 +5,23 @@
  *
  * -------------------------------------------------------------------------
  *
- * IT++ - C++ library of mathematical, signal processing, speech processing,
- *        and communications classes and functions
+ * Copyright (C) 1995-2010  (see AUTHORS file for a list of contributors)
  *
- * Copyright (C) 1995-2009  (see AUTHORS file for a list of contributors)
+ * This file is part of IT++ - a C++ library of mathematical, signal
+ * processing, speech processing, and communications classes and functions.
  *
- * This program is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License, or
- * (at your option) any later version.
+ * IT++ is free software: you can redistribute it and/or modify it under the
+ * terms of the GNU General Public License as published by the Free Software
+ * Foundation, either version 3 of the License, or (at your option) any
+ * later version.
  *
- * This program is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- * GNU General Public License for more details.
+ * IT++ is distributed in the hope that it will be useful, but WITHOUT ANY
+ * WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ * FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more
+ * details.
  *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA 02110-1301 USA
+ * You should have received a copy of the GNU General Public License along
+ * with IT++.  If not, see <http://www.gnu.org/licenses/>.
  *
  * -------------------------------------------------------------------------
  */
@@ -30,20 +29,9 @@
 #ifndef CONVERTERS_H
 #define CONVERTERS_H
 
-#ifndef _MSC_VER
-#  include <itpp/config.h>
-#else
-#  include <itpp/config_msvc.h>
-#endif
-
 #include <itpp/base/help_functions.h>
 #include <itpp/base/math/misc.h>
 
-
-#ifndef HAVE_RINT
-//! Round to nearest integer using the current rounding direction
-double rint(double x);
-#endif
 
 namespace itpp
 {
@@ -331,13 +319,13 @@ inline double rad_to_deg(double x) { return (180.0 / itpp::pi * x); }
 inline double deg_to_rad(double x) { return (itpp::pi / 180.0 * x); }
 
 //! Round to nearest integer, return result in double
-inline double round(double x) { return ::rint(x); }
+double round(double x);
 //! Round to nearest integer
-inline vec round(const vec &x) { return apply_function<double>(::rint, x); }
+vec round(const vec &x);
 //! Round to nearest integer
-inline mat round(const mat &x) { return apply_function<double>(::rint, x); }
+mat round(const mat &x);
 //! Round to nearest integer
-inline int round_i(double x) { return static_cast<int>(::rint(x)); }
+int round_i(double x);
 //! Round to nearest integer and return ivec
 ivec round_i(const vec &x);
 //! Round to nearest integer and return imat
@@ -398,6 +386,36 @@ cvec round_to_zero(const cvec &x, double threshold = 1e-14);
 //! Round each element to zero if element < threshold
 cmat round_to_zero(const cmat &x, double threshold = 1e-14);
 
+//! Remove trailing digits, found after the decimal point, for numbers greater than threshold
+inline double round_to_infty(const double in, const double threshold = 1e9)
+{
+  return (std::fabs(in)>threshold)?itpp::round(in):in;
+}
+
+//! Remove trailing digits, found after the decimal point, for complex numbers whose real and imaginary parts are greater than threshold
+inline std::complex<double> round_to_infty(const std::complex<double> &in, const double threshold = 1e9)
+{
+  return std::complex<double>(round_to_infty(in.real(), threshold),
+                              round_to_infty(in.imag(), threshold));
+}
+
+//! Remove trailing digits, found after the decimal point, for vectors greater than threshold
+inline vec round_to_infty(const vec &in, const double threshold = 1e9)
+{
+  return apply_function<double>(round_to_infty, in, threshold);
+}
+
+//! Remove trailing digits, found after the decimal point, for matrices greater than threshold
+inline mat round_to_infty(const mat &in, const double threshold = 1e9)
+{
+  return apply_function<double>(round_to_infty, in, threshold);
+}
+
+//! Remove trailing digits, found after the decimal point, for complex vectors greater than threshold
+cvec round_to_infty(const cvec &in, const double threshold = 1e9);
+
+//! Remove trailing digits, found after the decimal point, for complex matrices greater than threshold
+cmat round_to_infty(const cmat &in, const double threshold = 1e9);
 
 //! Convert to Gray Code
 inline int gray_code(int x) { return x ^(x >> 1); }
@@ -438,7 +456,7 @@ std::string to_str(const T &i)
 // Instantiations
 // ---------------------------------------------------------------------
 
-#ifdef HAVE_EXTERN_TEMPLATE
+#ifndef _MSC_VER
 
 extern template bvec to_bvec(const svec &v);
 extern template bvec to_bvec(const ivec &v);
@@ -447,10 +465,7 @@ extern template svec to_svec(const bvec &v);
 extern template svec to_svec(const ivec &v);
 extern template svec to_svec(const vec &v);
 
-// Workaround for GCC 3.3.x error when using -finine-functions or -O3 flag
-#if (GCC_VERSION >= 30400)
 extern template ivec to_ivec(const bvec &v);
-#endif
 extern template ivec to_ivec(const svec &v);
 extern template ivec to_ivec(const vec &v);
 
@@ -480,10 +495,8 @@ extern template imat to_imat(const smat &m);
 extern template imat to_imat(const mat &m);
 
 extern template mat to_mat(const bmat &m);
-#if (GCC_VERSION >= 30400)
 extern template mat to_mat(const smat &m);
 extern template mat to_mat(const imat &m);
-#endif
 
 extern template cmat to_cmat(const bmat &m);
 extern template cmat to_cmat(const smat &m);
@@ -495,7 +508,7 @@ extern template cmat to_cmat(const smat &real, const smat &imag);
 extern template cmat to_cmat(const imat &real, const imat &imag);
 extern template cmat to_cmat(const mat &real, const mat &imag);
 
-#endif // HAVE_EXTERN_TEMPLATE
+#endif // _MSC_VER
 
 //! \endcond
 
