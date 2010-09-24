@@ -73,7 +73,7 @@ binary-arch: build install
 	dh_install -a --sourcedir=debian/tmp
 	dh_installman -a
 	dh_link -a
-	dh_strip -a --dbg-package=libitpp6-dbg
+	dh_strip -a --dbg-package=libitpp7-dbg
 	dh_compress -a
 	dh_fixperms -a
 	dh_makeshlibs -a

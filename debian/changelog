@@ -1,10 +1,14 @@
-libitpp (4.0.7-2) unstable; urgency=low
+libitpp (4.2-1) experimental; urgency=low
 
+  * New upstream release.
   * Move dwww to suggests. (Closes: #570598).
   * Install Octave/Matlab file loading programs into /usr/share/itpp.
   * Standards version is now 3.9.1 (no changes needed)
+  * Soname bump: new package: libitpp7. Remove old conflicts and replaces
+    with libitpp6.
+  * Update copyright
 
- -- Kumar Appaiah <akumar@debian.org>  Mon, 13 Sep 2010 17:47:57 -0500
+ -- Kumar Appaiah <akumar@debian.org>  Thu, 23 Sep 2010 23:34:25 -0500
 
 libitpp (4.0.7-1) unstable; urgency=low
 
