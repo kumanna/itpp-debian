@@ -1,7 +1,6 @@
 usr/include/*
 usr/lib/lib*.so
 usr/lib/pkgconfig/*
-usr/lib/*.la
 usr/bin/itpp-config
 usr/share/man/man1/*
 usr/share/itpp/*
