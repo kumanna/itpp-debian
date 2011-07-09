@@ -1,8 +1,9 @@
 libitpp (4.2-4) unstable; urgency=low
 
   * Build-Depend on doxygen-latex instead of texlive-*. (Closes: #616256)
+  * Standards version is now 3.9.2 (no changes needed)
 
- -- Kumar Appaiah <akumar@debian.org>  Sat, 09 Jul 2011 09:39:03 -0500
+ -- Kumar Appaiah <akumar@debian.org>  Sat, 09 Jul 2011 09:41:35 -0500
 
 libitpp (4.2-3) unstable; urgency=low
 
