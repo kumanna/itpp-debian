@@ -30,7 +30,7 @@
 #define LOG_EXP_H
 
 #include <itpp/base/help_functions.h>
-
+#include <itpp/itexports.h>
 
 namespace itpp
 {
@@ -61,7 +61,7 @@ inline double dB(double x) { return 10.0 * log10(x); }
 //! Inverse of decibel of x
 inline double inv_dB(double x) { return pow(10.0, 0.1 * x); }
 
-//! Calculate the number of bits needed to represent an inteager \c n
+//! Calculate the number of bits needed to represent an integer \c n
 inline int int2bits(int n)
 {
   it_assert(n >= 0, "int2bits(): Improper argument value");
@@ -133,7 +133,7 @@ inline double trunc_exp(double x)
 
 
 //! Safe substitute for <tt>log(exp(log_a) + exp(log_b))</tt>
-double log_add(double log_a, double log_b);
+ITPP_EXPORT double log_add(double log_a, double log_b);
 
 
 // ----------------------------------------------------------------------
@@ -230,9 +230,9 @@ inline cmat log(const cmat &x)
 #  undef log2
 #endif
 //! log-2 of the elements
-vec log2(const vec &x);
+ITPP_EXPORT vec log2(const vec &x);
 //! log-2 of the elements
-mat log2(const mat &x);
+ITPP_EXPORT mat log2(const mat &x);
 
 //! log-10 of the elements
 inline vec log10(const vec &x)
@@ -278,7 +278,7 @@ inline mat inv_dB(const mat &x)
   return apply_function<double>(inv_dB, x);
 }
 
-//! Calculate the number of bits needed to represent each inteager in a vector
+//! Calculate the number of bits needed to represent each integer in a vector
 inline ivec int2bits(const ivec& v)
 {
   return apply_function<int>(int2bits, v);

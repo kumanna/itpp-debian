@@ -33,7 +33,7 @@
 #include <itpp/base/mat.h>
 #include <itpp/comm/convcode.h>
 #include <itpp/comm/llr.h>
-
+#include <itpp/itexports.h>
 
 namespace itpp
 {
@@ -48,7 +48,7 @@ namespace itpp
   E. Ryan, New Mexico State University. This paper was found on the web and is probably
   unpublished.
 */
-class Rec_Syst_Conv_Code
+class ITPP_EXPORT Rec_Syst_Conv_Code
 {
 public:
 
@@ -215,10 +215,6 @@ private:
   double rate, Lc;
   imat state_trans, output_parity, rev_state_trans, rev_output_parity;
   bool terminated;
-  mat gamma, alpha, beta;
-  QLLRmat gamma_q, alpha_q, beta_q;
-  vec denom;
-  QLLRvec denom_q;
   double ln2;
 
   /*!

@@ -63,7 +63,7 @@
 #define FASTICA_H
 
 #include <itpp/base/mat.h>
-
+#include <itpp/itexports.h>
 
 //! Use deflation approach : compute IC one-by-one in a Gram-Schmidt-like fashion
 #define FICA_APPROACH_DEFL 2
@@ -115,7 +115,7 @@ fastica.separate();
 mat ICs = fastica.get_independent_components();
 \endcode
 */
-class Fast_ICA
+class ITPP_EXPORT Fast_ICA
 {
 
 public:
@@ -133,8 +133,9 @@ public:
     \brief Explicit launch of main FastICA function
 
     Explicit launch of the Fast_ICA algorithm.
+	\returns true if algorithm converged and false otherwise
   */
-  void separate(void);
+  bool separate(void);
 
   /*!
     \brief Set approach : FICA_APPROACH_DEFL or FICA_APPROACH_SYMM (default)
