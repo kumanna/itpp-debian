@@ -1,10 +1,11 @@
-libitpp (4.3.0-1) UNRELEASED; urgency=low
+libitpp (4.3.0-1) unstable; urgency=low
 
   * New upstream release
   * Use debhelper 9
   * Standards Version is now 3.9.4
   * Use cmake for based system
   * Use jquery package for documentation
+  * Shift to Google Test based test system
 
  -- Kumar Appaiah <akumar@debian.org>  Sat, 25 May 2013 22:10:35 -0400
 
