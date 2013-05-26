@@ -1,8 +1,19 @@
 #!/usr/bin/make -f
 
+DEBUG_PACKAGE = $(shell awk '/^Package/ && /-dbg *$$/ { print $$2 }' debian/control)
 %:
-	dh $@ --parallel --builddirectory=build
+	VERBOSE=1 dh $@ --parallel --builddirectory=build
+
+.PHONY: override_dh_strip override_dh_auto_configure override_dh_install
 
 override_dh_auto_configure:
 	mkdir -p  build
-	(cd  build && cmake .. -DCMAKE_INSTALL_PREFIX=../debian/tmp/usr -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo -DGTEST_DIR=/usr/src/gtest);
+	(cd  build && cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_BUILD_TYPE=Release -DGTEST_DIR=/usr/src/gtest);
+
+override_dh_auto_install:
+	(cd build && gtests/itpp_gtests);
+	dh_auto_install
+	dh_install
+
+override_dh_strip:
+	dh_strip --dbg-package=$(DEBUG_PACKAGE)
