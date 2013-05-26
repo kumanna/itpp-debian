@@ -1,3 +1,9 @@
+libitpp (4.3.0-1) UNRELEASED; urgency=low
+
+  * New upstream release
+
+ -- Kumar Appaiah <akumar@debian.org>  Sat, 25 May 2013 22:10:35 -0400
+
 libitpp (4.2-5) unstable; urgency=low
 
   * Remove extraneous doxygen build dependency.
