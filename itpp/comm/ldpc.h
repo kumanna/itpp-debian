@@ -35,6 +35,7 @@
 #include <itpp/base/sort.h>
 #include <itpp/comm/llr.h>
 #include <itpp/comm/channel_code.h>
+#include <itpp/itexports.h>
 
 namespace itpp
 {
@@ -67,7 +68,7 @@ namespace itpp
 
   \author Erik G. Larsson, Mattias Andersson and Adam Piatyszek
 */
-class LDPC_Parity
+class ITPP_EXPORT LDPC_Parity
 {
   friend class LDPC_Code;
 public:
@@ -271,7 +272,7 @@ protected:
 
   \author Erik G. Larsson, Mattias Andersson and Adam Piatyszek
 */
-class LDPC_Parity_Unstructured : public LDPC_Parity
+class ITPP_EXPORT LDPC_Parity_Unstructured : public LDPC_Parity
 {
 public:
   //! Display some information about the matrix
@@ -328,7 +329,7 @@ protected:
   \brief Irregular LDPC code generator class
   \author Erik G. Larsson, Mattias Andersson and Adam Piatyszek
 */
-class LDPC_Parity_Irregular : public LDPC_Parity_Unstructured
+class ITPP_EXPORT LDPC_Parity_Irregular : public LDPC_Parity_Unstructured
 {
 public:
   //! Default constructor
@@ -393,7 +394,7 @@ public:
   \brief Regular LDPC code generator class
   \author Erik G. Larsson, Mattias Andersson and Adam Piatyszek
 */
-class LDPC_Parity_Regular : public LDPC_Parity_Unstructured
+class ITPP_EXPORT LDPC_Parity_Regular : public LDPC_Parity_Unstructured
 {
 public:
   //! Default constructor
@@ -457,7 +458,7 @@ public:
   [MYK05] S. Myung, K. Yang, J. Kim, "Quasi-Cyclic LDPC Codes for Fast
   Encoding", IEEE Trans. on Inform. Theory, vol. 51, no. 8, August 2005
 */
-class BLDPC_Parity : public LDPC_Parity
+class ITPP_EXPORT BLDPC_Parity : public LDPC_Parity
 {
 public:
   //! Default constructor
@@ -519,26 +520,31 @@ private:
 
   \author Adam Piatyszek
 */
-class LDPC_Generator
+class ITPP_EXPORT LDPC_Generator
 {
   friend class LDPC_Code;
 public:
   //! Default constructor
   LDPC_Generator(const std::string& type_in = ""): init_flag(false),
-      type(type_in) {}
+      type(new std::string(type_in)) {}
   //! Virtual destructor
-  virtual ~LDPC_Generator() {}
+  virtual ~LDPC_Generator() {delete type;}
 
   //! Generator specific encode function
   virtual void encode(const bvec &input, bvec &output) = 0;
 
   //! Return generator type
-  std::string get_type() const { return type; }
+  std::string get_type() const { return *type; }
 
-protected:
+  //! Mark generator as initialized
+  void mark_initialized() {init_flag = true;};
+
+  //! Check if generator is initialized
+  bool is_initialized() const {return init_flag;};
+private:
   bool init_flag;  //!< True if generator is initialized
-  std::string type;  //!< Generator type
-
+  std::string* type;  //!< Generator type
+protected:
   //! Save generator data to a file
   virtual void save(const std::string& filename) const = 0;
   //! Read generator data from a file
@@ -561,7 +567,7 @@ protected:
 
   \author Erik G. Larsson and Adam Piatyszek
 */
-class LDPC_Generator_Systematic : public LDPC_Generator
+class ITPP_EXPORT LDPC_Generator_Systematic : public LDPC_Generator
 {
 public:
   //! Default constructor
@@ -635,7 +641,7 @@ private:
   \note Please refer to the BLDPC_Parity class description for
   information on B-LDPC codes
 */
-class BLDPC_Generator : public LDPC_Generator
+class ITPP_EXPORT BLDPC_Generator : public LDPC_Generator
 {
 public:
   //! Default constructor
@@ -716,13 +722,13 @@ protected:
 
   \note Please refer to the tutorials \ref ldpc_gen_codes and \ref
   ldpc_bersim_awgn for extensive examples of how to use LDPC codes.
- 
+
   \note For issues relating to the accuracy of LLR computations,
   please see the documentation of \c LLR_calc_unit
-  
+
   \author Erik G. Larsson, Adam Piatyszek and Gorka Prieto (decoder improvements)
 */
-class LDPC_Code : public Channel_Code
+class ITPP_EXPORT LDPC_Code : public Channel_Code
 {
 public:
   //! Default constructor
@@ -730,11 +736,16 @@ public:
 
   /*!
     \brief Constructor, from a parity check matrix and optionally a
-    generator
+    generator.
 
     This constructor simply calls \c set_code().
+
+    \param H The parity check matrix
+    \param G A pointer to the optional generator object
+    \param perform_integrity_check if true, then check that the parity and generator matrices are consistent
   */
-  LDPC_Code(const LDPC_Parity* const H, LDPC_Generator* const G = 0);
+    LDPC_Code(const LDPC_Parity* const H, LDPC_Generator* const G = 0, 
+	      bool perform_integrity_check = true);
 
   /*!
     \brief Constructor, from a saved file
@@ -744,7 +755,7 @@ public:
   LDPC_Code(const std::string& filename, LDPC_Generator* const G = 0);
 
   //! Destructor
-  virtual ~LDPC_Code() {}
+  virtual ~LDPC_Code() {delete dec_method;}
 
 
   /*!
@@ -753,8 +764,10 @@ public:
 
     \param H The parity check matrix
     \param G A pointer to the optional generator object
+    \param perform_integrity_check if true, then check that the parity and generator matrices are consistent
   */
-  void set_code(const LDPC_Parity* const H, LDPC_Generator* const G = 0);
+  void set_code(const LDPC_Parity* const H, LDPC_Generator* const G = 0, 
+		bool perform_integrity_check = true);
 
   /*!
     \brief Set the codec, by reading from a saved file
@@ -888,6 +901,16 @@ public:
   //! Syndrome check, on bit vector
   bool syndrome_check(const bvec &b) const;
 
+  /*! \brief Soft syndrome check
+
+    This function checks all parity constraints and computes for each
+    one the posterior probability that it is satisfied. The result is
+    a vector, whose i:th element is given by \f[ \mbox{Boxplus}_j LLR_{p_{ij}}
+    \f] where \f[ p_{ij} \f] is the index of the j:th nonzero element
+    of the i:th row of the code's parity check matrix.
+   */
+  QLLRvec soft_syndrome_check(const QLLRvec &LLR) const;
+
   // ------------ Basic information gathering functions ------
 
   //! Get the coderate
@@ -905,7 +928,7 @@ public:
   int get_ninfo() const { return nvar - ncheck; }
 
   //! Return the decoding method
-  std::string get_decoding_method() const { return dec_method; }
+  std::string get_decoding_method() const { return *dec_method; }
 
   //! Get the maximum number of iterations of the decoder
   int get_nrof_iterations() const { return max_iters; }
@@ -914,22 +937,9 @@ public:
   LLR_calc_unit get_llrcalc() const { return llrcalc; }
 
   //! Print some properties of the codec in plain text
-  friend std::ostream &operator<<(std::ostream &os, const LDPC_Code &C);
+  friend ITPP_EXPORT std::ostream &operator<<(std::ostream &os, const LDPC_Code &C);
 
 protected:
-  bool H_defined;  //!< true if parity check matrix is defined
-  bool G_defined;  //!< true if generator is defined
-  int nvar;   //!< Number of variable nodes
-  int ncheck;   //!< Number of check nodes
-  LDPC_Generator *G;  //!< Generator object pointer
-
-  // decoder parameters
-  std::string dec_method; //!< Decoding method
-  int max_iters;  //!< Maximum number of iterations
-  bool psc;   //!< check syndrom after each iteration
-  bool pisc;   //!< check syndrom before first iteration
-  LLR_calc_unit llrcalc; //!< LLR calculation unit
-
   //! Function to compute decoder parameterization
   void decoder_parameterization(const LDPC_Parity* const H);
 
@@ -940,6 +950,18 @@ protected:
   void setup_decoder();
 
 private:
+  bool H_defined;  //!< true if parity check matrix is defined
+  bool G_defined;  //!< true if generator is defined
+  int nvar;   //!< Number of variable nodes
+  int ncheck;   //!< Number of check nodes
+  LDPC_Generator *G;  //!< Generator object pointer
+
+  // decoder parameters
+  std::string* dec_method; //!< Decoding method
+  int max_iters;  //!< Maximum number of iterations
+  bool psc;   //!< check syndrom after each iteration
+  bool pisc;   //!< check syndrom before first iteration
+  LLR_calc_unit llrcalc; //!< LLR calculation unit
   // Parity check matrix parameterization
   ivec C, V, sumX1, sumX2, iind, jind;
 
@@ -955,7 +977,7 @@ private:
   \relatesalso LDPC_Code
   \brief Print some properties of the LDPC codec in plain text.
 */
-std::ostream &operator<<(std::ostream &os, const LDPC_Code &C);
+ITPP_EXPORT std::ostream &operator<<(std::ostream &os, const LDPC_Code &C);
 }
 
 #endif
