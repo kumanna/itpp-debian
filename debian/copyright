@@ -5,48 +5,56 @@ It was downloaded from http://itpp.sourceforge.net
 
 Upstream Authors:
 Project Admins
-  - Tony Ottosson <tonyottosson (at) users.sourceforge.net>
-  - Adam Piątyszek <ediap (at) users.sourceforge.net>
+--------------
+  o Bogdan Cristea (cristeab)
+  o Tony Ottosson (tonyottosson)
+  o Adam Piatyszek (ediap)
 
-Developers:
-  - Johan Bergman <emwjohb (at) users.sourceforge.net>
-  - Håkan Eriksson <hakanbe (at) users.sourceforge.net>
-  - Thomas Eriksson <thomases2 (at) users.sourceforge.net>
-  - Pål Frenger <frenger (at) users.sourceforge.net>
-  - Fredrik Huss <frehu (at) users.sourceforge.net>
-  - Erik G. Larsson <erik_g_larsson (at) users.sourceforge.net>
-  - Conrad Sanderson <conrad_s (at) users.sourceforge.net>
-  - Andreas Wolfgang <andreas-w (at) users.sourceforge.net>
-  - Simon Wood <sgwoodjr (at) users.sourceforge.net>
+Developers
+----------
+  o Mirsad Čirkić (mirsadcirkic)
+  o Johan Bergman (emwjohb)
+  o Thomas Eriksson (thomases2)
+  o Pal Frenger (frenger)
+  o Fredrik Huss (frehu)
+  o Erik G. Larsson (erik_g_larsson)
+  o Stephan Ludwig (donludovico)
+  o Robert Orzechowski (tytusz)
+  o Andy Panov (andypanov)
+  o Conrad Sanderson (conrad_s)
+  o Andreas Wolfgang (andreas-w)
+  o Simon Wood (sgwoodjr)
 
-Retired Developers:
-  - Thomas Lemaire
-  - Anders Persson
-  - Tobias Ringstrom
-  - Jonas Samuelsson
+Retired Developers
+------------------
+  o Hakan Eriksson (hakanbe)
+  o Thomas Lemaire
+  o Anders Persson
+  o Tobias Ringstrom
+  o Jonas Samuelsson
 
-Contributors:
-  - Mattias Andersson
-  - Francois Cayre
-  - Zbigniew Długaszewski
-  - Mark Dobossy
-  - Sean Finney
-  - Teddy Furon
-  - Bjorn Furugard
-  - Kenneth Hilmersson
-  - Peter Klotz
-  - Krister Norlund
-  - Andy Panov
-  - Steve Peters
-  - Svante Signell
-  - Erik Stoy
-  - Tobias Tynderfeldt
-  - Bogdan Cristea
-  - Gorka Prieto
-  - Stephan Ludwig
-  - Kumar Appaiah
+Contributors
+------------
+  o Mattias Andersson
+  o Kumar Appaiah
+  o Francois Cayre
+  o Zbigniew Dlugaszewski
+  o Mark Dobossy
+  o Sean Finney
+  o Teddy Furon
+  o Bjorn Furugard
+  o Kenneth Hilmersson
+  o Peter Klotz
+  o Krister Norlund
+  o Steve Peters
+  o Gorka Prieto
+  o Martin Senst
+  o Svante Signell
+  o Vasek Smidl
+  o Erik Stoy
+  o Tobias Tynderfeldt
 
-Copyright: © 1995-2008  (above authors and contributors)
+Copyright: © 1995-2013  (above authors and contributors)
 
 fastica code Copyright © 2004 by:
 Francois CAYRE and Teddy FURON
@@ -58,6 +66,11 @@ Email : firstname.lastname@irisa.fr
 
 tcp.h and tcp.c: Copyright © 2000-2004 IKR (formerly IND),
 University of Stuttgart
+
+cmake/Modules/CheckCXXFunctionExists.cmake: Copyright © 2002-2011 Kitware, Inc.
+cmake/Modules/CheckCXXFunctionExists.cmake:# Copyright © 2012 Bogdan Cristea
+cmake/Modules/FindBLAS.cmake:# Copyright © 2007-2009 Kitware, Inc.
+cmake/Modules/FindLAPACK.cmake:# Copyright © 2007-2009 Kitware, Inc.
 
 License:
 
@@ -78,5 +91,5 @@ License:
 On Debian systems, the complete text of the GNU General
 Public License can be found in `/usr/share/common-licenses/GPL'.
 
-The Debian packaging is © 2007, Kumar Appaiah <akumar@ee.iitm.ac.in> and
-is licensed under the GPL, see above.
+The Debian packaging is © 2007-2013, Kumar Appaiah
+<akumar@debian.org> and is licensed under the GPL, see above.

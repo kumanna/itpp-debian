@@ -1,4 +1,17 @@
 #!/usr/bin/make -f
 
 %:
-	dh $@
+	DH_VERBOSE=1 dh $@ --parallel ---gnudirectory=-gnu
+
+override_dh_auto_configure:
+	mkdir -p  -gnu
+	mkdir -p debian/tmp
+	(cd  -gnu && cmake .. -DCMAKE_INSTALL_PREFIX=../debian/tmp/usr -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo -DGTEST_DIR=/usr/src/gtest);
+
+override_dh_auto_ -gnu:
+	dh_auto_ -gnu
+
+override_dh_auto_install:
+	mkdir -p debian/tmp
+	(cd  -gnu && gtests/itpp_gtests && make install)
+	dh_install
