@@ -8,6 +8,8 @@ libitpp (4.3.0-1) unstable; urgency=low
     + Use jquery package for documentation
     + Update copyright file
   * Shift to Google Test based test system
+  * Shift to Debian Science as the maintainer
+    + Move VCS repository to the Debian Science project
 
  -- Kumar Appaiah <akumar@debian.org>  Sat, 25 May 2013 22:10:35 -0400
 

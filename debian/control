@@ -1,12 +1,13 @@
 Source: libitpp
 Priority: optional
-Maintainer: Kumar Appaiah <akumar@debian.org>
+Maintainer: Debian Science Maintainers <debian-science-maintainers@lists.alioth.debian.org>
+Uploaders: Kumar Appaiah <akumar@debian.org>
 Standards-Version: 3.9.4
 Build-Depends: debhelper (>= 9), libblas-dev, libfftw3-dev, doxygen-latex, ghostscript, liblapack-dev, gfortran, libgtest-dev, cmake
 Section: libs
 Homepage: http://itpp.sourceforge.net
-Vcs-Git: git://git.debian.org/git/collab-maint/libitpp.git
-Vcs-Browser: http://git.debian.org/?p=collab-maint/libitpp.git
+Vcs-Git: git://git.debian.org/git/debian-science/packages/libitpp.git
+Vcs-Browser: http://git.debian.org/?p=debian-science/packages/libitpp.git
 
 Package: libitpp-dev
 Section: libdevel
