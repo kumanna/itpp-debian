@@ -6,13 +6,28 @@ DEBUG_PACKAGE = $(shell awk '/^Package/ && /-dbg *$$/ { print $$2 }' debian/cont
 
 .PHONY: override_dh_strip override_dh_auto_configure override_dh_install
 
-override_dh_auto_configure:
-	mkdir -p  build
-	(cd  build && cmake .. -DCMAKE_CXX_FLAGS="" -DCMAKE_CXX_FLAGS_RELEASE="$(CXXFLAGS)" -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_BUILD_TYPE=Release -DGTEST_DIR=/usr/src/gtest);
+verride_dh_auto_configure:
+	mkdir -p build
+	(cd build && cmake .. -DCMAKE_CXX_FLAGS="" -DCMAKE_CXX_FLAGS_RELEASE="$(CXXFLAGS)" -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DCMAKE_VERBOSE_MAKEFILE=ON -DGTEST_DIR=/usr/src/gtest -DHTML_DOCS=off)
+
+override_dh_auto_build-arch:
+	dh_auto_build --builddirectory=build -- itpp
+	dh_auto_build --builddirectory=build -- itpp_gtests
+
+override_dh_auto_build-indep:
+	(cd build && cmake .. -DHTML_DOCS=on)
+	dh_auto_build --builddirectory=build -- itpp_doc
+
+# No tests needed for docs
+override_dh_auto_test-indep:
+
+override_dh_auto_install-indep:
+
 
 override_dh_auto_install:
 	(cd build && gtests/itpp_gtests);
 	dh_auto_install
+	dh_auto_install --builddirectory=build
 	dh_install
 
 override_dh_strip:
