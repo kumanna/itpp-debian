@@ -8,7 +8,7 @@ DEBUG_PACKAGE = $(shell awk '/^Package/ && /-dbg *$$/ { print $$2 }' debian/cont
 
 override_dh_auto_configure:
 	mkdir -p  build
-	(cd  build && cmake .. -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_BUILD_TYPE=Release -DGTEST_DIR=/usr/src/gtest);
+	(cd  build && cmake .. -DCMAKE_CXX_FLAGS="" -DCMAKE_CXX_FLAGS_RELEASE="$(CXXFLAGS)" -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_VERBOSE_MAKEFILE=ON -DCMAKE_BUILD_TYPE=Release -DGTEST_DIR=/usr/src/gtest);
 
 override_dh_auto_install:
 	(cd build && gtests/itpp_gtests);
