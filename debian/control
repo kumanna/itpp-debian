@@ -3,7 +3,8 @@ Priority: optional
 Maintainer: Debian Science Maintainers <debian-science-maintainers@lists.alioth.debian.org>
 Uploaders: Kumar Appaiah <akumar@debian.org>
 Standards-Version: 3.9.4
-Build-Depends: debhelper (>= 9), libblas-dev, libfftw3-dev, doxygen-latex, ghostscript, liblapack-dev, gfortran, libgtest-dev, cmake
+Build-Depends: debhelper (>= 9), libblas-dev, libfftw3-dev, liblapack-dev, gfortran, libgtest-dev, cmake
+Build-Depends-Indep: doxygen-latex, ghostscript
 Section: libs
 Homepage: http://itpp.sourceforge.net
 Vcs-Git: git://git.debian.org/git/debian-science/packages/libitpp.git
