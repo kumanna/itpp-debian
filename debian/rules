@@ -6,7 +6,7 @@ DEBUG_PACKAGE = $(shell awk '/^Package/ && /-dbg *$$/ { print $$2 }' debian/cont
 
 .PHONY: override_dh_strip override_dh_auto_configure override_dh_install
 
-verride_dh_auto_configure:
+override_dh_auto_configure:
 	mkdir -p build
 	(cd build && cmake .. -DCMAKE_CXX_FLAGS="" -DCMAKE_CXX_FLAGS_RELEASE="$(CXXFLAGS)" -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DCMAKE_VERBOSE_MAKEFILE=ON -DGTEST_DIR=/usr/src/gtest -DHTML_DOCS=off)
 
