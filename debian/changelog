@@ -1,6 +1,7 @@
 libitpp (4.3.0-2) UNRELEASED; urgency=low
 
   * Pass correct CXXFLAGS to cmake
+  * Separate architecture dependent and independent builds
 
  -- Kumar Appaiah <akumar@debian.org>  Thu, 30 May 2013 08:36:27 -0400
 
