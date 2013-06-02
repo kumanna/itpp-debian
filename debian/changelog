@@ -1,7 +1,13 @@
-libitpp (4.3.0-2) UNRELEASED; urgency=low
+libitpp (4.3.0-2) unstable; urgency=low
 
-  * Pass correct CXXFLAGS to cmake
-  * Separate architecture dependent and independent builds
+  * Pass correct CPPFLAGS and CXXFLAGS to cmake
+  * Separate architecture dependent and independent builds (Closes: #710338)
+  * debian/patches:
+      + turbo_test_fix.diff, blas_test_fix.diff, multilateration_test_fix.diff:
+        Fix tests on non-amd64 architectures (Closes: #710204)
+      + channel_arm_fix.diff: Don't explicitly define "Array" templates;
+        these explicit template instantiations are not considered "weak"
+        references on ARM architectures. (Closes: #710337)
 
  -- Kumar Appaiah <akumar@debian.org>  Thu, 30 May 2013 08:36:27 -0400
 
