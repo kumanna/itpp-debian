@@ -2,3 +2,4 @@ blas_test_fix.diff
 channel_arm_fix.diff
 multilateration_test_fix.diff
 turbo_test_fix.diff
+itpp-config-pc.diff
