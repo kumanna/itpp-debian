@@ -1,3 +1,23 @@
+2013-07-04  Bogdan Cristea <cristeab@users.sourceforge.net>
+	* cmake/Modules/FindBLAS.cmake, cmake/Modules/FindLAPACK.cmake,
+	doc/local/installation.doc: add support for detecting itpp-external compiled
+	as static libraries
+
+2013-07-03  Bogdan Cristea <cristeab@users.sourceforge.net>
+	* doc/local/installation.doc: add install instructions with cmake using external
+	libraries without being root
+
+2013-06-16  Bogdan Cristea <cristeab@users.sourceforge.net>
+	* itpp.pc.cmake.in, itpp/CMakeLists.txt: generate and install itpp.pc
+
+2013-06-02  Andy Panov <andypanov@users.sourceforge.net>
+	* itpp/base/math/log_exp.h
+	pow2 overloads for integer arguments added.
+
+2013-05-24  Bogdan Cristea <cristeab@users.sourceforge.net>
+	* CMakeLists.txt, itpp-config.cmake.in, itpp/CMakeLists.txt: add
+	configuration script generation for UNIX-like systems (bug #221)
+
 2013-05-24  Bogdan Cristea <cristeab@users.sourceforge.net>
 	* doc/local/authors.doc, doc/local/index.doc.in, doc/local/installation.doc,
 	doc/local/test.doc, doc/local/verification.doc: documentation updates
