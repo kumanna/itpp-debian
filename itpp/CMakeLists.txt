@@ -51,11 +51,16 @@ else()
   add_library (${libitpp_target} STATIC ${ITPP_SRCS})
 endif()
 
+#remove duplicates in external libraries list
+if (ITPP_LIBS)
+  list(REMOVE_DUPLICATES ITPP_LIBS)
+endif()
+
 target_link_libraries (${libitpp_target} ${ITPP_LIBS})
 
 set(LIBITPP_VERSION_MAJOR 8)
 set(LIBITPP_VERSION_MINOR 2)
-set(LIBITPP_VERSION_PATCH 0)
+set(LIBITPP_VERSION_PATCH 1)
 set(LIBITPP_VERSION_STRING ${LIBITPP_VERSION_MAJOR}.${LIBITPP_VERSION_MINOR}.${LIBITPP_VERSION_PATCH})
 
 set_target_properties(${libitpp_target} PROPERTIES VERSION ${LIBITPP_VERSION_STRING}
@@ -91,5 +96,20 @@ if (HTML_DOCS AND DOXYGEN_FOUND)
     ${DOXYGEN_EXECUTABLE} ${CMAKE_BINARY_DIR}/Doxyfile
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
     COMMENT "Generating API documentation with Doxygen" VERBATIM)
+  file(COPY ${CMAKE_SOURCE_DIR}/doc/images/itpp_logo.png DESTINATION ${CMAKE_BINARY_DIR}/html)
   install(DIRECTORY ${CMAKE_BINARY_DIR}/html DESTINATION share/doc/itpp)
+endif()
+
+#itpp-config script for UNIX-like systems
+if (UNIX)
+  if (ITPP_LIBS)
+    string (REPLACE ";" " " ITPP_LIBS "${ITPP_LIBS}")
+  endif()
+  configure_file(${CMAKE_SOURCE_DIR}/itpp-config.cmake.in ${CMAKE_BINARY_DIR}/itpp-config @ONLY)
+  configure_file(${CMAKE_SOURCE_DIR}/itpp-config.1.cmake.in ${CMAKE_BINARY_DIR}/itpp-config.1 @ONLY)
+  configure_file(${CMAKE_SOURCE_DIR}/itpp.pc.cmake.in ${CMAKE_BINARY_DIR}/itpp.pc @ONLY)
+  install(FILES ${CMAKE_BINARY_DIR}/itpp-config DESTINATION bin PERMISSIONS OWNER_READ OWNER_EXECUTE
+    GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+  install(FILES ${CMAKE_BINARY_DIR}/itpp-config.1 DESTINATION share/man/man1)
+  install(FILES ${CMAKE_BINARY_DIR}/itpp.pc DESTINATION lib/pkgconfig)
 endif()
