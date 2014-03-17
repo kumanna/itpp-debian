@@ -1,0 +1,19 @@
+commit 8781a1cef5d89a5a6c476c4e0afb9dac9f985dd8
+Author: Bogdan Cristea <cristeab@gmail.com>
+Date:   Sun Dec 1 19:32:56 2013 +0100
+
+    corrected multilateration algorithm
+
+diff --git a/itpp/comm/multilateration.cpp b/itpp/comm/multilateration.cpp
+index c99e626..27ddcb3 100644
+--- a/itpp/comm/multilateration.cpp
++++ b/itpp/comm/multilateration.cpp
+@@ -87,7 +87,7 @@ public:
+     for(unsigned int i = 0; i < size_; ++i) {
+       if(data_[i] == elem) {
+         if((i + 1) < size_) {
+-          memcpy(data_ + i, data_ + i + 1, (size_ - i - 1)*sizeof(*data_));
++          memmove(data_+i, data_+i+1, (size_ - i - 1)*sizeof(*data_));
+         }
+         --size_;
+         res = true;
