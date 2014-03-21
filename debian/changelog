@@ -1,6 +1,6 @@
 libitpp (4.3.1-3) unstable; urgency=low
 
-  * Multiarch additions to debian/{control,rules}
+  * Multiarch additions to debian/{control,rules} (Closes: #742238)
     + Move the library and pkgconfig files to the
       DEB_HOST_MULTIARCH directory manually.
     + Add Multi-Arch: same for the library
