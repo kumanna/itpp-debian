@@ -27,6 +27,8 @@ Description: C++ library of signal processing and communication routines: Header
 Package: libitpp8
 Section: libs
 Architecture: any
+Pre-Depends: ${misc:Pre-Depends}
+Multi-Arch: same
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: C++ library of signal processing and communication routines
  IT++ is a C++ library of mathematical, signal processing and

@@ -1,5 +1,7 @@
 #!/usr/bin/make -f
 
+DEB_HOST_MULTIARCH ?= $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
+
 DEBUG_PACKAGE = $(shell awk '/^Package/ && /-dbg *$$/ { print $$2 }' debian/control)
 %:
 	VERBOSE=1 dh $@ --parallel --builddirectory=build
@@ -8,7 +10,7 @@ DEBUG_PACKAGE = $(shell awk '/^Package/ && /-dbg *$$/ { print $$2 }' debian/cont
 
 override_dh_auto_configure:
 	mkdir -p build
-	(cd build && cmake .. -DCMAKE_CXX_FLAGS="" -DCMAKE_CXX_FLAGS_RELEASE="$(CPPFLAGS) $(CXXFLAGS)" -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DCMAKE_VERBOSE_MAKEFILE=ON -DGTEST_DIR=/usr/src/gtest -DHTML_DOCS=off)
+	(cd build && cmake .. -DCMAKE_CXX_FLAGS="" -DCMAKE_CXX_FLAGS_RELEASE="$(CPPFLAGS) $(CXXFLAGS)" -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DCMAKE_VERBOSE_MAKEFILE=ON -DGTEST_DIR=/usr/src/gtest -DHTML_DOCS=off  -DCMAKE_LIBRARY_ARCHITECTURE="$(DEB_HOST_MULTIARCH)")
 
 override_dh_auto_build-arch:
 	dh_auto_build --builddirectory=build -- itpp
@@ -23,6 +25,10 @@ override_dh_auto_test-indep:
 
 override_dh_auto_install:
 	dh_auto_install --builddirectory=build
+	mkdir -p debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/
+	mv debian/tmp/usr/lib/libitpp.so* debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/
+	mkdir -p debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/pkgconfig
+	mv debian/tmp/usr/lib/pkgconfig/* debian/tmp/usr/lib/$(DEB_HOST_MULTIARCH)/pkgconfig/
 	dh_install
 
 override_dh_strip:
