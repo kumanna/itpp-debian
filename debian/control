@@ -7,8 +7,8 @@ Build-Depends: debhelper (>= 9), libblas-dev, libfftw3-dev, liblapack-dev, gfort
 Build-Depends-Indep: doxygen-latex, ghostscript
 Section: libs
 Homepage: http://itpp.sourceforge.net
-Vcs-Git: git://git.debian.org/git/debian-science/packages/libitpp.git
-Vcs-Browser: http://git.debian.org/?p=debian-science/packages/libitpp.git
+Vcs-Git: git://anonscm.debian.org/debian-science/packages/libitpp.git
+Vcs-Browser: http://anonscm.debian.org/gitweb/?p=debian-science/packages/libitpp.git
 
 Package: libitpp-dev
 Section: libdevel
