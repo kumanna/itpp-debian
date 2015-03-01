@@ -1,3 +1,12 @@
+libitpp (4.3.1-4) experimental; urgency=medium
+
+  * debian/patches:
+    + delete-sflogo.diff: Remove the SF logo fetched from outside
+    + itpp-pc-fix.diff: Correct the location of the itpp.pc file
+      (Closes: #779282)
+
+ -- Kumar Appaiah <akumar@debian.org>  Sun, 01 Mar 2015 06:47:20 +0530
+
 libitpp (4.3.1-3) unstable; urgency=low
 
   * Multiarch additions to debian/{control,rules} (Closes: #742238)

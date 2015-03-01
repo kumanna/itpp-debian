@@ -1,0 +1,18 @@
+Index: libitpp/itpp.pc.cmake.in
+===================================================================
+--- libitpp.orig/itpp.pc.cmake.in
++++ libitpp/itpp.pc.cmake.in
+@@ -1,6 +1,6 @@
+ prefix=@CMAKE_INSTALL_PREFIX@
+ exec_prefix=@CMAKE_INSTALL_PREFIX@
+-libdir=@CMAKE_INSTALL_PREFIX@/lib
++libdir=@CMAKE_INSTALL_PREFIX@/lib/@CMAKE_LIBRARY_ARCHITECTURE@
+ includedir=@CMAKE_INSTALL_PREFIX@/include
+ 
+ Name: @PACKAGE_NAME@
+@@ -9,4 +9,4 @@ Version: @PACKAGE_VERSION@
+ URL: http://itpp.sourceforge.net/
+ Libs: -L${libdir} -l@libitpp_target@
+ Libs.private:@ITPP_LIBS@
+-Cflags: -I${includedir} @CMAKE_CXX_FLAGS_RELEASE@
++Cflags: -I${includedir}
