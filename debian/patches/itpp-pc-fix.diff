@@ -16,3 +16,25 @@ Index: libitpp/itpp.pc.cmake.in
  Libs.private:@ITPP_LIBS@
 -Cflags: -I${includedir} @CMAKE_CXX_FLAGS_RELEASE@
 +Cflags: -I${includedir}
+Index: libitpp/itpp-config.cmake.in
+===================================================================
+--- libitpp.orig/itpp-config.cmake.in
++++ libitpp/itpp-config.cmake.in
+@@ -67,7 +67,7 @@ while test $# -gt 0; do
+       if test "x$debug_flag" = xyes; then
+       flags="${flags} @CMAKE_CXX_FLAGS_DEBUG@"
+       else
+-      flags="${flags} @CMAKE_CXX_FLAGS_RELEASE@"
++      flags="${flags}"
+       fi
+       ;;
+     --cflags-deb*)
+@@ -75,7 +75,7 @@ while test $# -gt 0; do
+       exit 0
+       ;;
+     --cflags-opt*)
+-  echo "-I${includedir} @CMAKE_CXX_FLAGS_RELEASE@"
++  echo "-I${includedir}"
+       exit 0
+       ;;
+     --libs)
