@@ -4,6 +4,7 @@ libitpp (4.3.1-4) experimental; urgency=medium
     + delete-sflogo.diff: Remove the SF logo fetched from outside
     + itpp-pc-fix.diff: Correct the location of the itpp.pc file
       (Closes: #779282)
+  * Standards version is now 3.9.6 (no changes needed)
 
  -- Kumar Appaiah <akumar@debian.org>  Sun, 01 Mar 2015 06:47:20 +0530
 
