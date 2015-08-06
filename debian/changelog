@@ -1,3 +1,10 @@
+libitpp (4.3.1-5) unstable; urgency=medium
+
+  * Rename binary package to libitpp8v5 do handle GCC5
+    transition.
+
+ -- Kumar Appaiah <akumar@debian.org>  Thu, 06 Aug 2015 13:30:23 +0530
+
 libitpp (4.3.1-4) experimental; urgency=medium
 
   * debian/patches:

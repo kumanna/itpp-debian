@@ -13,7 +13,7 @@ Vcs-Browser: http://anonscm.debian.org/gitweb/?p=debian-science/packages/libitpp
 Package: libitpp-dev
 Section: libdevel
 Architecture: any
-Depends: libitpp8 (= ${binary:Version}), ${misc:Depends}
+Depends: libitpp8v5 (= ${binary:Version}), ${misc:Depends}
 Description: C++ library of signal processing and communication routines: Headers
  IT++ is a C++ library of mathematical, signal processing and
  communication classes and functions. Its main use is in simulation of
@@ -24,11 +24,13 @@ Description: C++ library of signal processing and communication routines: Header
  .
  This package has the development libraries and headers for IT++.
 
-Package: libitpp8
+Package: libitpp8v5
 Section: libs
 Architecture: any
 Pre-Depends: ${misc:Pre-Depends}
 Multi-Arch: same
+Conflicts: libitpp8
+Replaces: libitpp8
 Depends: ${shlibs:Depends}, ${misc:Depends}
 Description: C++ library of signal processing and communication routines
  IT++ is a C++ library of mathematical, signal processing and
@@ -38,11 +40,13 @@ Description: C++ library of signal processing and communication routines
  and matrix classes, and a set of accompanying routines. Such a kernel
  makes IT++ similar to MATLAB or GNU Octave .
 
-Package: libitpp8-dbg
+Package: libitpp8v5-dbg
 Section: debug
 Priority: extra
 Architecture: any
-Depends: libitpp8 (= ${binary:Version}), ${misc:Depends}
+Conflicts: libitpp8-dbg
+Replaces: libitpp8-dbg
+Depends: libitpp8v5 (= ${binary:Version}), ${misc:Depends}
 Description: C++ library of signal processing and communication routines: Debug symbols
  IT++ is a C++ library of mathematical, signal processing and
  communication classes and functions. Its main use is in simulation of
