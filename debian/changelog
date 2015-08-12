@@ -1,3 +1,11 @@
+libitpp (4.3.1-6) unstable; urgency=medium
+
+  * debian/copyright:
+    + The license is GPL-3. This is now reflected in the
+    copyright. (Closes: #795153)
+
+ -- Kumar Appaiah <akumar@debian.org>  Wed, 12 Aug 2015 14:35:31 +0530
+
 libitpp (4.3.1-5) unstable; urgency=medium
 
   * Rename binary package to libitpp8v5 do handle GCC5
