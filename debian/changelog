@@ -1,3 +1,10 @@
+libitpp (4.3.1-7) unstable; urgency=medium
+
+  * Replace man timestamp by SOURCE_DATE_EPOCH to make the package
+    build. Thanks to Eduard Sanou for the patch. (Closes: #795394)
+
+ -- Kumar Appaiah <akumar@debian.org>  Tue, 02 Aug 2016 21:43:35 +0530
+
 libitpp (4.3.1-6) unstable; urgency=medium
 
   * debian/copyright:

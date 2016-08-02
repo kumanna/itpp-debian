@@ -1,3 +1,4 @@
 741814-FTBFS-fix.diff
 itpp-pc-fix.diff
 delete-sflogo.diff
+honour-SOURCE_DATE_EPOCH.diff

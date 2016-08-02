@@ -1,0 +1,20 @@
+Description: Honour SOURCE_DATE_EPOCH in man pages
+ Replace manpage timestamp with SOURCE_DATE_EPOCH only if the variable is 
+ defined, to make the man pages reproducible.
+Author: Eduard Sanou <dhole@openmailbox.org>
+
+--- libitpp-4.3.1.orig/CMakeLists.txt
++++ libitpp-4.3.1/CMakeLists.txt
+@@ -155,7 +155,11 @@ set (PACKAGE_STRING "${PACKAGE_NAME} ${P
+ set (PACKAGE_TARNAME ${PACKAGE})
+ set (PACKAGE_URL "")
+ if (UNIX)
+-  EXECUTE_PROCESS(COMMAND "date" "+%d/%m/%Y" OUTPUT_VARIABLE PACKAGE_DATE)
++  if (DEFINED ENV{SOURCE_DATE_EPOCH})
++    EXECUTE_PROCESS(COMMAND "date" "-u" "-d @${SOURCE_DATE_EPOCH}" "+%d/%m/%Y" OUTPUT_VARIABLE PACKAGE_DATE)
++  else()
++    EXECUTE_PROCESS(COMMAND "date" "+%d/%m/%Y" OUTPUT_VARIABLE PACKAGE_DATE)
++  endif()
+   string(REGEX REPLACE "(..)/(..)/..(..).*" "\\1/\\2/\\3" PACKAGE_DATE "${PACKAGE_DATE}")
+ else()
+   set(PACKAGE_DATE "")
