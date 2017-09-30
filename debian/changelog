@@ -1,3 +1,11 @@
+libitpp (4.3.1-8) unstable; urgency=medium
+
+  * Use ffloat-store on i386 to avoid accuracy based test failure. Fixed
+    by Adrian Bunk (Closes: #877063)
+  * Standards Version is now 4.0.0 (No changes required)
+
+ -- Kumar Appaiah <akumar@debian.org>  Sat, 30 Sep 2017 12:34:09 +0530
+
 libitpp (4.3.1-7) unstable; urgency=medium
 
   * Replace man timestamp by SOURCE_DATE_EPOCH to make the package

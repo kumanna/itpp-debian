@@ -1,7 +1,12 @@
 #!/usr/bin/make -f
 
+DEB_HOST_ARCH ?= $(shell dpkg-architecture -qDEB_HOST_ARCH)
 DEB_HOST_MULTIARCH ?= $(shell dpkg-architecture -qDEB_HOST_MULTIARCH)
 
+ifneq (,$(findstring $(DEB_HOST_ARCH), i386))
+    export DEB_CFLAGS_MAINT_APPEND = -ffloat-store
+    export DEB_CXXFLAGS_MAINT_APPEND = -ffloat-store
+endif
 DEBUG_PACKAGE = $(shell awk '/^Package/ && /-dbg *$$/ { print $$2 }' debian/control)
 %:
 	VERBOSE=1 dh $@ --parallel --builddirectory=build
