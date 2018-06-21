@@ -1,3 +1,12 @@
+libitpp (4.3.1-9) unstable; urgency=medium
+
+  * Add sse2-immediate-fix.diff to fix build errors with g++ 7.3.
+  * Update Salsa Vcs URLs in debian/control.
+  * Standards Version is now 4.1.1 (no changes needed)
+  * dbg package is now optional instead of extra.
+
+ -- Kumar Appaiah <akumar@debian.org>  Thu, 21 Jun 2018 21:36:18 +0530
+
 libitpp (4.3.1-8) unstable; urgency=medium
 
   * Use ffloat-store on i386 to avoid accuracy based test failure. Fixed

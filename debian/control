@@ -2,13 +2,13 @@ Source: libitpp
 Priority: optional
 Maintainer: Debian Science Maintainers <debian-science-maintainers@lists.alioth.debian.org>
 Uploaders: Kumar Appaiah <akumar@debian.org>
-Standards-Version: 4.0.0
+Standards-Version: 4.1.1
 Build-Depends: debhelper (>= 9), libblas-dev, libfftw3-dev, liblapack-dev, gfortran, libgtest-dev, cmake
 Build-Depends-Indep: doxygen-latex, ghostscript
 Section: libs
 Homepage: http://itpp.sourceforge.net
-Vcs-Git: git://anonscm.debian.org/debian-science/packages/libitpp.git
-Vcs-Browser: http://anonscm.debian.org/gitweb/?p=debian-science/packages/libitpp.git
+Vcs-Git: https://salsa.debian.org/science-team/libitpp.git
+Vcs-Browser: https://salsa.debian.org/science-team/libitpp
 
 Package: libitpp-dev
 Section: libdevel
@@ -42,7 +42,7 @@ Description: C++ library of signal processing and communication routines
 
 Package: libitpp8v5-dbg
 Section: debug
-Priority: extra
+Priority: optional
 Architecture: any
 Conflicts: libitpp8-dbg
 Replaces: libitpp8-dbg
